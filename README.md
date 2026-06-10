@@ -1,78 +1,117 @@
-# 我在故我在 — 哲学与生活应用网站
+# Cogito Ergo Vivo (I Think, Therefore I Am)
 
-让普通人通过哲学思辨理解生活问题的互动网站。
+**An interactive philosophy website** — Match your life dilemmas with philosophers from Bertrand Russell's *A History of Western Philosophy*, get Feynman-style AI analysis, and conclude with Eastern wisdom (Buddhism/Daoism/Confucianism) shareable cards.
 
-## 快速体验
+## Quick Start
 
 ```bash
+npm install
 npm run dev
-# 访问 http://localhost:3000
+# Open http://localhost:3000
 ```
 
-或者双击 `public/test_latest.html` 一键测试。
+Or double-click `public/test_latest.html` for a standalone offline demo.
 
-## 核心交互
+## Core Flow
 
 ```
-选生活问题 ──→ 选哲学家（可完全不相关）──→ AI费曼式分析 ──→ 佛道儒结语+分享
-     │                │                      │                  │
-  6大类24题        罗素三卷本            逐段打字机         130句原文
-  自由输入         38位哲学家            每段引用问题        Canvas卡片
+Pick a Problem → Pick a Philosopher (or deliberately mismatched) 
+  → AI generates Feynman-style analysis (typewriter effect)
+    → Choose Buddhism/Daoism/Confucianism for a closing quote + share card
 ```
 
-## 哲学体系
+Every analysis section **must**:
+1. Begin with a direct quote of the user's question (e.g. `You asked "Should I quit my job?"...`)
+2. Reference the user's question at least once more in the body
+3. Cite the philosopher's original text (`famousQuote` field)
 
-以罗素《西方哲学史》为准，覆盖三卷：
+## Philosophy System
 
-| 卷 | 时代 | 哲学家数 | 代表人物 |
-|----|------|---------|---------|
-| 卷I | 古代哲学 | 16位 | 泰勒斯、柏拉图、亚里士多德、第欧根尼 |
-| 卷II | 天主教哲学 | 4位 | 奥古斯丁、托马斯·阿奎那 |
-| 卷III | 近代哲学 | 18位 | 笛卡尔、康德、尼采、维特根斯坦 |
+Based on Bertrand Russell's *A History of Western Philosophy* (3 volumes):
 
-## 技术栈
+| Volume | Era | Philosophers | Highlights |
+|--------|-----|-------------|-----------|
+| I | Ancient | 16 | Thales, Plato, Aristotle, Diogenes |
+| II | Catholic | 4 | Augustine, Thomas Aquinas, Ockham |
+| III | Modern | 18 | Descartes, Kant, Nietzsche, Wittgenstein |
 
-| 层 | 选型 |
-|---|------|
-| 框架 | Next.js 16 (App Router) + TypeScript |
-| 样式 | Tailwind CSS v3 + CSS变量 |
-| AI | DeepSeek V4 Flash（cc-switch代理） |
-| 数据 | JSON文件（零数据库） |
-| 部署 | Vercel |
+**Total: 38 philosophers** with structured data including name, school, era, summary, key works, opposite thinkers, and famous quotes.
 
-## 提示词核心规则
+## Wisdom Library
 
-每条分析输出**必须**：
-1. 每一段以"你问{问题原文}"开头
-2. 每一段正文至少再出现一次用户问题原文
-3. 引用该哲学家的经典名言原文进行分析
+130 hand-curated Chinese classical quotes:
 
-## 项目结构
+| Tradition | Count | Sources |
+|-----------|-------|---------|
+| Buddhism | 40 | Heart Sutra, Diamond Sutra, Platform Sutra |
+| Daoism | 40 | Tao Te Ching, Zhuangzi |
+| Confucianism | 50 | Analects, Mencius, Great Learning |
+
+## Tech Stack
+
+| Layer | Choice |
+|-------|--------|
+| Framework | Next.js 16 (App Router) + TypeScript |
+| Styling | Tailwind CSS v3 + CSS custom properties |
+| AI | DeepSeek V4 Flash (via cc-switch proxy) |
+| Data | Zero database — pure JSON files |
+| Deployment | Vercel (Hobby Plan) |
+| Dev Tools | Claude Code (VS Code) + Hermes Agent |
+
+## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── page.tsx           # 首页
-│   ├── think/page.tsx     # 思辨交互（四步）
-│   ├── concepts/page.tsx  # 概念库
-│   ├── about/page.tsx     # 关于
-│   └── api/analyze/route.ts  # DeepSeek SSE代理
+│   ├── page.tsx              # Home page
+│   ├── think/page.tsx        # Core interaction (4-step flow)
+│   ├── concepts/page.tsx     # Philosopher library
+│   ├── about/page.tsx        # About page
+│   └── api/analyze/route.ts  # DeepSeek SSE proxy
 ├── components/
-│   └── ShareCard.tsx      # Canvas分享卡片
+│   └── ShareCard.tsx         # Canvas share card (3 styles)
 ├── lib/
-│   ├── api.ts             # API调用+模拟数据
-│   ├── types.ts           # 类型定义
-│   └── useUrlState.ts     # URL状态hook
+│   ├── api.ts                # API client + mock data
+│   ├── types.ts              # TypeScript interfaces
+│   └── useUrlState.ts        # URL state management hook
 └── data/
-    ├── philosophers.json  # 38位哲学家
-    └── wisdom-quotes.json # 130句佛道儒原文
+    ├── philosophers.json     # 38 philosophers
+    └── wisdom-quotes.json    # 130 wisdom quotes
+public/
+└── test_latest.html          # Standalone test (double-click)
 ```
 
-## 部署
+## Team (Agent Skills)
+
+| Role | Skill | Purpose |
+|------|-------|---------|
+| Architect | Claude Code | Implementation |
+| Frontend Lead | Subagent | Architecture review |
+| Supervisor | `project-supervisor` | Architecture oversight |
+| Reviewer | `requesting-code-review` | Code quality |
+| Prompt Engineer | `prompt-engineer` | AI prompt design |
+| Design Expert | `frontend-design` (146K⭐) | Aesthetic direction |
+| UI/UX | `ui-ux-pro-max` (51.2K⭐) | Design system |
+| DevOps | `vercel-deploy-engineer` | Deployment |
+
+## Team (Hermes Skills)
+
+| Skill | Purpose |
+|-------|---------|
+| `philosophy-website-feynman-digital-garden` | Feynman + Digital Garden website builder |
+| `philosophy-website-cogito` | Complete project workflow (this document) |
+| `prompt-engineer-philosophy-website` | Philosophy-specific prompt engineering |
+
+## Deployment
 
 ```bash
+npm run build
 npx vercel --prod
 ```
 
-需要设置环境变量：
-- `DEEPSEEK_PROXY_URL` — DeepSeek API代理地址
+Environment variables:
+- `DEEPSEEK_PROXY_URL` — DeepSeek API proxy address (default: `http://127.0.0.1:15721/anthropic/v1/messages`)
+
+## License
+
+MIT
