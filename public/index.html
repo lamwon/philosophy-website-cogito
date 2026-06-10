@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我在故我在 - 哲学与生活</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --primary: #1A3A5C; --bg: #F5F0EB; --accent: #C9A96E;
+  --text: #2C1810; --muted: #8B7355; --card-bg: #FFFFFF;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06); --radius: 12px;
+  --gold: #C9A96E; --buddha: #D4836D; --dao: #5D7A6E; --confucian: #8B4513;
+  --font: 'Noto Serif SC', 'STSong', 'SimSun', serif;
+  --font-sans: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.8; }
+.container { max-width: 800px; margin: 0 auto; padding: 20px; }
+.header { text-align: center; padding: 40px 20px 20px; background: linear-gradient(135deg, #1A3A5C 0%, #2C5F7A 100%); color: #fff; border-radius: 0 0 24px 24px; margin-bottom: 30px; }
+.header h1 { font-size: 28px; font-weight: 700; letter-spacing: 4px; }
+.header p { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 6px; }
+.steps { display: flex; justify-content: center; gap: 8px; margin: 20px 0 30px; }
+.step-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; background: #ddd; color: #999; transition: all 0.3s; }
+.step-dot.active { background: var(--primary); color: #fff; transform: scale(1.1); }
+.step-dot.done { background: var(--accent); color: #fff; }
+.step-line { width: 40px; height: 2px; background: #ddd; align-self: center; }
+.step-line.done { background: var(--accent); }
+.card { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 20px; transition: all 0.3s; }
+.card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.card-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--primary); }
+.categories { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.cat-tag { padding: 6px 16px; border-radius: 20px; background: var(--bg); border: 1px solid #ddd; cursor: pointer; font-size: 13px; transition: all 0.2s; font-family: var(--font); }
+.cat-tag:hover { border-color: var(--primary); background: #EBE5DE; }
+.cat-tag.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
+.questions { display: grid; gap: 8px; }
+.q-item { padding: 12px 16px; border-radius: 8px; background: var(--bg); cursor: pointer; transition: all 0.2s; font-size: 14px; border: 2px solid transparent; }
+.q-item:hover { background: #EBE5DE; }
+.q-item.selected { border-color: var(--accent); background: #FFF8F0; }
+.input-area { margin-top: 16px; display: flex; gap: 8px; }
+.input-area input { flex: 1; padding: 12px 16px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; font-family: var(--font); background: var(--card-bg); transition: border-color 0.2s; outline: none; }
+.input-area input:focus { border-color: var(--accent); }
+.input-area button { padding: 12px 24px; border: none; border-radius: 8px; background: var(--primary); color: #fff; cursor: pointer; font-size: 14px; font-family: var(--font); transition: background 0.2s; }
+.input-area button:hover { background: #2C5F7A; }
+.volume-tabs { display: flex; gap: 4px; margin-bottom: 16px; }
+.vol-tab { padding: 8px 20px; border-radius: 8px 8px 0 0; cursor: pointer; background: var(--bg); border: none; font-size: 13px; font-family: var(--font); transition: all 0.2s; }
+.vol-tab.active { background: var(--card-bg); color: var(--primary); font-weight: 700; box-shadow: 0 -2px 8px rgba(0,0,0,0.04); }
+.philosopher-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.ph-card { padding: 16px; border-radius: var(--radius); background: var(--bg); cursor: pointer; text-align: center; transition: all 0.2s; border: 2px solid transparent; }
+.ph-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.ph-card.selected { border-color: var(--accent); background: #FFF8F0; }
+.ph-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-size: 18px; font-weight: 700; }
+.ph-name { font-size: 14px; font-weight: 600; }
+.ph-school { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.search-bar { margin-bottom: 16px; }
+.search-bar input { width: 100%; padding: 10px 16px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; font-family: var(--font); outline: none; }
+.search-bar input:focus { border-color: var(--accent); }
+.action-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.btn { padding: 8px 20px; border: 2px solid var(--primary); border-radius: 20px; background: transparent; color: var(--primary); cursor: pointer; font-size: 13px; font-family: var(--font); transition: all 0.2s; }
+.btn:hover { background: var(--primary); color: #fff; }
+.btn-gold { background: var(--gold); border: none; color: #fff; padding: 12px 32px; border-radius: 8px; font-size: 15px; font-family: var(--font); cursor: pointer; transition: background 0.2s; }
+.btn-gold:hover { background: #B89450; }
+.contrast-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.contrast-toggle input { width: 40px; height: 20px; cursor: pointer; }
+.thinking { text-align: center; padding: 40px; }
+.spinner { width: 40px; height: 40px; border: 3px solid var(--bg); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.analysis-section { margin-bottom: 20px; }
+.analysis-section .label { font-size: 14px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.analysis-section .content { font-size: 15px; line-height: 1.8; color: var(--text); }
+.typewriter { overflow: hidden; }
+.wisdom-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.wisdom-card { padding: 24px 16px; border-radius: var(--radius); text-align: center; cursor: pointer; transition: all 0.3s; border: 3px solid transparent; min-height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.wisdom-card:hover { transform: translateY(-4px); }
+.wisdom-card.selected { border-color: var(--gold); }
+.wisdom-card .icon { font-size: 36px; margin-bottom: 8px; }
+.wisdom-card .name { font-size: 20px; font-weight: 700; }
+.wisdom-card.buddhism { background: linear-gradient(135deg, #FDF6F0 0%, #F5E6DA 100%); color: var(--buddha); }
+.wisdom-card.daoism { background: linear-gradient(135deg, #F0F5F2 0%, #E0EDE5 100%); color: var(--dao); }
+.wisdom-card.confucianism { background: linear-gradient(135deg, #F5F0EB 0%, #EDE0D5 100%); color: var(--confucian); }
+.result-card { background: linear-gradient(135deg, var(--primary), #2C5F7A); color: #fff; border-radius: var(--radius); padding: 32px; text-align: center; position: relative; }
+.result-card .quote { font-size: 22px; line-height: 1.8; margin-bottom: 12px; font-style: italic; }
+.result-card .source { font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 16px; }
+.result-card .meaning { font-size: 15px; line-height: 1.6; background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px; margin-bottom: 20px; }
+.share-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+.share-btn { padding: 10px 24px; border: 2px solid rgba(255,255,255,0.3); border-radius: 20px; background: transparent; color: #fff; cursor: pointer; font-size: 13px; font-family: var(--font); transition: all 0.2s; }
+.share-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
+.restart-btn { display: block; margin: 30px auto 0; padding: 12px 40px; background: var(--gold); border: none; border-radius: 8px; color: #fff; font-size: 15px; font-family: var(--font); cursor: pointer; transition: background 0.2s; }
+.restart-btn:hover { background: #B89450; }
+.step { display: none; }
+.step.active { display: block; }
+.toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: var(--primary); color: #fff; padding: 12px 24px; border-radius: 8px; font-size: 14px; z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+.toast.show { opacity: 1; }
+@media (max-width: 600px) { .container { padding: 12px; } .header h1 { font-size: 22px; } .philosopher-grid { grid-template-columns: repeat(2, 1fr); } .wisdom-cards { grid-template-columns: 1fr; } }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="header">
+  <h1>我在故我在</h1>
+  <p>思辩即生活</p>
+</div>
+<div class="container">
+<div class="steps" id="stepIndicator">
+  <div class="step-dot active" data-step="1">1</div><div class="step-line" data-between="1-2"></div>
+  <div class="step-dot" data-step="2">2</div><div class="step-line" data-between="2-3"></div>
+  <div class="step-dot" data-step="3">3</div><div class="step-line" data-between="3-4"></div>
+  <div class="step-dot" data-step="4">4</div>
+</div>
+
+<div class="step active" id="step1">
+  <div class="card">
+    <div class="card-title">你遇到了什么困惑？</div>
+    <div class="categories" id="categories"></div>
+    <div class="questions" id="questions"></div>
+    <div class="input-area">
+      <input type="text" id="customQuestion" placeholder="或者自己描述你的困惑..." />
+      <button onclick="startWithCustom()">确定</button>
+    </div>
+  </div>
+</div>
+
+<div class="step hidden" id="step2">
+  <div class="card">
+    <div class="card-title">选一位哲学家来回应你</div>
+    <div class="action-row">
+      <button class="btn" onclick="randomPick()">随缘试试</button>
+      <div class="contrast-toggle">
+        <label>反差模式</label>
+        <input type="checkbox" id="contrastMode" onchange="renderPhilosophers()" />
+        <span style="font-size:11px;">专挑不相关的</span>
+      </div>
+    </div>
+    <div class="search-bar">
+      <input type="text" id="philSearch" placeholder="搜索哲学家..." oninput="renderPhilosophers()" />
+    </div>
+    <div class="volume-tabs" id="volumeTabs"></div>
+    <div class="philosopher-grid" id="philosopherGrid"></div>
+  </div>
+</div>
+
+<div class="step hidden" id="step3">
+  <div class="card" id="analysisCard">
+    <div id="thinkingState" class="thinking">
+      <div class="spinner"></div>
+      <div style="font-size:16px;color:var(--muted);">正在思考...</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:8px;" id="thinkingHint">从哲学的角度审视你的问题</div>
+    </div>
+    <div id="analysisOutput" style="display:none;"></div>
+  </div>
+  <button class="btn-gold" id="gotoWisdomBtn" style="display:none;width:100%;" onclick="goToStep(4)">我要结语 &rarr;</button>
+</div>
+
+<div class="step hidden" id="step4">
+  <div class="card">
+    <div class="card-title">以东方智慧收尾</div>
+    <div class="wisdom-cards" id="wisdomCards"></div>
+  </div>
+  <div id="wisdomResult" style="display:none;" class="result-card"></div>
+  <button class="restart-btn" onclick="restart()">再来一次</button>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var PHILOSOPHERS = {"philosophers": [{"id": "thales", "name": "泰勒斯", "englishName": "Thales", "volume": 1, "era": "古希腊（前苏格拉底）", "school": "米利都学派", "summary": "西方哲学史上第一位哲学家，米利都学派创始人。提出「水是万物的本原」，认为一切事物皆源于水并复归于水，开创了用自然原因解释世界的理性传统。", "keyWorks": ["《论自然》（失传）"], "oppositeIds": ["anaximander"], "famousQuote": "水是万物的本原。"}, {"id": "anaximander", "name": "阿那克西曼德", "englishName": "Anaximander", "volume": 1, "era": "古希腊（前苏格拉底）", "school": "米利都学派", "summary": "泰勒斯的学生，提出万物的本原是「无限者」（apeiron），一种无定形的永恒实体。首次提出宇宙演化论，认为世界从对立物的分离中产生。", "keyWorks": ["《论自然》（失传）"], "oppositeIds": ["thales", "anaximenes"], "famousQuote": "万物的本原是无定的无限者，万物由之产生，也必然复归于它。"}, {"id": "anaximenes", "name": "阿那克西美尼", "englishName": "Anaximenes", "volume": 1, "era": "古希腊（前苏格拉底）", "school": "米利都学派", "summary": "阿那克西曼德的学生，提出「气」是万物的本原。认为气通过稀散和凝聚两种运动变化为火、风、水、土等不同形态，首次用量的变化解释质的差别。", "keyWorks": ["《论自然》（失传）"], "oppositeIds": ["anaximander"], "famousQuote": "气通过稀散和凝聚产生万物，灵魂是气，火也是气。"}, {"id": "pythagoras", "name": "毕达哥拉斯", "englishName": "Pythagoras", "volume": 1, "era": "古希腊（前苏格拉底）", "school": "毕达哥拉斯学派", "summary": "提出「数是万物的本原」，认为宇宙的本质在于数学比例与和谐。创立了集哲学、宗教、数学于一体的学派，主张灵魂轮回与净化的生活方式。", "keyWorks": ["（无直接著作，学说由弟子传述）"], "oppositeIds": ["democritus", "heraclitus"], "famousQuote": "万物皆数。"}, {"id": "heraclitus", "name": "赫拉克利特", "englishName": "Heraclitus", "volume": 1, "era": "古希腊（前苏格拉底）", "school": "爱菲斯学派", "summary": "提出「万物皆流变」的宇宙观，认为火是万物的本原。强调对立统一与逻各斯（Logos）作为宇宙的普遍规律，认为斗争是万物之父。", "keyWorks": ["《论自然》（残篇）"], "oppositeIds": ["parmenides", "pythagoras"], "famousQuote": "人不能两次踏进同一条河流。"}, {"id": "parmenides", "name": "巴门尼德", "englishName": "Parmenides", "volume": 1, "era": "古希腊（前苏格拉底）", "school": "爱利亚学派", "summary": "提出「存在者存在，非存在者不存在」的本体论命题，认为真实是永恒不变、不可分割的「一」。首次在哲学中区分了真理之路与意见之路，开创了逻辑论证的先河。", "keyWorks": ["《论自然》（残篇）"], "oppositeIds": ["heraclitus", "democritus"], "famousQuote": "存在者存在，非存在者不存在。"}, {"id": "democritus", "name": "德谟克利特", "englishName": "Democritus", "volume": 1, "era": "古希腊（前苏格拉底）", "school": "原子论", "summary": "原子论的集大成者，认为万物由不可分割的原子和虚空构成，原子在虚空中运动、碰撞、结合形成世界。主张唯物主义决定论，反对目的论解释。", "keyWorks": ["《宇宙大系统》（失传）「, 」《论自然》（失传）"], "oppositeIds": ["plato", "pythagoras", "parmenides", "socrates", "aristotle", "plotinus"], "famousQuote": "万物皆由原子和虚空构成，没有东西从无中产生。"}, {"id": "socrates", "name": "苏格拉底", "englishName": "Socrates", "volume": 1, "era": "古希腊（古典时期）", "school": "古典希腊哲学", "summary": "西方哲学的奠基人之一，以「精神助产术」（辩证法）著称。致力于伦理问题的探究，提出「德性即知识」的核心命题，主张通过理性对话认识普遍真理。", "keyWorks": ["（无直接著作，思想见于柏拉图的对话录）"], "oppositeIds": ["protagoras", "democritus"], "famousQuote": "我唯一知道的就是我一无所知。"}, {"id": "plato", "name": "柏拉图", "englishName": "Plato", "volume": 1, "era": "古希腊（古典时期）", "school": "理念论", "summary": "提出理念论（Theory of Forms），区分了可感的物质世界与可知的理念世界，前者是后者的不完美摹本。主张哲学王统治的理想国，奠定了西方唯心主义哲学传统。", "keyWorks": ["《理想国》「, 」《斐多篇》「, 」《会饮篇》「, 」《巴门尼德篇》"], "oppositeIds": ["democritus", "protagoras", "diogenes", "machiavelli", "aristotle", "pyrrho", "locke"], "famousQuote": "理想存在于理念之中，现实不过是理念的影子。"}, {"id": "aristotle", "name": "亚里士多德", "englishName": "Aristotle", "volume": 1, "era": "古希腊（古典时期）", "school": "逍遥学派", "summary": "柏拉图的学生，百科全书式学者。批判理念论，提出「四因说」（质料因、形式因、动力因、目的因）和「实体」理论。开创了逻辑学、生物学、政治学等学科，强调经验观察与理性分析的结合。", "keyWorks": ["《形而上学》「, 」《尼各马可伦理学》「, 」《政治学》「, 」《范畴篇》"], "oppositeIds": ["plato", "pyrrho", "democritus"], "famousQuote": "吾爱吾师，吾更爱真理。"}, {"id": "protagoras", "name": "普罗泰戈拉", "englishName": "Protagoras", "volume": 1, "era": "古希腊（古典时期）", "school": "智者派", "summary": "最著名的智者（Sophist），提出「人是万物的尺度」这一著名命题，开创了相对主义和怀疑论的先河。擅长修辞术和辩论术，是古希腊启蒙运动的代表人物。", "keyWorks": ["《论真理》（失传）「, 」《论神》（失传）"], "oppositeIds": ["plato", "socrates"], "famousQuote": "人是万物的尺度，是存在者存在的尺度，也是非存在者不存在的尺度。"}, {"id": "diogenes", "name": "第欧根尼", "englishName": "Diogenes of Sinope", "volume": 1, "era": "古希腊（后亚里士多德）", "school": "犬儒主义", "summary": "犬儒学派代表人物，以极端的清贫和反习俗行为著称。主张回归自然、摒弃世俗欲望，追求自足（autarkeia）的道德自由。常以讽刺和挑衅的方式揭露社会虚伪。", "keyWorks": ["（无系统著作）"], "oppositeIds": ["plato", "epicurus"], "famousQuote": "别挡住我的阳光。"}, {"id": "zeno", "name": "芝诺（斯多葛）", "englishName": "Zeno of Citium", "volume": 1, "era": "古希腊（后亚里士多德）", "school": "斯多葛主义", "summary": "斯多葛学派创始人。主张宇宙由理性（逻各斯）主宰，人应当顺应自然理性生活，控制欲望、接受命运。强调德性是唯一的善，外在事物无关紧要。", "keyWorks": ["《论共和国》（失传）「, 」《论自然》（失传）"], "oppositeIds": ["epicurus", "pyrrho"], "famousQuote": "与宇宙的理性和谐一致地生活，就是德性的生活。"}, {"id": "epicurus", "name": "伊壁鸠鲁", "englishName": "Epicurus", "volume": 1, "era": "古希腊（后亚里士多德）", "school": "伊壁鸠鲁学派", "summary": "伊壁鸠鲁学派创始人。继承德谟克利特的原子论，主张快乐是人生的最高善（快乐主义），但强调精神快乐高于感官享乐，追求心灵的宁静（ataraxia）。反对迷信和死亡恐惧。", "keyWorks": ["《论自然》（残篇）「, 」《准则学》（残篇）"], "oppositeIds": ["zeno", "diogenes", "plotinus"], "famousQuote": "死亡与我们无关，因为当我们存在时，死亡尚未到来；当死亡到来时，我们已经不存在了。"}, {"id": "pyrrho", "name": "皮浪", "englishName": "Pyrrho", "volume": 1, "era": "古希腊（后亚里士多德）", "school": "怀疑论", "summary": "怀疑论（皮浪主义）创始人。主张对一切事物的真实本性不做判断（epoche），因为感官和理性都不可靠。悬搁判断能带来心灵的宁静（ataraxia），这是最高的幸福。", "keyWorks": ["（无直接著作，学说由弟子蒂蒙传述）"], "oppositeIds": ["aristotle", "zeno", "plato"], "famousQuote": "不做任何判断，才能获得心灵的不动心。"}, {"id": "plotinus", "name": "普罗提诺", "englishName": "Plotinus", "volume": 1, "era": "古希腊（晚期）", "school": "新柏拉图主义", "summary": "新柏拉图主义创始人，将柏拉图哲学与东方神秘主义结合。提出「太一」（The One）作为终极实在，万物从太一中流溢而出，灵魂通过沉思回归太一。", "keyWorks": ["《九章集》"], "oppositeIds": ["epicurus", "democritus"], "famousQuote": "太一是超越存在的，它是一切事物的源泉。"}, {"id": "augustine", "name": "奥古斯丁", "englishName": "Augustine of Hippo", "volume": 2, "era": "中世纪（教父哲学）", "school": "教父哲学", "summary": "基督教教父哲学的集大成者。融合新柏拉图主义与基督教神学，提出「上帝之城」与「世俗之城」的二元历史观。论证原罪、恩典与自由意志的关系，深刻影响了西方基督教思想。", "keyWorks": ["《忏悔录》「, 」《上帝之城》「, 」《论三位一体》"], "oppositeIds": ["ockham", "machiavelli"], "famousQuote": "上帝啊，你为自己创造了我们，我们的心若不安息在你怀中，便永远不得安宁。"}, {"id": "aquinas", "name": "托马斯·阿奎那", "englishName": "Thomas Aquinas", "volume": 2, "era": "中世纪（经院哲学）", "school": "经院哲学", "summary": "经院哲学的巅峰人物，将亚里士多德哲学融入基督教神学。提出「五路论证」证明上帝存在，区分了自然神学与启示神学，认为理性与信仰可以调和。", "keyWorks": ["《神学大全》「, 」《反异教大全》"], "oppositeIds": ["duns_scotus", "ockham", "augustine"], "famousQuote": "恩典并不摧毁自然，而是成全自然。"}, {"id": "duns_scotus", "name": "邓斯·司各脱", "englishName": "Duns Scotus", "volume": 2, "era": "中世纪（经院哲学）", "school": "经院哲学", "summary": "经院哲学的重要代表，强调意志高于理智的唯意志论。提出「此性」概念解释个体化原则，主张神学与哲学分离。其精细论证风格被誉为「精微博士」。", "keyWorks": ["《牛津评注》「, 」《巴黎记录》"], "oppositeIds": ["aquinas"], "famousQuote": "意志高于理智，爱比知更卓越。"}, {"id": "ockham", "name": "奥卡姆的威廉", "englishName": "William of Ockham", "volume": 2, "era": "中世纪（经院哲学晚期）", "school": "经院哲学", "summary": "经院哲学晚期的批判者，以「奥卡姆剃刀」闻名——如无必要勿增实体。主张唯名论，否定共相的实在性，认为只有个体存在。强调上帝的全能性，动摇理性神学的基础。", "keyWorks": ["《箴言注疏》「, 」《逻辑大全》"], "oppositeIds": ["aquinas", "augustine"], "famousQuote": "如无必要，勿增实体。"}, {"id": "machiavelli", "name": "马基雅维利", "englishName": "Niccolò Machiavelli", "volume": 3, "era": "文艺复兴", "school": "文艺复兴政治哲学", "summary": "近代政治哲学的奠基人，将政治从伦理和宗教中独立出来。提出「为达目的可不择手段」的现实主义政治观，主张君主应兼具狮子的凶猛和狐狸的狡猾。", "keyWorks": ["《君主论》「, 」《李维史论》"], "oppositeIds": ["augustine", "rousseau", "plato"], "famousQuote": "目的总是为手段辩护。"}, {"id": "bacon", "name": "弗兰西斯·培根", "englishName": "Francis Bacon", "volume": 3, "era": "文艺复兴晚期", "school": "经验主义", "summary": "近代经验主义和科学方法的倡导者。提出「知识就是力量」的口号，批判「四假相」学说，主张通过归纳法从经验事实中推导出普遍原理，开创了现代实验科学哲学。", "keyWorks": ["《新工具》「, 」《学术的进展》「, 」《新大西岛》"], "oppositeIds": ["descartes", "hegel"], "famousQuote": "知识就是力量。"}, {"id": "descartes", "name": "笛卡尔", "englishName": "René Descartes", "volume": 3, "era": "17世纪", "school": "理性主义", "summary": "近代哲学之父，提出「我思故我在」的第一原理。通过普遍怀疑建立理性主义认识论，主张心物二元论。首创解析几何，将数学方法引入哲学思考。", "keyWorks": ["《第一哲学沉思集》「, 」《方法论》「, 」《哲学原理》"], "oppositeIds": ["hume", "bacon", "locke"], "famousQuote": "我思故我在。"}, {"id": "spinoza", "name": "斯宾诺莎", "englishName": "Baruch Spinoza", "volume": 3, "era": "17世纪", "school": "理性主义", "summary": "用几何学方法构建哲学体系，提出实体即自然、上帝即自然的泛神论。认为一切都是必然的，自由是对必然的认识。主张以理性克制情感，达到心灵的至福。", "keyWorks": ["《伦理学》「, 」《神学政治论》「, 」《知性改进论》"], "oppositeIds": ["leibniz", "hume"], "famousQuote": "自由是对必然的认识。"}, {"id": "leibniz", "name": "莱布尼茨", "englishName": "Gottfried Wilhelm Leibniz", "volume": 3, "era": "17-18世纪", "school": "理性主义", "summary": "提出单子论，认为世界由无数不可分的精神实体（单子）构成，单子之间通过「前定和谐」协调。主张「所有可能世界中最完美的世界」的神正论，也是微积分的共同发明者。", "keyWorks": ["《单子论》「, 」《人类理智新论》「, 」《神正论》"], "oppositeIds": ["spinoza", "locke"], "famousQuote": "我们的世界是所有可能世界中最好的世界。"}, {"id": "locke", "name": "洛克", "englishName": "John Locke", "volume": 3, "era": "17世纪", "school": "经验主义", "summary": "古典经验主义代表人物，提出「白板说」（Tabula Rasa），认为一切知识来源于经验。区分了第一性质和第二性质，主张有限政府、自然权利和宗教宽容，深刻影响了自由主义政治哲学。", "keyWorks": ["《人类理解论》「, 」《政府论》「, 」《论宗教宽容》"], "oppositeIds": ["leibniz", "descartes", "plato"], "famousQuote": "心灵如同一张白纸，一切观念皆来自经验。"}, {"id": "berkeley", "name": "贝克莱", "englishName": "George Berkeley", "volume": 3, "era": "18世纪", "school": "经验主义", "summary": "主观唯心主义经验论的代表，提出「存在即被感知」。认为物质实体不存在，万物只是心灵中的观念集合，世界的持续存在依赖于上帝这个永恒感知者的心灵。", "keyWorks": ["《人类知识原理》「, 」《海拉斯与斐洛诺斯对话三篇》"], "oppositeIds": ["hume", "democritus"], "famousQuote": "存在即被感知。"}, {"id": "hume", "name": "休谟", "englishName": "David Hume", "volume": 3, "era": "18世纪", "school": "经验主义", "summary": "经验主义的极端化发展，将洛克的经验论推向怀疑论。否定因果关系是客观必然联系，认为只是心理习惯联想。批判实体概念和心灵实体，对康德产生了决定性影响。", "keyWorks": ["《人性论》「, 」《人类理解研究》「, 」《自然宗教对话录》"], "oppositeIds": ["descartes", "kant", "spinoza", "berkeley"], "famousQuote": "理性是并且也应当是情感的奴隶。"}, {"id": "rousseau", "name": "卢梭", "englishName": "Jean-Jacques Rousseau", "volume": 3, "era": "18世纪", "school": "社会契约论", "summary": "启蒙运动的重要思想家，提出「人生而自由却无往不在枷锁中」。主张社会契约论与人民主权，认为文明腐化了人的自然善性，崇尚情感高于理性。", "keyWorks": ["《社会契约论》「, 」《论人类不平等的起源》「, 」《爱弥儿》"], "oppositeIds": ["machiavelli", "augustine"], "famousQuote": "人生而自由，却无往不在枷锁之中。"}, {"id": "kant", "name": "康德", "englishName": "Immanuel Kant", "volume": 3, "era": "18世纪", "school": "德国古典哲学", "summary": "德国古典哲学创始人，发动「哥白尼式革命」，提出先天综合判断和物自体不可知。区分了现象界与本体界，以三大批判构建了真、善、美的哲学体系，为理性划界。", "keyWorks": ["《纯粹理性批判》「, 」《实践理性批判》「, 」《判断力批判》"], "oppositeIds": ["hume", "bentham", "schopenhauer"], "famousQuote": "有两样东西，愈是经常和持久地思考它们，就愈使心灵充满常新而日增的惊奇和敬畏：头顶的星空和心中的道德律。"}, {"id": "hegel", "name": "黑格尔", "englishName": "Georg Wilhelm Friedrich Hegel", "volume": 3, "era": "19世纪", "school": "德国古典哲学", "summary": "德国古典哲学的顶峰，提出绝对精神在辩证法的正-反-合运动中自我实现。主张「凡是现实的都是合理的，凡是合理的都是现实的」，建立了庞大而严密的思辨哲学体系。", "keyWorks": ["《精神现象学》「, 」《逻辑学》「, 」《法哲学原理》「, 」《历史哲学讲演录》"], "oppositeIds": ["schopenhauer", "james", "frege", "bacon", "wittgenstein"], "famousQuote": "凡是现实的都是合理的，凡是合理的都是现实的。"}, {"id": "schopenhauer", "name": "叔本华", "englishName": "Arthur Schopenhauer", "volume": 3, "era": "19世纪", "school": "唯意志论", "summary": "唯意志论创始人，认为世界的本质是盲目的生命意志（Will），意志高于理性。人生因意志永不满足而充满痛苦，唯有通过艺术审美、道德同情和佛教式的否定意志才能获得解脱。", "keyWorks": ["《作为意志和表象的世界》「, 」《附录与补遗》"], "oppositeIds": ["hegel", "kant", "leibniz", "wittgenstein"], "famousQuote": "生命是一团欲望，欲望不满足便痛苦，满足便无聊，人生就在痛苦和无聊之间摇摆。"}, {"id": "nietzsche", "name": "尼采", "englishName": "Friedrich Nietzsche", "volume": 3, "era": "19世纪", "school": "存在主义", "summary": "提出「上帝死了」的宣告和「权力意志」概念，批判传统基督教道德为奴隶道德。主张「超人」哲学和永恒轮回，强调个体超越自我、创造价值，对存在主义和后现代主义影响深远。", "keyWorks": ["《查拉图斯特拉如是说》「, 」《善与恶的彼岸》「, 」《道德谱系学》「, 」《悲剧的诞生》"], "oppositeIds": ["mill", "bentham", "kant"], "famousQuote": "上帝死了！是我们杀死了他。"}, {"id": "bentham", "name": "边沁", "englishName": "Jeremy Bentham", "volume": 3, "era": "18-19世纪", "school": "功利主义", "summary": "功利主义（Utilitarianism）创始人，提出「最大多数人的最大幸福」原则。主张以快乐和痛苦的量化计算作为道德和政治的评判标准，推动了英国法律和社会制度改革。", "keyWorks": ["《道德与立法原理导论》「, 」《政府片论》"], "oppositeIds": ["kant", "nietzsche", "hegel"], "famousQuote": "最大多数人的最大幸福是衡量是非的标准。"}, {"id": "mill", "name": "约翰·斯图亚特·密尔", "englishName": "John Stuart Mill", "volume": 3, "era": "19世纪", "school": "功利主义", "summary": "边沁功利主义的继承和发展者，区分了快乐的质与量，认为理性的快乐高于感官的快乐。主张自由至上原则（伤害原则）和代议制民主，是古典自由主义的集大成者。", "keyWorks": ["《论自由》「, 」《功利主义》「, 」《代议制政府》「, 」《逻辑体系》"], "oppositeIds": ["nietzsche", "hegel"], "famousQuote": "个人自由在不伤害他人的前提下应当不受限制。"}, {"id": "james", "name": "威廉·詹姆斯", "englishName": "William James", "volume": 3, "era": "19-20世纪", "school": "实用主义", "summary": "实用主义哲学创始人之一，认为真理是「有用的观念」，其意义在于实际效果。提出「意识流」概念，在心理学和宗教哲学方面也有重要贡献，主张多元宇宙论。", "keyWorks": ["《实用主义》「, 」《心理学原理》「, 」《宗教经验之种种》"], "oppositeIds": ["hegel", "frege"], "famousQuote": "真理不过是思维中的权宜之计，就像权宜之计是行动中的真理一样。"}, {"id": "frege", "name": "弗雷格", "englishName": "Gottlob Frege", "volume": 3, "era": "19-20世纪", "school": "分析哲学", "summary": "现代分析哲学和数理逻辑的奠基人。区分了含义（Sinn）与指称（Bedeutung），开创了量化逻辑系统。其逻辑主义方案（数学可还原为逻辑）深刻影响了罗素和维特根斯坦。", "keyWorks": ["《概念文字》「, 」《算术基础》「, 」《论含义与指称》"], "oppositeIds": ["hegel", "james"], "famousQuote": "逻辑是数学的基础，算术是逻辑的延伸。"}, {"id": "wittgenstein", "name": "维特根斯坦", "englishName": "Ludwig Wittgenstein", "volume": 3, "era": "20世纪", "school": "分析哲学", "summary": "分析哲学的核心人物，早期提出「语言图像论」，认为哲学问题是语言逻辑的误用。后期转向「语言游戏」和「家族相似」概念，主张哲学的任务是治疗语言疾病。", "keyWorks": ["《逻辑哲学论》「, 」《哲学研究》"], "oppositeIds": ["hegel", "schopenhauer"], "famousQuote": "凡是可以说的，就能说清楚；对于不可说的，我们必须保持沉默。"}], "schools": [{"id": "milesian", "name": "米利都学派", "volume": 1, "description": "古希腊最早的哲学流派，以米利都为中心，关注万物本原问题，主张用自然原因解释世界。"}, {"id": "pythagorean", "name": "毕达哥拉斯学派", "volume": 1, "description": "以数是万物本原为核心的哲学-宗教团体，重视数学、音乐与灵魂净化。"}, {"id": "ephesian", "name": "爱菲斯学派", "volume": 1, "description": "以赫拉克利特为代表的哲学流派，强调万物流变与对立统一的逻各斯。"}, {"id": "eleatic", "name": "爱利亚学派", "volume": 1, "description": "以巴门尼德和芝诺为代表，主张存在是唯一、不变、不动的，强调逻辑论证。"}, {"id": "atomism", "name": "原子论", "volume": 1, "description": "以德谟克利特为代表，认为万物由不可分割的原子和虚空构成，持唯物主义决定论。"}, {"id": "classical_greek", "name": "古典希腊哲学", "volume": 1, "description": "以苏格拉底为代表的雅典哲学，关注伦理与辩证法，奠定了西方哲学核心问题。"}, {"id": "idealism", "name": "理念论", "volume": 1, "description": "柏拉图创立的哲学体系，区分理念世界与物质世界，认为真实存在于理念之中。"}, {"id": "peripatetic", "name": "逍遥学派", "volume": 1, "description": "亚里士多德创立的学派，注重经验观察与逻辑分析，研究范围涵盖全部知识领域。"}, {"id": "sophist", "name": "智者派", "volume": 1, "description": "以普罗泰戈拉为代表的修辞与辩论教师群体，持相对主义立场，是古希腊启蒙运动的代表。"}, {"id": "cynicism", "name": "犬儒主义", "volume": 1, "description": "以第欧根尼为代表，主张极端清贫与反习俗，追求自足的自由道德。"}, {"id": "stoicism", "name": "斯多葛主义", "volume": 1, "description": "芝诺创立，主张顺应自然理性生活，控制欲望，接受命运，强调德性是唯一善。"}, {"id": "epicureanism", "name": "伊壁鸠鲁学派", "volume": 1, "description": "伊壁鸠鲁创立，追求精神快乐的宁静生活，继承原子论，反对迷信和对死亡的恐惧。"}, {"id": "skepticism", "name": "怀疑论", "volume": 1, "description": "皮浪创立，主张悬搁一切判断以获得心灵宁静，认为感官和理性都不可靠。"}, {"id": "neoplatonism", "name": "新柏拉图主义", "volume": 1, "description": "普罗提诺创立，融合柏拉图哲学与神秘主义，提出太一流溢说和灵魂回归说。"}, {"id": "patristic", "name": "教父哲学", "volume": 2, "description": "早期基督教哲学，以奥古斯丁为代表，融合希腊哲学与基督教信仰，奠定了中世纪神学基础。"}, {"id": "scholasticism", "name": "经院哲学", "volume": 2, "description": "中世纪基督教哲学的主流，运用理性论证神学教义，以阿奎那为巅峰代表。"}, {"id": "renaissance_politics", "name": "文艺复兴政治哲学", "volume": 3, "description": "以马基雅维利为代表，将政治从伦理和宗教中独立出来，持现实主义政治观。"}, {"id": "empiricism", "name": "经验主义", "volume": 3, "description": "近代英国哲学传统，主张一切知识来源于感官经验，代表人物包括洛克、贝克莱、休谟。"}, {"id": "rationalism", "name": "理性主义", "volume": 3, "description": "近代欧洲大陆哲学传统，主张理性是知识的可靠来源，代表人物为笛卡尔、斯宾诺莎、莱布尼茨。"}, {"id": "social_contract", "name": "社会契约论", "volume": 3, "description": "以卢梭为代表，主张国家基于人民的契约建立，强调人民主权和自然权利。"}, {"id": "german_idealism", "name": "德国古典哲学", "volume": 3, "description": "18世纪末至19世纪德国哲学巅峰，以康德、黑格尔为代表，探讨主体性与绝对精神。"}, {"id": "voluntarism", "name": "唯意志论", "volume": 3, "description": "以叔本华为代表，认为意志是世界的本质，理性从属于意志，持悲观主义人生观。"}, {"id": "existentialism", "name": "存在主义", "volume": 3, "description": "以尼采为先驱，强调个体自由、价值创造和超越自我，批判传统道德与宗教信仰。"}, {"id": "utilitarianism", "name": "功利主义", "volume": 3, "description": "以边沁和密尔为代表，以最大幸福原则作为道德和政治的评判标准。"}, {"id": "pragmatism", "name": "实用主义", "volume": 3, "description": "以詹姆斯为代表，认为真理的价值在于其实际效果，主张多元主义和经验主义。"}, {"id": "analytic_philosophy", "name": "分析哲学", "volume": 3, "description": "以弗雷格、维特根斯坦为代表，通过语言分析和逻辑分析解决哲学问题，是20世纪主流哲学流派之一。"}], "volumes": [{"id": 1, "name": "古代哲学", "description": "从泰勒斯到普罗提诺，涵盖前苏格拉底自然哲学、希腊古典三杰、后亚里士多德各学派及新柏拉图主义。"}, {"id": 2, "name": "天主教哲学", "description": "从奥古斯丁到奥卡姆的威廉，涵盖教父哲学和经院哲学两个阶段。"}, {"id": 3, "name": "近代哲学", "description": "从马基雅维利到维特根斯坦，涵盖文艺复兴、理性主义、经验主义、德国古典哲学、功利主义、实用主义及分析哲学等流派。"}]};
+var WISDOM = {"buddhism": [{"id": "b001", "text": "色不异空，空不异色；色即是空，空即是色", "source": "《心经》", "chapter": "色空章", "explanation": "物质现象与空性本质不可分离，破除对物质世界的执着", "mood": "zen", "tags": ["空性", "智慧", "般若"]}, {"id": "b002", "text": "照见五蕴皆空，度一切苦厄", "source": "《心经》", "chapter": "开篇", "explanation": "以般若智慧照见身心皆空，从而超越一切苦难", "mood": "peaceful", "tags": ["空性", "般若", "解脱"]}, {"id": "b003", "text": "凡所有相，皆是虚妄。若见诸相非相，即见如来", "source": "《金刚经》", "chapter": "如理实见分第五", "explanation": "一切表象皆非真实，能看透现象本质者，方见真理", "mood": "zen", "tags": ["空性", "智慧", "实相"]}, {"id": "b004", "text": "一切有为法，如梦幻泡影，如露亦如电，应作如是观", "source": "《金刚经》", "chapter": "应化非真分第三十二", "explanation": "世间一切现象皆短暂无常，不应执着", "mood": "zen", "tags": ["无常", "空性", "智慧"]}, {"id": "b005", "text": "应无所住而生其心", "source": "《金刚经》", "chapter": "庄严净土分第十", "explanation": "心不执着于任何事物，才能生起真正的清净心", "mood": "zen", "tags": ["心性", "禅机", "智慧"]}, {"id": "b006", "text": "若以色见我，以音声求我，是人行邪道，不能见如来", "source": "《金刚经》", "chapter": "法身非相分第二十六", "explanation": "执着于外在形象声音求道，是走错了方向", "mood": "zen", "tags": ["破执", "实相", "智慧"]}, {"id": "b007", "text": "菩提本无树，明镜亦非台，本来无一物，何处惹尘埃", "source": "《六祖坛经》", "chapter": "行由品第一", "explanation": "心性本来清净无物，无须刻意拂拭，当下即是", "mood": "enlightened", "tags": ["顿悟", "心性", "禅机"]}, {"id": "b008", "text": "不是风动，不是幡动，仁者心动", "source": "《六祖坛经》", "chapter": "机缘品第七", "explanation": "外在动静皆由心生，心若不动万境皆寂", "mood": "zen", "tags": ["心性", "禅机", "智慧"]}, {"id": "b009", "text": "何期自性，本自清净；何期自性，本不生灭", "source": "《六祖坛经》", "chapter": "行由品第一", "explanation": "自性本来清净圆满，不生不灭，人人本具", "mood": "enlightened", "tags": ["自性", "顿悟", "心性"]}, {"id": "b010", "text": "迷时师度，悟了自度", "source": "《六祖坛经》", "chapter": "行由品第一", "explanation": "迷惑时需老师指引，开悟后要靠自己修行", "mood": "wise", "tags": ["修行", "自度", "智慧"]}, {"id": "b011", "text": "诸法从本来，常自寂灭相", "source": "《法华经》", "chapter": "方便品第二", "explanation": "一切万法从根本上说，本来就是寂静涅槃的", "mood": "peaceful", "tags": ["实相", "寂灭", "法华"]}, {"id": "b012", "text": "治世语言，资生业等，皆与实相不相违背", "source": "《法华经》", "chapter": "法师品第十", "explanation": "世间一切正当事业与语言，皆与真理不相矛盾", "mood": "wise", "tags": ["世间", "实相", "圆融"]}, {"id": "b013", "text": "若人散乱心，入于塔庙中，一称南无佛，皆已成佛道", "source": "《法华经》", "chapter": "方便品第二", "explanation": "即使散乱心念佛，也已种下成佛的善根种子", "mood": "compassionate", "tags": ["慈悲", "方便", "念佛"]}, {"id": "b014", "text": "一切众生皆具如来智慧德相，但以妄想执着而不能证得", "source": "《华严经》", "chapter": "如来出现品", "explanation": "每个众生本具佛的智慧，只因妄想执着而无法显现", "mood": "compassionate", "tags": ["佛性", "华严", "智慧"]}, {"id": "b015", "text": "心如工画师，能画诸世间，五蕴悉从生，无法而不造", "source": "《华严经》", "chapter": "觉林菩萨偈", "explanation": "心如同画家，创造出世间万象，一切法皆由心造", "mood": "zen", "tags": ["心性", "华严", "万法唯心"]}, {"id": "b016", "text": "一即一切，一切即一", "source": "《华严经》", "chapter": "初发心菩萨功德品", "explanation": "一个与一切相互含摄，整体与部分圆融无碍", "mood": "zen", "tags": ["圆融", "华严", "一多"]}, {"id": "b017", "text": "一切众生而为树根，诸佛菩萨而为华果", "source": "《华严经》", "chapter": "普贤行愿品", "explanation": "众生是根基，佛菩萨是花果，慈悲不离众生", "mood": "compassionate", "tags": ["慈悲", "众生", "华严"]}, {"id": "b018", "text": "若能转物，即同如来", "source": "《楞严经》", "chapter": "卷第二", "explanation": "不被外物所转而能转物，便与如来无异", "mood": "zen", "tags": ["心性", "禅机", "楞严"]}, {"id": "b019", "text": "狂心顿歇，歇即菩提", "source": "《楞严经》", "chapter": "卷第一", "explanation": "狂妄躁动的心一旦停歇，当下即是觉悟", "mood": "peaceful", "tags": ["顿悟", "禅机", "菩提"]}, {"id": "b020", "text": "知见立知，即无明本；知见无见，斯即涅槃", "source": "《楞严经》", "chapter": "卷第五", "explanation": "在知见上再立一个知见，就是无明；知见而不执着，即是涅槃", "mood": "zen", "tags": ["无明", "涅槃", "楞严"]}, {"id": "b021", "text": "一切众生，从无始来，生死相续，皆由不知常住真心", "source": "《楞严经》", "chapter": "卷第一", "explanation": "众生轮回生死，皆因不识自己本具的常住真心", "mood": "zen", "tags": ["心性", "生死", "楞严"]}, {"id": "b022", "text": "随其心净，则佛土净", "source": "《维摩诘经》", "chapter": "佛国品第一", "explanation": "心清净了，所处的世界就是净土", "mood": "peaceful", "tags": ["净土", "心性", "维摩"]}, {"id": "b023", "text": "不舍道法而现凡夫事", "source": "《维摩诘经》", "chapter": "方便品第二", "explanation": "在行凡夫之事的同时，不背离道法，即世间而出世间", "mood": "wise", "tags": ["圆融", "世间", "维摩"]}, {"id": "b024", "text": "以一切众生病，是故我病；若一切众生病愈，则我病愈", "source": "《维摩诘经》", "chapter": "文殊师利问疾品第五", "explanation": "菩萨与众生一体同悲，众生病愈菩萨方愈", "mood": "compassionate", "tags": ["慈悲", "菩萨", "维摩"]}, {"id": "b025", "text": "知一切法无我，得成于忍", "source": "《金刚经》", "chapter": "究竟无我分第十七", "explanation": "了知万法无我，才能成就真正的安忍", "mood": "zen", "tags": ["无我", "忍辱", "般若"]}, {"id": "b026", "text": "过去心不可得，现在心不可得，未来心不可得", "source": "《金刚经》", "chapter": "一体同观分第十八", "explanation": "过去现在未来的心念皆不可执着，当下放下", "mood": "zen", "tags": ["三心", "放下", "般若"]}, {"id": "b027", "text": "无缘大慈，同体大悲", "source": "《大智度论》", "chapter": "卷二十七", "explanation": "对一切众生无条件施予慈爱，视众生与自己同体", "mood": "compassionate", "tags": ["慈悲", "菩萨", "大乘"]}, {"id": "b028", "text": "一切法无我、无人、无众生、无寿者", "source": "《金刚经》", "chapter": "大乘正宗分第三", "explanation": "破除对自我、他人、众生、寿命的执着，了知无我", "mood": "zen", "tags": ["无我", "空性", "般若"]}, {"id": "b029", "text": "于诸病苦，为作良医；于失道者，示其正路", "source": "《华严经》", "chapter": "普贤行愿品", "explanation": "对病苦者做良医，对迷途者指引正道，普度众生", "mood": "compassionate", "tags": ["慈悲", "普贤", "度众"]}, {"id": "b030", "text": "众生无边誓愿度，烦恼无尽誓愿断", "source": "《六祖坛经》", "chapter": "忏悔品第六", "explanation": "发愿度尽无边众生，断除无尽烦恼，是菩萨四弘誓愿", "mood": "compassionate", "tags": ["誓愿", "菩萨", "修行"]}, {"id": "b031", "text": "佛法在世间，不离世间觉；出世觅菩提，犹如求兔角", "source": "《六祖坛经》", "chapter": "般若品第二", "explanation": "佛法就在世间生活中，离开世间求觉悟如同找兔子角", "mood": "wise", "tags": ["世间", "禅机", "修行"]}, {"id": "b032", "text": "但用此心，直了成佛", "source": "《六祖坛经》", "chapter": "般若品第二", "explanation": "只需用这个本心，直接了悟便可成佛", "mood": "enlightened", "tags": ["顿悟", "心性", "成佛"]}, {"id": "b033", "text": "善能分别诸法相，于第一义而不动", "source": "《维摩诘经》", "chapter": "佛国品第一", "explanation": "善巧分别一切法相，但在究竟真理上如如不动", "mood": "zen", "tags": ["智慧", "禅定", "维摩"]}, {"id": "b034", "text": "知幻即离，不作方便；离幻即觉，亦无渐次", "source": "《圆觉经》", "chapter": "普贤菩萨章", "explanation": "知道是幻即已远离，不需要方法；离幻就是觉悟，没有次第", "mood": "enlightened", "tags": ["顿悟", "圆觉", "禅机"]}, {"id": "b035", "text": "一切众生，种种幻化，皆生如来圆觉妙心", "source": "《圆觉经》", "chapter": "文殊菩萨章", "explanation": "一切幻化现象，都从如来的圆觉妙心中生起", "mood": "zen", "tags": ["圆觉", "心性", "如如"]}, {"id": "b036", "text": "居一切时不起妄念，于诸妄心亦不息灭", "source": "《圆觉经》", "chapter": "普贤菩萨章", "explanation": "任何时候不起妄念，也不刻意息灭妄心，自然清净", "mood": "zen", "tags": ["禅定", "圆觉", "修行"]}, {"id": "b037", "text": "佛以一言演说法，众生随类各得解", "source": "《维摩诘经》", "chapter": "佛国品第一", "explanation": "佛以一音说法，众生随各自根器得到不同的理解", "mood": "compassionate", "tags": ["方便", "说法", "法音"]}, {"id": "b038", "text": "诸行无常，是生灭法；生灭灭已，寂灭为乐", "source": "《涅槃经》", "chapter": "圣行品", "explanation": "一切造作无常，生灭止息后的寂灭才是真乐", "mood": "peaceful", "tags": ["无常", "涅槃", "寂灭"]}, {"id": "b039", "text": "一滴水如何不干涸？将其融入大海", "source": "《华严经》", "chapter": "净行品", "explanation": "个体融入整体才能永恒，小我融入大我方不枯竭", "mood": "wise", "tags": ["融入", "整体", "华严"]}, {"id": "b040", "text": "不放逸为甘露道，放逸为死亡道", "source": "《法句经》", "chapter": "不放逸品", "explanation": "精进不放逸是通向解脱之路，放逸是趋向堕落", "mood": "wise", "tags": ["精进", "修行", "警醒"]}], "daoism": [{"id": "d001", "text": "道可道，非常道；名可名，非常名", "source": "《道德经》", "chapter": "第一章", "explanation": "可说的道并非永恒的道，可名的名并非永恒的名，道超越言诠", "mood": "mysterious", "tags": ["道", "无名", "玄妙"]}, {"id": "d002", "text": "上善若水。水善利万物而不争，处众人之所恶，故几于道", "source": "《道德经》", "chapter": "第八章", "explanation": "最高的善像水一样，利万物而不争，居卑下处，最接近道", "mood": "peaceful", "tags": ["水", "不争", "上善"]}, {"id": "d003", "text": "道生一，一生二，二生三，三生万物", "source": "《道德经》", "chapter": "第四十二章", "explanation": "道化生出阴阳二气及和气，进而生成宇宙万物", "mood": "mysterious", "tags": ["道", "生成", "宇宙"]}, {"id": "d004", "text": "人法地，地法天，天法道，道法自然", "source": "《道德经》", "chapter": "第二十五章", "explanation": "人取法地，地取法天，天取法道，道取法自身本然", "mood": "peaceful", "tags": ["自然", "道", "无为"]}, {"id": "d005", "text": "无为而无不为", "source": "《道德经》", "chapter": "第四十八章", "explanation": "不妄为则无所不为，顺应自然规律而成就一切", "mood": "peaceful", "tags": ["无为", "自然", "道"]}, {"id": "d006", "text": "知人者智，自知者明。胜人者有力，自胜者强", "source": "《道德经》", "chapter": "第三十三章", "explanation": "能了解别人是智慧，能认识自己才是真正的明达", "mood": "wise", "tags": ["自知", "自胜", "修身"]}, {"id": "d007", "text": "祸兮福之所倚，福兮祸之所伏", "source": "《道德经》", "chapter": "第五十八章", "explanation": "灾祸中倚藏着幸福，幸福中潜伏着灾祸，福祸相互转化", "mood": "wise", "tags": ["福祸", "转化", "辩证"]}, {"id": "d008", "text": "天下万物生于有，有生于无", "source": "《道德经》", "chapter": "第四十章", "explanation": "万物从有中产生，而有最终从无中产生", "mood": "mysterious", "tags": ["有无", "道", "生成"]}, {"id": "d009", "text": "大方无隅，大器晚成，大音希声，大象无形", "source": "《道德经》", "chapter": "第四十一章", "explanation": "最大的方没有棱角，最大的器最后完成，最大的声音无声", "mood": "mysterious", "tags": ["大象", "无形", "道"]}, {"id": "d010", "text": "天下之至柔，驰骋天下之至坚", "source": "《道德经》", "chapter": "第四十三章", "explanation": "天下最柔弱的东西，能驾驭天下最坚硬的东西", "mood": "zen", "tags": ["柔弱", "刚强", "水"]}, {"id": "d011", "text": "知足不辱，知止不殆，可以长久", "source": "《道德经》", "chapter": "第四十四章", "explanation": "知道满足就不会受辱，知道适可而止就不会有危险", "mood": "wise", "tags": ["知足", "知止", "长久"]}, {"id": "d012", "text": "五色令人目盲，五音令人耳聋，五味令人口爽", "source": "《道德经》", "chapter": "第十二章", "explanation": "过度追求声色味觉享受，反而会损害感官的灵敏", "mood": "wise", "tags": ["欲望", "简朴", "修行"]}, {"id": "d013", "text": "为学日益，为道日损。损之又损，以至于无为", "source": "《道德经》", "chapter": "第四十八章", "explanation": "求学日益增加知识，修道日益减损妄念，直至无为", "mood": "zen", "tags": ["为道", "日损", "无为"]}, {"id": "d014", "text": "夫唯不争，故天下莫能与之争", "source": "《道德经》", "chapter": "第二十二章", "explanation": "正因为不与人争，所以天下没有人能与他相争", "mood": "peaceful", "tags": ["不争", "谦下", "智慧"]}, {"id": "d015", "text": "飘风不终朝，骤雨不终日", "source": "《道德经》", "chapter": "第二十三章", "explanation": "狂风刮不了一整个早晨，暴雨下不了一整天，暴烈难持久", "mood": "wise", "tags": ["自然", "持久", "柔韧"]}, {"id": "d016", "text": "合抱之木，生于毫末；九层之台，起于累土", "source": "《道德经》", "chapter": "第六十四章", "explanation": "大树从小芽生起，高台从泥土筑起，大事须从小事做起", "mood": "wise", "tags": ["积累", "渐进", "恒心"]}, {"id": "d017", "text": "知者不言，言者不知", "source": "《道德经》", "chapter": "第五十六章", "explanation": "真正有智慧的人不多言，多言的人往往没有真知", "mood": "zen", "tags": ["沉默", "智慧", "慎言"]}, {"id": "d018", "text": "曲则全，枉则直，洼则盈，敝则新", "source": "《道德经》", "chapter": "第二十二章", "explanation": "弯曲反能保全，屈枉反能伸直，低洼反能充盈", "mood": "wise", "tags": ["辩证", "柔韧", "谦下"]}, {"id": "d019", "text": "大道至简，大智若愚", "source": "《道德经》", "chapter": "第四十五章", "explanation": "最根本的道理极其简单，最大的智慧看起来像愚钝", "mood": "zen", "tags": ["简朴", "智慧", "道"]}, {"id": "d020", "text": "天地不仁，以万物为刍狗", "source": "《道德经》", "chapter": "第五章", "explanation": "天地没有偏爱，任由万物自然生长消亡，公平无私", "mood": "mysterious", "tags": ["自然", "公平", "天道"]}, {"id": "d021", "text": "吾所以有大患者，为吾有身；及吾无身，吾有何患", "source": "《道德经》", "chapter": "第十三章", "explanation": "人有忧患是因为有身体和自我意识，若能无我则无忧", "mood": "zen", "tags": ["无我", "超脱", "修行"]}, {"id": "d022", "text": "道常无为而无不为。侯王若能守之，万物将自化", "source": "《道德经》", "chapter": "第三十七章", "explanation": "道永远无为却无所不为，治理者守此道，万物自然化育", "mood": "peaceful", "tags": ["无为", "治国", "自化"]}, {"id": "d023", "text": "北冥有鱼，其名为鲲。鲲之大，不知其几千里也", "source": "《庄子》", "chapter": "逍遥游", "explanation": "北海有巨鱼名为鲲，寓意生命潜能之广大无边", "mood": "mysterious", "tags": ["逍遥", "大化", "自由"]}, {"id": "d024", "text": "化而为鸟，其名为鹏。鹏之背，不知其几千里也", "source": "《庄子》", "chapter": "逍遥游", "explanation": "鲲化为鹏，展翅高飞，象征生命的转化与超越", "mood": "inspired", "tags": ["逍遥", "转化", "自由"]}, {"id": "d025", "text": "天地与我并生，而万物与我为一", "source": "《庄子》", "chapter": "齐物论", "explanation": "天地与我同生于道，万物与我本是一体，物我两忘", "mood": "enlightened", "tags": ["齐物", "一体", "逍遥"]}, {"id": "d026", "text": "吾生也有涯，而知也无涯。以有涯随无涯，殆已", "source": "《庄子》", "chapter": "养生主", "explanation": "生命有限而知识无限，以有限追无限只会疲惫", "mood": "wise", "tags": ["养生", "知止", "智慧"]}, {"id": "d027", "text": "彼节者有间，而刀刃者无厚；以无厚入有间，恢恢乎其于游刃必有余地", "source": "《庄子》", "chapter": "养生主", "explanation": "以无厚入有间，顺势而为则游刃有余，养生处世之道", "mood": "zen", "tags": ["养生", "顺势", "庖丁"]}, {"id": "d028", "text": "相濡以沫，不如相忘于江湖", "source": "《庄子》", "chapter": "大宗师", "explanation": "与其在困境中互相救济，不如在广阔天地中各自逍遥", "mood": "zen", "tags": ["逍遥", "超脱", "自由"]}, {"id": "d029", "text": "子非鱼，安知鱼之乐", "source": "《庄子》", "chapter": "秋水", "explanation": "你不是鱼，怎知鱼的快乐？提醒不以己度人", "mood": "wise", "tags": ["齐物", "认知", "相对"]}, {"id": "d030", "text": "至人无己，神人无功，圣人无名", "source": "《庄子》", "chapter": "逍遥游", "explanation": "至人破除自我执着，神人不求功业，圣人不求名声", "mood": "enlightened", "tags": ["逍遥", "无我", "境界"]}, {"id": "d031", "text": "方生方死，方死方生；方可方不可，方不可方可", "source": "《庄子》", "chapter": "齐物论", "explanation": "生死、是非都在不断转化，没有固定不变的界限", "mood": "zen", "tags": ["齐物", "相对", "变化"]}, {"id": "d032", "text": "独与天地精神往来，而不敖倪于万物", "source": "《庄子》", "chapter": "天下", "explanation": "与天地精神相往来，又不轻视万物，超然而平等", "mood": "enlightened", "tags": ["逍遥", "精神", "平等"]}, {"id": "d033", "text": "人皆知有用之用，而莫知无用之用也", "source": "《庄子》", "chapter": "人间世", "explanation": "人都知道有用的用处，却不懂无用的更大用处", "mood": "wise", "tags": ["无用", "智慧", "辩证"]}, {"id": "d034", "text": "大知闲闲，小知间间；大言炎炎，小言詹詹", "source": "《庄子》", "chapter": "齐物论", "explanation": "大智慧广博从容，小聪明琐细计较；大言论气势盛大", "mood": "wise", "tags": ["大知", "小知", "齐物"]}, {"id": "d035", "text": "人生天地之间，若白驹之过郤，忽然而已", "source": "《庄子》", "chapter": "知北游", "explanation": "人生在世如白马过隙般短暂，转瞬即逝", "mood": "peaceful", "tags": ["人生", "短暂", "珍惜"]}, {"id": "d036", "text": "为善无近名，为恶无近刑，缘督以为经", "source": "《庄子》", "chapter": "养生主", "explanation": "做善不近求名，做恶不近触刑，循中道而行", "mood": "wise", "tags": ["养生", "中道", "处世"]}, {"id": "d037", "text": "列子御风而行，泠然善也，旬有五日而后返", "source": "《庄子》", "chapter": "逍遥游", "explanation": "列子乘风飞行，轻盈美妙，但仍有待于风，非真逍遥", "mood": "mysterious", "tags": ["逍遥", "有待", "列子"]}, {"id": "d038", "text": "得道者，物莫能伤", "source": "《列子》", "chapter": "黄帝篇", "explanation": "得道之人与外物和谐，外物不能伤害他", "mood": "peaceful", "tags": ["得道", "和谐", "列子"]}, {"id": "d039", "text": "至信之人，可以感物也", "source": "《列子》", "chapter": "黄帝篇", "explanation": "至诚守信的人，可以感通万物", "mood": "wise", "tags": ["至信", "感通", "列子"]}, {"id": "d040", "text": "天地无全功，圣人无全能，万物无全用", "source": "《列子》", "chapter": "天瑞篇", "explanation": "天地并非全能的，道出了万物各有局限的道理", "mood": "wise", "tags": ["局限", "自然", "列子"]}], "confucianism": [{"id": "c001", "text": "学而时习之，不亦说乎？有朋自远方来，不亦乐乎？", "source": "《论语》", "chapter": "学而篇第一", "explanation": "学习并经常温习是喜悦的，有志同道合的人来访是快乐的", "mood": "joyful", "tags": ["学习", "快乐", "交友"]}, {"id": "c002", "text": "己所不欲，勿施于人", "source": "《论语》", "chapter": "卫灵公篇第十五", "explanation": "自己不愿意承受的事，不要强加给别人", "mood": "wise", "tags": ["仁", "恕道", "处世"]}, {"id": "c003", "text": "学而不思则罔，思而不学则殆", "source": "《论语》", "chapter": "为政篇第二", "explanation": "只学习不思考会迷惑，只思考不学习会陷入困境", "mood": "wise", "tags": ["学习", "思考", "中庸"]}, {"id": "c004", "text": "温故而知新，可以为师矣", "source": "《论语》", "chapter": "为政篇第二", "explanation": "温习旧知识能悟出新道理，就可以做老师了", "mood": "wise", "tags": ["学习", "温故", "为师"]}, {"id": "c005", "text": "知之者不如好之者，好之者不如乐之者", "source": "《论语》", "chapter": "雍也篇第六", "explanation": "懂得不如喜欢，喜欢不如以此为乐，兴趣是最好的老师", "mood": "joyful", "tags": ["兴趣", "学习", "境界"]}, {"id": "c006", "text": "三人行，必有我师焉。择其善者而从之，其不善者而改之", "source": "《论语》", "chapter": "述而篇第七", "explanation": "三人同行必有可学之处，善者学习，不善者自省改正", "mood": "wise", "tags": ["谦逊", "学习", "修身"]}, {"id": "c007", "text": "己欲立而立人，己欲达而达人", "source": "《论语》", "chapter": "雍也篇第六", "explanation": "自己想立身也要帮人立身，自己想通达也要帮人通达", "mood": "compassionate", "tags": ["仁", "忠恕", "利他"]}, {"id": "c008", "text": "君子和而不同，小人同而不和", "source": "《论语》", "chapter": "子路篇第十三", "explanation": "君子和谐但不盲从一致，小人表面一致却内心不和", "mood": "wise", "tags": ["君子", "和谐", "差异"]}, {"id": "c009", "text": "学而不厌，诲人不倦", "source": "《论语》", "chapter": "述而篇第七", "explanation": "学习永不满足，教导别人永不疲倦", "mood": "wise", "tags": ["学习", "教诲", "师德"]}, {"id": "c010", "text": "岁寒，然后知松柏之后凋也", "source": "《论语》", "chapter": "子罕篇第九", "explanation": "天冷了才知松柏最后凋零，艰难时刻方见真品格", "mood": "inspired", "tags": ["品格", "坚韧", "君子"]}, {"id": "c011", "text": "君子坦荡荡，小人长戚戚", "source": "《论语》", "chapter": "述而篇第七", "explanation": "君子心胸开阔坦荡，小人则常忧愁局促", "mood": "peaceful", "tags": ["君子", "心胸", "品格"]}, {"id": "c012", "text": "朝闻道，夕死可矣", "source": "《论语》", "chapter": "里仁篇第四", "explanation": "早上明白了真理，晚上就死去也值得", "mood": "inspired", "tags": ["求道", "真理", "至诚"]}, {"id": "c013", "text": "不义而富且贵，于我如浮云", "source": "《论语》", "chapter": "述而篇第七", "explanation": "用不义手段得来的富贵，对我如同天上的浮云", "mood": "wise", "tags": ["义利", "清高", "品德"]}, {"id": "c014", "text": "其身正，不令而行；其身不正，虽令不从", "source": "《论语》", "chapter": "子路篇第十三", "explanation": "自身端正不令而行，自身不正有令也不从", "mood": "wise", "tags": ["修身", "表率", "治国"]}, {"id": "c015", "text": "欲速则不达，见小利则大事不成", "source": "《论语》", "chapter": "子路篇第十三", "explanation": "求快反而达不到目的，贪图小利就成不了大事", "mood": "wise", "tags": ["耐心", "远见", "中庸"]}, {"id": "c016", "text": "人无远虑，必有近忧", "source": "《论语》", "chapter": "卫灵公篇第十五", "explanation": "人没有长远考虑，必然会有眼前的忧患", "mood": "wise", "tags": ["远见", "规划", "智慧"]}, {"id": "c017", "text": "道不同，不相为谋", "source": "《论语》", "chapter": "卫灵公篇第十五", "explanation": "志向不同的人，无法一起谋划共事", "mood": "wise", "tags": ["志同道合", "选择", "原则"]}, {"id": "c018", "text": "四海之内，皆兄弟也", "source": "《论语》", "chapter": "颜渊篇第十二", "explanation": "天下人都可以成为兄弟，心胸宽广则四海一家", "mood": "compassionate", "tags": ["仁爱", "兄弟", "天下"]}, {"id": "c019", "text": "君子喻于义，小人喻于利", "source": "《论语》", "chapter": "里仁篇第四", "explanation": "君子明白道义，小人只懂利益", "mood": "wise", "tags": ["义利", "君子", "品德"]}, {"id": "c020", "text": "见贤思齐焉，见不贤而内自省也", "source": "《论语》", "chapter": "里仁篇第四", "explanation": "见贤者想向他看齐，见不贤者则自我反省", "mood": "wise", "tags": ["修身", "反省", "学习"]}, {"id": "c021", "text": "敏而好学，不耻下问", "source": "《论语》", "chapter": "公冶长篇第五", "explanation": "聪敏好学，不以向地位低的人请教为耻", "mood": "wise", "tags": ["好学", "谦逊", "学问"]}, {"id": "c022", "text": "志士仁人，无求生以害仁，有杀身以成仁", "source": "《论语》", "chapter": "卫灵公篇第十五", "explanation": "志士仁人不因求生而损害仁义，宁可牺牲以成全仁义", "mood": "inspired", "tags": ["仁", "气节", "牺牲"]}, {"id": "c023", "text": "老吾老以及人之老，幼吾幼以及人之幼", "source": "《孟子》", "chapter": "梁惠王上", "explanation": "尊敬自家老人也尊敬别人老人，关爱自家孩子也关爱别人孩子", "mood": "compassionate", "tags": ["仁政", "推己及人", "孝悌"]}, {"id": "c024", "text": "天将降大任于是人也，必先苦其心志，劳其筋骨", "source": "《孟子》", "chapter": "告子下", "explanation": "天要赋予重任，必先磨炼其心志和身体", "mood": "inspired", "tags": ["磨炼", "担当", "励志"]}, {"id": "c025", "text": "生于忧患，死于安乐", "source": "《孟子》", "chapter": "告子下", "explanation": "忧患使人生存发展，安乐使人衰败灭亡", "mood": "wise", "tags": ["忧患", "警醒", "励志"]}, {"id": "c026", "text": "鱼，我所欲也；熊掌，亦我所欲也。二者不可得兼，舍鱼而取熊掌者也", "source": "《孟子》", "chapter": "告子上", "explanation": "生命与道义不可兼得时，舍生命而取道义", "mood": "inspired", "tags": ["取舍", "义利", "节操"]}, {"id": "c027", "text": "穷则独善其身，达则兼善天下", "source": "《孟子》", "chapter": "尽心上", "explanation": "不得志时修养自身，得志时造福天下", "mood": "wise", "tags": ["修身", "济世", "进退"]}, {"id": "c028", "text": "富贵不能淫，贫贱不能移，威武不能屈，此之谓大丈夫", "source": "《孟子》", "chapter": "滕文公下", "explanation": "富贵不能惑乱，贫贱不能改变，威武不能屈服，才是大丈夫", "mood": "inspired", "tags": ["气节", "大丈夫", "品格"]}, {"id": "c029", "text": "恻隐之心，仁之端也；羞恶之心，义之端也", "source": "《孟子》", "chapter": "公孙丑上", "explanation": "同情心是仁的萌芽，羞耻心是义的萌芽，人性本善", "mood": "compassionate", "tags": ["性善", "四端", "仁义"]}, {"id": "c030", "text": "民为贵，社稷次之，君为轻", "source": "《孟子》", "chapter": "尽心下", "explanation": "百姓最重要，国家其次，君主最轻，民本思想", "mood": "wise", "tags": ["民本", "仁政", "政治"]}, {"id": "c031", "text": "大学之道，在明明德，在亲民，在止于至善", "source": "《大学》", "chapter": "经一章", "explanation": "大学宗旨在于弘扬光明德性，亲近民众，达到至善境界", "mood": "inspired", "tags": ["大学", "明明德", "至善"]}, {"id": "c032", "text": "修身齐家治国平天下", "source": "《大学》", "chapter": "经一章", "explanation": "修养自身、治理家庭、治理国家、平定天下，由内而外", "mood": "wise", "tags": ["修身", "齐家", "治国"]}, {"id": "c033", "text": "诚者，天之道也；诚之者，人之道也", "source": "《中庸》", "chapter": "第二十章", "explanation": "真诚是天道，追求真诚是人道，天人合一在诚", "mood": "wise", "tags": ["诚", "天道", "人道"]}, {"id": "c034", "text": "喜怒哀乐之未发，谓之中；发而皆中节，谓之和", "source": "《中庸》", "chapter": "第一章", "explanation": "情绪未发是中，发而适度是和，中和是天地之根本", "mood": "peaceful", "tags": ["中和", "中庸", "修养"]}, {"id": "c035", "text": "君子中庸，小人反中庸", "source": "《中庸》", "chapter": "第二章", "explanation": "君子行为合乎中庸之道，小人则违背中庸", "mood": "wise", "tags": ["中庸", "君子", "德行"]}, {"id": "c036", "text": "天命之谓性，率性之谓道，修道之谓教", "source": "《中庸》", "chapter": "第一章", "explanation": "天赋予人的是本性，顺着本性是道，修养道是教化", "mood": "peaceful", "tags": ["天命", "性", "道"]}, {"id": "c037", "text": "博学之，审问之，慎思之，明辨之，笃行之", "source": "《中庸》", "chapter": "第二十章", "explanation": "广博学习、详细追问、谨慎思考、明确分辨、切实实践", "mood": "wise", "tags": ["学问", "为学", "笃行"]}, {"id": "c038", "text": "关关雎鸠，在河之洲。窈窕淑女，君子好逑", "source": "《诗经》", "chapter": "周南·关雎", "explanation": "雎鸠鸟在河洲鸣叫，美丽贤淑的女子是君子的好配偶", "mood": "joyful", "tags": ["诗经", "爱情", "风雅"]}, {"id": "c039", "text": "蒹葭苍苍，白露为霜。所谓伊人，在水一方", "source": "《诗经》", "chapter": "秦风·蒹葭", "explanation": "芦花苍苍白露成霜，心上人在河水那一方，可望而不可即", "mood": "zen", "tags": ["诗经", "思念", "意境"]}, {"id": "c040", "text": "昔我往矣，杨柳依依；今我来思，雨雪霏霏", "source": "《诗经》", "chapter": "小雅·采薇", "explanation": "当年离家杨柳依依，如今归来大雪纷飞，物是人非之感", "mood": "zen", "tags": ["诗经", "感怀", "时光"]}, {"id": "c041", "text": "天行健，君子以自强不息", "source": "《周易》", "chapter": "乾卦·象传", "explanation": "天道运行刚健不息，君子应效法天道自强不息", "mood": "inspired", "tags": ["周易", "自强", "刚健"]}, {"id": "c042", "text": "地势坤，君子以厚德载物", "source": "《周易》", "chapter": "坤卦·象传", "explanation": "大地厚实和顺，君子应效法大地以厚德包容万物", "mood": "peaceful", "tags": ["周易", "厚德", "包容"]}, {"id": "c043", "text": "一阴一阳之谓道", "source": "《周易》", "chapter": "系辞上传", "explanation": "阴阳交替变化就是道的运行规律", "mood": "mysterious", "tags": ["周易", "阴阳", "道"]}, {"id": "c044", "text": "穷则变，变则通，通则久", "source": "《周易》", "chapter": "系辞下传", "explanation": "走投无路就要变化，变化就能通达，通达就能长久", "mood": "wise", "tags": ["周易", "变通", "创新"]}, {"id": "c045", "text": "知错能改，善莫大焉", "source": "《左传》", "chapter": "宣公二年", "explanation": "知道错误能够改正，没有比这更大的善了", "mood": "wise", "tags": ["改过", "修身", "反省"]}, {"id": "c046", "text": "言必信，行必果", "source": "《论语》", "chapter": "子路篇第十三", "explanation": "说话一定要守信，做事一定要有结果", "mood": "wise", "tags": ["诚信", "笃行", "品格"]}, {"id": "c047", "text": "逝者如斯夫，不舍昼夜", "source": "《论语》", "chapter": "子罕篇第九", "explanation": "时光像流水一样不分昼夜地流逝，珍惜光阴", "mood": "zen", "tags": ["惜时", "光阴", "感慨"]}, {"id": "c048", "text": "往者不可谏，来者犹可追", "source": "《论语》", "chapter": "微子篇第十八", "explanation": "过去的事已无法挽回，未来的事还来得及追求", "mood": "inspired", "tags": ["过去", "未来", "希望"]}, {"id": "c049", "text": "德不孤，必有邻", "source": "《论语》", "chapter": "里仁篇第四", "explanation": "有德行的人不会孤单，一定会有志同道合者相伴", "mood": "compassionate", "tags": ["德行", "交友", "仁"]}, {"id": "c050", "text": "当仁，不让于师", "source": "《论语》", "chapter": "卫灵公篇第十五", "explanation": "面对仁道之事，即使对老师也不必谦让", "mood": "inspired", "tags": ["仁", "勇", "担当"]}]};
+
+var philosophers = PHILOSOPHERS.philosophers;
+var schools = PHILOSOPHERS.schools;
+var volumes = PHILOSOPHERS.volumes;
+var wisdomQuotes = WISDOM;
+var allWisdom = [].concat(wisdomQuotes.buddhism).concat(wisdomQuotes.daoism).concat(wisdomQuotes.confucianism);
+
+var state = { step:1, category:null, question:null, philosopher:null, isMismatch:false, wisdom:null };
+
+var categories = [
+  {id:"career", name:"\u804c\u573a\u56f0\u60d1", icon:"\ud83d\udcbc", questions:["\u8be5\u4e0d\u8be5\u8df3\u69fd\uff1f","\u9886\u5bfc\u4e0d\u8ba4\u53ef\u6211\u7684\u5de5\u4f5c\u600e\u4e48\u529e\uff1f","\u540c\u4e8b\u62a2\u529f\u600e\u4e48\u5904\u7406\uff1f","\u5de5\u4f5c\u6ca1\u6709\u610f\u4e49\u611f\u600e\u4e48\u529e\uff1f"]},
+  {id:"relationship", name:"\u60c5\u611f\u5173\u7cfb", icon:"\ud83d\udc95", questions:["\u8be5\u4e0d\u8be5\u548cTA\u7ee7\u7eed\u8d70\u4e0b\u53bb\uff1f","\u88ab\u4f24\u5bb3\u4e86\u8be5\u539f\u8c05\u5417\uff1f","\u5982\u4f55\u5728\u5173\u7cfb\u4e2d\u4fdd\u6301\u81ea\u6211\uff1f","\u5f02\u5730\u604b\u80fd\u575a\u6301\u5417\uff1f"]},
+  {id:"consumption", name:"\u6d88\u8d39\u51b3\u7b56", icon:"\ud83d\uded2", questions:["\u4e70\u4e0d\u8d77\u4f46\u53c8\u5f88\u60f3\u8981\uff0c\u600e\u4e48\u529e\uff1f","\u8be5\u82b1\u65f6\u95f4\u7701\u94b1\u8fd8\u662f\u82b1\u94b1\u7701\u65f6\u95f4\uff1f","\u8ddf\u98ce\u6d88\u8d39\u540e\u603b\u540e\u6094","\u8be5\u4e0d\u8be5\u501f\u94b1\u6d88\u8d39\uff1f"]},
+  {id:"moral", name:"\u9053\u5fb7\u56f0\u5883", icon:"\u2696\ufe0f", questions:["\u770b\u5230\u4e0d\u516c\u8be5\u631a\u8eab\u800c\u51fa\u5417\uff1f","\u5584\u610f\u7684\u8c0e\u8a00\u80fd\u8bf4\u5417\uff1f","\u670b\u53cb\u72af\u9519\u8be5\u4e3e\u62a5\u5417\uff1f","\u5229\u76ca\u548c\u539f\u5219\u51b2\u7a81\u65f6\u600e\u4e48\u9009\uff1f"]},
+  {id:"meaning", name:"\u4eba\u751f\u610f\u4e49", icon:"\ud83c\udf05", questions:["\u6d3b\u7740\u7684\u610f\u4e49\u662f\u4ec0\u4e48\uff1f","\u4e3a\u4ec0\u4e48\u6211\u603b\u611f\u89c9\u4e0d\u5feb\u4e50\uff1f","\u52aa\u529b\u4e86\u5374\u6ca1\u6709\u7ed3\u679c\u600e\u4e48\u529e\uff1f","\u5982\u4f55\u9762\u5bf9\u6b7b\u4ea1\u548c\u5931\u53bb\uff1f"]},
+  {id:"tech", name:"\u79d1\u6280\u4f26\u7406", icon:"\ud83d\udd2c", questions:["AI\u4f1a\u53d6\u4ee3\u4eba\u7c7b\u5417\uff1f","\u8be5\u628a\u9690\u79c1\u4ea4\u7ed9\u5927\u516c\u53f8\u5417\uff1f","\u5237\u77ed\u89c6\u9891\u505c\u4e0d\u4e0b\u6765\u600e\u4e48\u529e\uff1f","\u79d1\u6280\u8ba9\u751f\u6d3b\u66f4\u597d\u4e86\u8fd8\u662f\u66f4\u7cdf\u4e86\uff1f"]}
+];
+
+// Default analysis responses
+var defaultMatch = {
+  oneliner: "\u8fd9\u4f4d\u54f2\u5b66\u5bb6\u7684\u601d\u60f3\uff0c\u6070\u597d\u80fd\u7ed9\u4f60\u7684\u56f0\u60d1\u5f00\u4e00\u6247\u65b0\u7684\u7a97\u3002",
+  analogy: "\u751f\u6d3b\u5c31\u50cf\u4e00\u6761\u6cb3\uff0c\u4f60\u4ee5\u4e3a\u81ea\u5df1\u5728\u9006\u6d41\u800c\u4e0a\uff0c\u6362\u4e2a\u89d2\u5ea6\u5c31\u4f1a\u53d1\u73b0\u5176\u5b9e\u662f\u987a\u6c34\u63a8\u821f\u3002\u8fd9\u4f4d\u54f2\u5b66\u5bb6\u7684\u601d\u60f3\u5c31\u662f\u5e2e\u4f60\u627e\u5230\u90a3\u4e2a\u89d2\u5ea6\u3002",
+  deep: "\u54f2\u5b66\u4e0d\u662f\u7ed9\u51fa\u6807\u51c6\u7b54\u6848\uff0c\u800c\u662f\u6559\u4f60\u5b66\u4f1a\u95ee\u66f4\u597d\u7684\u95ee\u9898\u3002\u7528\u8fd9\u4f4d\u54f2\u5b66\u5bb6\u7684\u6838\u5fc3\u65b9\u6cd5\u8bba\u6765\u5206\u6790\u4f60\u7684\u56f0\u5883\uff0c\u4f60\u4f1a\u53d1\u73b0\u539f\u672c\u8ba4\u4e3a\u975e\u6b64\u5373\u5f7c\u7684\u9009\u62e9\uff0c\u5176\u5b9e\u6709\u7b2c\u4e09\u6761\u8def\u3002\u5173\u952e\u5728\u4e8e\u8df3\u51fa\u65e5\u5e38\u601d\u7ef4\u7684\u6846\u67b6\uff0c\u7528\u66f4\u9ad8\u5c42\u6b21\u7684\u89c6\u89d2\u5ba1\u89c6\u5168\u5c40\u3002",
+  advice: "\u4eca\u5929\u82b110\u5206\u949f\uff0c\u7528\u8fd9\u4e2a\u54f2\u5b66\u5bb6\u7684\u65b9\u5f0f\u91cd\u65b0\u63cf\u8ff0\u4f60\u7684\u95ee\u9898\u2014\u2014\u4e0d\u7528\u201c\u6211\u8be5\u600e\u4e48\u529e\u201d\uff0c\u800c\u662f\u95ee\u201c\u8fd9\u4e2a\u95ee\u9898\u8ba9\u6211\u770b\u5230\u4e86\u4ec0\u4e48\u201d\u3002"
+};
+var defaultMismatch = {
+  oneliner: "\u8fd9\u4f4d\u54f2\u5b66\u5bb6\u5927\u6982\u4e00\u8f88\u5b50\u6ca1\u60f3\u8fc7\u4f60\u8fd9\u79cd\u95ee\u9898\u2014\u2014\u4f46\u8fd9\u6b63\u6b63\u662f\u5b83\u6709\u8da3\u7684\u5730\u65b9\u3002",
+  analogy: "\u5c31\u50cf\u62ff\u4e00\u628a\u4fee\u949f\u8868\u7684\u87ba\u4e1d\u5200\u53bb\u4fee\u6c7d\u8f66\u2014\u2014\u5de5\u5177\u4e0d\u5bf9\u8def\uff0c\u4f46\u8bf4\u4e0d\u5b9a\u80fd\u6263\u5f00\u522b\u4eba\u6263\u4e0d\u52a8\u7684\u87ba\u4e1d\u3002",
+  deep: "\u8bf4\u5b9e\u8bdd\uff0c\u8fd9\u4f4d\u54f2\u5b66\u5bb6\u5982\u679c\u6d3b\u5230\u4eca\u5929\uff0c\u770b\u5230\u4f60\u7684\u95ee\u9898\u53ef\u80fd\u4f1a\u5148\u60a3\u4e00\u4e0b\uff0c\u7136\u540e\u76b1\u7740\u7709\u5934\u8bf4\u201c\u8fd9\u4e0d\u662f\u6211\u5173\u5fc3\u7684\u8303\u7574\u201d\u3002\u4f46\u6b63\u56e0\u5982\u6b64\uff0c\u4ed6\u7684\u56de\u7b54\u624d\u4f1a\u51fa\u4e4e\u610f\u6599\u2014\u2014\u56e0\u4e3a\u4ed6\u7684\u601d\u7ef4\u6846\u67b6\u8ddf\u4f60\u7684\u95ee\u9898\u6839\u672c\u4e0d\u5728\u540c\u4e00\u4e2a\u7ef4\u5ea6\u4e0a\u3002",
+  advice: "\u8bd5\u8bd5\u7528\u5b8c\u5168\u76f8\u53cd\u7684\u601d\u8def\uff1a\u5982\u679c\u8fd9\u4f4d\u54f2\u5b66\u5bb6\u8bf4A\uff0c\u4f60\u5c31\u60f3\u975eA\u3002\u77db\u76fe\u672c\u8eab\u5f80\u5f80\u5c31\u662f\u7b54\u6848\u7684\u8d77\u70b9\u3002"
+};
+
+function renderCategories() {
+  var c = document.getElementById("categories"); c.innerHTML = "";
+  categories.forEach(function(cat) {
+    var e = document.createElement("div");
+    e.className = "cat-tag" + (state.category === cat.id ? " selected" : "");
+    e.textContent = cat.icon + " " + cat.name;
+    e.onclick = function() { state.category = state.category === cat.id ? null : cat.id; renderCategories(); renderQuestions(); };
+    c.appendChild(e);
+  });
+}
+
+function renderQuestions() {
+  var c = document.getElementById("questions"); c.innerHTML = "";
+  var filtered = state.category ? categories.find(function(cat) { return cat.id === state.category; }).questions : [];
+  if (!state.category) {
+    categories.forEach(function(cat) { cat.questions.forEach(function(q) { filtered.push(q); }); });
+  }
+  filtered.forEach(function(q) {
+    var e = document.createElement("div");
+    e.className = "q-item" + (state.question === q ? " selected" : "");
+    e.textContent = q;
+    e.onclick = function() { state.question = q; renderQuestions(); document.getElementById("customQuestion").value = ""; goToStep(2); };
+    c.appendChild(e);
+  });
+}
+
+function startWithCustom() {
+  var v = document.getElementById("customQuestion").value.trim();
+  if (!v) { showToast("\u8bf7\u8f93\u5165\u4f60\u7684\u56f0\u60d1"); return; }
+  state.question = v; goToStep(2);
+}
+
+var currentVol = 1;
+function renderPhilosophers() {
+  var tabs = document.getElementById("volumeTabs"); tabs.innerHTML = "";
+  volumes.forEach(function(v) {
+    var e = document.createElement("button");
+    e.className = "vol-tab" + (v.id === currentVol ? " active" : "");
+    e.textContent = "\u5377" + v.id + " " + v.name;
+    e.onclick = function() { currentVol = v.id; renderPhilosophers(); };
+    tabs.appendChild(e);
+  });
+  var grid = document.getElementById("philosopherGrid"); grid.innerHTML = "";
+  var s = document.getElementById("philSearch").value.trim().toLowerCase();
+  var filtered = philosophers.filter(function(p) { return p.volume === currentVol && (!s || p.name.indexOf(s) !== -1 || p.englishName.toLowerCase().indexOf(s) !== -1); });
+  filtered.forEach(function(p) {
+    var c = document.createElement("div");
+    c.className = "ph-card" + (state.philosopher && state.philosopher.id === p.id ? " selected" : "");
+    c.innerHTML = '<div class="ph-avatar">' + p.englishName.charAt(0) + '</div><div class="ph-name">' + p.name + '</div><div class="ph-school">' + p.school + '</div>';
+    c.onclick = function() { state.philosopher = p; state.isMismatch = document.getElementById("contrastMode").checked; renderPhilosophers(); goToStep(3); };
+    grid.appendChild(c);
+  });
+  if (!filtered.length) grid.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted);">\u6ca1\u6709\u627e\u5230\u5339\u914d\u7684\u54f2\u5b66\u5bb6</div>';
+}
+
+function randomPick() {
+  var pool = philosophers.filter(function(p) { return p.volume === currentVol; });
+  if (!pool.length) return;
+  var pick = pool[Math.floor(Math.random() * pool.length)];
+  state.philosopher = pick; state.isMismatch = document.getElementById("contrastMode").checked;
+  renderPhilosophers(); goToStep(3);
+}
+
+function goToStep(n) {
+  state.step = n;
+  document.querySelectorAll(".step").forEach(function(e) { e.classList.remove("active"); e.classList.add("hidden"); });
+  document.getElementById("step" + n).classList.remove("hidden"); document.getElementById("step" + n).classList.add("active");
+  document.querySelectorAll(".step-dot").forEach(function(e) {
+    var s = parseInt(e.getAttribute("data-step")); e.classList.remove("active","done");
+    if (s === n) e.classList.add("active"); else if (s < n) e.classList.add("done");
+  });
+  document.querySelectorAll(".step-line").forEach(function(e) {
+    var p = e.getAttribute("data-between").split("-"); e.classList.toggle("done", parseInt(p[1]) <= n);
+  });
+  if (n === 2) renderPhilosophers();
+  if (n === 3) setTimeout(generateAnalysis, 300);
+  if (n === 4) renderWisdom();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function generateAnalysis() {
+  document.getElementById("thinkingState").style.display = "block";
+  document.getElementById("analysisOutput").style.display = "none";
+  document.getElementById("gotoWisdomBtn").style.display = "none";
+
+  var hints = ["\u7ffb\u5f00\u54f2\u5b66\u5bb6\u7684\u8457\u4f5c...","\u5bfb\u627e\u4e0e\u4f60\u95ee\u9898\u7684\u5173\u8054...","\u7528\u8d39\u66fc\u65b9\u6cd5\u7b80\u5316\u8868\u8fbe...","\u6784\u5efa\u751f\u6d3b\u7c7b\u6bd4...","\u63d0\u70bc\u53ef\u64cd\u4f5c\u5efa\u8bae..."];
+  var idx = 0;
+  var t = setInterval(function() { idx = (idx + 1) % hints.length; document.getElementById("thinkingHint").textContent = hints[idx]; }, 2000);
+
+  setTimeout(function() {
+    clearInterval(t);
+    document.getElementById("thinkingState").style.display = "none";
+    document.getElementById("analysisOutput").style.display = "block";
+    document.getElementById("gotoWisdomBtn").style.display = "block";
+    var p = state.philosopher;
+    var opp = p && p.oppositeIds && p.oppositeIds.length ? (philosophers.find(function(ph) { return ph.id === p.oppositeIds[0]; }) || {name:"\u76f8\u53cd\u6d3e\u7684\u54f2\u5b66\u5bb6"}).name : "\u76f8\u53cd\u6d41\u6d3e\u7684\u54f2\u5b66\u5bb6";
+    var o = state.isMismatch ? defaultMismatch : defaultMatch;
+    var html = '<div class="analysis-section"><div class="label">\ud83e\udde0 ' + p.name + '\u7528\u4e00\u53e5\u8bdd\u8bf4\u6e05\u695a</div><div class="content typewriter">' + o.oneliner + '</div></div>' +
+      '<div class="analysis-section"><div class="label">\ud83d\udcd6 \u751f\u6d3b\u7c7b\u6bd4</div><div class="content typewriter">' + o.analogy + '</div></div>' +
+      '<div class="analysis-section"><div class="label">\ud83d\udd2c \u6df1\u5ea6\u5206\u6790</div><div class="content typewriter">' + o.deep + '</div></div>' +
+      '<div class="analysis-section"><div class="label">\ud83d\udca1 \u751f\u6d3b\u5efa\u8bae</div><div class="content typewriter">' + o.advice + '</div></div>' +
+      '<div class="analysis-section"><div class="label">\ud83e\udd14 \u6362\u4e2a\u89d2\u5ea6\u2014\u2014\u5982\u679c' + opp + '\u6765\u770b\u8fd9\u4e2a\u95ee\u9898...</div><div class="content typewriter">' + opp + '\u53ef\u80fd\u4f1a\u7ed9\u51fa\u5b8c\u5168\u76f8\u53cd\u7684\u7b54\u6848\u3002\u8fd9\u6b63\u662f\u54f2\u5b66\u7684\u9b45\u529b\u2014\u2014\u540c\u4e00\u4e2a\u95ee\u9898\uff0c\u4e0d\u540c\u6d41\u6d3e\u7684\u54f2\u5b66\u5bb6\u4f1a\u7ed9\u51fa\u622a\u7136\u4e0d\u540c\u4f46\u5404\u81ea\u5408\u7406\u7684\u56de\u7b54\u3002\u4f60\u4e0d\u9700\u8981\u5168\u76d8\u63a5\u53d7\u4efb\u4f55\u4e00\u4e2a\uff0c\u800c\u662f\u901a\u8fc7\u8fd9\u79cd\u601d\u60f3\u78b0\u649e\u627e\u5230\u5c5e\u4e8e\u81ea\u5df1\u7684\u7b54\u6848\u3002</div></div>';
+    document.getElementById("analysisOutput").innerHTML = html;
+    typewriteEffect();
+  }, 2500);
+}
+
+function typewriteEffect() {
+  var els = document.querySelectorAll("#analysisOutput .typewriter");
+  els.forEach(function(el, i) {
+    var text = el.textContent; el.textContent = "";
+    var pos = 0;
+    var delay = 20 + i * 200;
+    setTimeout(function() {
+      var t = setInterval(function() {
+        if (pos < text.length) { el.textContent += text.charAt(pos); pos++; } else clearInterval(t);
+      }, 25);
+    }, delay);
+  });
+}
+
+function renderWisdom() {
+  var c = document.getElementById("wisdomCards"); c.innerHTML = "";
+  [
+    {id:"buddhism", icon:"\ud83d\udd49", name:"\u4f5b", style:"buddhism"},
+    {id:"daoism", icon:"\u262f", name:"\u9053", style:"daoism"},
+    {id:"confucianism", icon:"\ud83d\udcda", name:"\u5112", style:"confucianism"}
+  ].forEach(function(card) {
+    var e = document.createElement("div");
+    e.className = "wisdom-card " + card.style + (state.wisdom === card.id ? " selected" : "");
+    e.innerHTML = '<div class="icon">' + card.icon + '</div><div class="name">' + card.name + '</div>';
+    e.onclick = function() { selectWisdom(card.id); };
+    c.appendChild(e);
+  });
+}
+
+function selectWisdom(id) {
+  state.wisdom = id; renderWisdom();
+  var list = wisdomQuotes[id];
+  var d = list[Math.floor(Math.random() * list.length)];
+  var r = document.getElementById("wisdomResult"); r.style.display = "block";
+  r.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;">' +
+    (id==="buddhism"? "\u4f5b\u5bb6\u00b7\u7985\u610f" : id==="daoism"? "\u9053\u5bb6\u00b7\u81ea\u7136" : "\u5112\u5bb6\u00b7\u4fee\u8eab") +
+    '</div><div class="quote">\u300c' + d.text + '\u300d</div>' +
+    '<div class="source">\u2014\u2014 ' + d.source + (d.chapter ? ' \u00b7 ' + d.chapter : "") + '</div>' +
+    '<div class="meaning">' + d.explanation + '</div>' +
+    '<div class="share-row"><button class="share-btn" onclick="shareToMoment()">\ud83d\udcf1 \u5206\u4eab\u5230\u670b\u53cb\u5708</button><button class="share-btn" onclick="saveCard()">\ud83d\udcf7 \u4fdd\u5b58\u56fe\u7247</button></div>';
+}
+
+function shareToMoment() {
+  var txt = "\u300c" + (wisdomQuotes[state.wisdom] ? wisdomQuotes[state.wisdom][0].text : "") + "\u300d - \u6765\u81ea\u300c\u6211\u5728\u6545\u6211\u5728\u300d\u54f2\u5b66\u7f51\u7ad9";
+  if (navigator.share) { navigator.share({title:"\u6211\u5728\u6545\u6211\u5728", text:txt}).catch(function(){}); }
+  else {
+    var ta = document.createElement("textarea"); ta.value = txt + " " + window.location.href;
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta);
+    showToast("\u5df2\u590d\u5236\u5230\u526a\u8d34\u677f\uff0c\u53bb\u670b\u53cb\u5708\u7c98\u8d34\u5427\uff01");
+  }
+}
+
+function saveCard() { showToast("\u957f\u6309\u4e0a\u65b9\u5361\u7247\u5373\u53ef\u4fdd\u5b58\u5230\u76f8\u518c \ud83d\udcf7"); }
+function restart() {
+  state = { step:1, category:null, question:null, philosopher:null, isMismatch:false, wisdom:null };
+  document.getElementById("contrastMode").checked = false;
+  document.getElementById("philSearch").value = "";
+  document.getElementById("customQuestion").value = "";
+  document.getElementById("wisdomResult").style.display = "none";
+  goToStep(1); renderCategories(); renderQuestions();
+}
+function showToast(msg) { var e = document.getElementById("toast"); e.textContent = msg; e.classList.add("show"); setTimeout(function(){e.classList.remove("show");}, 3000); }
+
+renderCategories(); renderQuestions();
+
+// ===== DeepSeek API Configuration =====
+var API_CONFIG = {
+  enabled: false,          // Set to true to use real DeepSeek API
+  baseUrl: "http://127.0.0.1:15721/anthropic/v1/messages",
+  model: "deepseek-v4-flash",
+  maxTokens: 1024
+};
+
+// API calling function (for when enabled)
+async function callDeepSeekAPI(question, philosopher) {
+  if (!API_CONFIG.enabled) return null;
+
+  var prompt = "";
+  prompt += "你是一位精通" + philosopher.name + "哲学思想的导师。";
+  prompt += "用费曼学习法，用最简单的语言向一个普通人解释" + philosopher.name + "会如何看待这个问题。\n\n";
+  prompt += "用户问题：" + question + "\n";
+  prompt += "哲学家：" + philosopher.name + "（" + philosopher.school + "）\n";
+  prompt += "核心思想：" + philosopher.summary + "\n\n";
+  prompt += "输出格式（严格按以下结构）：\n";
+  prompt += "【一句话说清楚】20字以内\n";
+  prompt += "【生活类比】一个日常类比\n";
+  prompt += "【深度分析】200-300字\n";
+  prompt += "【生活建议】可操作的建议\n";
+  prompt += "【换个角度】用相反的哲学家视角";
+
+  try {
+    var response = await fetch(API_CONFIG.baseUrl, {
+      method: "POST",
+      headers: {"Content-Type": "application/json", "x-api-key": "sk-placeholder"},
+      body: JSON.stringify({
+        model: API_CONFIG.model,
+        max_tokens: API_CONFIG.maxTokens,
+        messages: [
+          {role: "user", content: prompt}
+        ]
+      })
+    });
+    if (!response.ok) return null;
+    var data = await response.json();
+    return data.content && data.content[0] ? data.content[0].text : null;
+  } catch(e) {
+    console.warn("API call failed, using mock data:", e);
+    return null;
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,848 @@
+{
+  "philosophers": [
+    {
+      "id": "thales",
+      "name": "泰勒斯",
+      "englishName": "Thales",
+      "volume": 1,
+      "era": "古希腊（前苏格拉底）",
+      "school": "米利都学派",
+      "summary": "西方哲学史上第一位哲学家，米利都学派创始人。提出「水是万物的本原」，认为一切事物皆源于水并复归于水，开创了用自然原因解释世界的理性传统。",
+      "keyWorks": [
+        "《论自然》（失传）"
+      ],
+      "oppositeIds": [
+        "anaximander"
+      ],
+      "famousQuote": "水是万物的本原。"
+    },
+    {
+      "id": "anaximander",
+      "name": "阿那克西曼德",
+      "englishName": "Anaximander",
+      "volume": 1,
+      "era": "古希腊（前苏格拉底）",
+      "school": "米利都学派",
+      "summary": "泰勒斯的学生，提出万物的本原是「无限者」（apeiron），一种无定形的永恒实体。首次提出宇宙演化论，认为世界从对立物的分离中产生。",
+      "keyWorks": [
+        "《论自然》（失传）"
+      ],
+      "oppositeIds": [
+        "thales",
+        "anaximenes"
+      ],
+      "famousQuote": "万物的本原是无定的无限者，万物由之产生，也必然复归于它。"
+    },
+    {
+      "id": "anaximenes",
+      "name": "阿那克西美尼",
+      "englishName": "Anaximenes",
+      "volume": 1,
+      "era": "古希腊（前苏格拉底）",
+      "school": "米利都学派",
+      "summary": "阿那克西曼德的学生，提出「气」是万物的本原。认为气通过稀散和凝聚两种运动变化为火、风、水、土等不同形态，首次用量的变化解释质的差别。",
+      "keyWorks": [
+        "《论自然》（失传）"
+      ],
+      "oppositeIds": [
+        "anaximander"
+      ],
+      "famousQuote": "气通过稀散和凝聚产生万物，灵魂是气，火也是气。"
+    },
+    {
+      "id": "pythagoras",
+      "name": "毕达哥拉斯",
+      "englishName": "Pythagoras",
+      "volume": 1,
+      "era": "古希腊（前苏格拉底）",
+      "school": "毕达哥拉斯学派",
+      "summary": "提出「数是万物的本原」，认为宇宙的本质在于数学比例与和谐。创立了集哲学、宗教、数学于一体的学派，主张灵魂轮回与净化的生活方式。",
+      "keyWorks": [
+        "（无直接著作，学说由弟子传述）"
+      ],
+      "oppositeIds": [
+        "democritus",
+        "heraclitus"
+      ],
+      "famousQuote": "万物皆数。"
+    },
+    {
+      "id": "heraclitus",
+      "name": "赫拉克利特",
+      "englishName": "Heraclitus",
+      "volume": 1,
+      "era": "古希腊（前苏格拉底）",
+      "school": "爱菲斯学派",
+      "summary": "提出「万物皆流变」的宇宙观，认为火是万物的本原。强调对立统一与逻各斯（Logos）作为宇宙的普遍规律，认为斗争是万物之父。",
+      "keyWorks": [
+        "《论自然》（残篇）"
+      ],
+      "oppositeIds": [
+        "parmenides",
+        "pythagoras"
+      ],
+      "famousQuote": "人不能两次踏进同一条河流。"
+    },
+    {
+      "id": "parmenides",
+      "name": "巴门尼德",
+      "englishName": "Parmenides",
+      "volume": 1,
+      "era": "古希腊（前苏格拉底）",
+      "school": "爱利亚学派",
+      "summary": "提出「存在者存在，非存在者不存在」的本体论命题，认为真实是永恒不变、不可分割的「一」。首次在哲学中区分了真理之路与意见之路，开创了逻辑论证的先河。",
+      "keyWorks": [
+        "《论自然》（残篇）"
+      ],
+      "oppositeIds": [
+        "heraclitus",
+        "democritus"
+      ],
+      "famousQuote": "存在者存在，非存在者不存在。"
+    },
+    {
+      "id": "democritus",
+      "name": "德谟克利特",
+      "englishName": "Democritus",
+      "volume": 1,
+      "era": "古希腊（前苏格拉底）",
+      "school": "原子论",
+      "summary": "原子论的集大成者，认为万物由不可分割的原子和虚空构成，原子在虚空中运动、碰撞、结合形成世界。主张唯物主义决定论，反对目的论解释。",
+      "keyWorks": [
+        "《宇宙大系统》（失传）「, 」《论自然》（失传）"
+      ],
+      "oppositeIds": [
+        "plato",
+        "pythagoras",
+        "parmenides",
+        "socrates",
+        "aristotle",
+        "plotinus"
+      ],
+      "famousQuote": "万物皆由原子和虚空构成，没有东西从无中产生。"
+    },
+    {
+      "id": "socrates",
+      "name": "苏格拉底",
+      "englishName": "Socrates",
+      "volume": 1,
+      "era": "古希腊（古典时期）",
+      "school": "古典希腊哲学",
+      "summary": "西方哲学的奠基人之一，以「精神助产术」（辩证法）著称。致力于伦理问题的探究，提出「德性即知识」的核心命题，主张通过理性对话认识普遍真理。",
+      "keyWorks": [
+        "（无直接著作，思想见于柏拉图的对话录）"
+      ],
+      "oppositeIds": [
+        "protagoras",
+        "democritus"
+      ],
+      "famousQuote": "我唯一知道的就是我一无所知。"
+    },
+    {
+      "id": "plato",
+      "name": "柏拉图",
+      "englishName": "Plato",
+      "volume": 1,
+      "era": "古希腊（古典时期）",
+      "school": "理念论",
+      "summary": "提出理念论（Theory of Forms），区分了可感的物质世界与可知的理念世界，前者是后者的不完美摹本。主张哲学王统治的理想国，奠定了西方唯心主义哲学传统。",
+      "keyWorks": [
+        "《理想国》「, 」《斐多篇》「, 」《会饮篇》「, 」《巴门尼德篇》"
+      ],
+      "oppositeIds": [
+        "democritus",
+        "protagoras",
+        "diogenes",
+        "machiavelli",
+        "aristotle",
+        "pyrrho",
+        "locke"
+      ],
+      "famousQuote": "理想存在于理念之中，现实不过是理念的影子。"
+    },
+    {
+      "id": "aristotle",
+      "name": "亚里士多德",
+      "englishName": "Aristotle",
+      "volume": 1,
+      "era": "古希腊（古典时期）",
+      "school": "逍遥学派",
+      "summary": "柏拉图的学生，百科全书式学者。批判理念论，提出「四因说」（质料因、形式因、动力因、目的因）和「实体」理论。开创了逻辑学、生物学、政治学等学科，强调经验观察与理性分析的结合。",
+      "keyWorks": [
+        "《形而上学》「, 」《尼各马可伦理学》「, 」《政治学》「, 」《范畴篇》"
+      ],
+      "oppositeIds": [
+        "plato",
+        "pyrrho",
+        "democritus"
+      ],
+      "famousQuote": "吾爱吾师，吾更爱真理。"
+    },
+    {
+      "id": "protagoras",
+      "name": "普罗泰戈拉",
+      "englishName": "Protagoras",
+      "volume": 1,
+      "era": "古希腊（古典时期）",
+      "school": "智者派",
+      "summary": "最著名的智者（Sophist），提出「人是万物的尺度」这一著名命题，开创了相对主义和怀疑论的先河。擅长修辞术和辩论术，是古希腊启蒙运动的代表人物。",
+      "keyWorks": [
+        "《论真理》（失传）「, 」《论神》（失传）"
+      ],
+      "oppositeIds": [
+        "plato",
+        "socrates"
+      ],
+      "famousQuote": "人是万物的尺度，是存在者存在的尺度，也是非存在者不存在的尺度。"
+    },
+    {
+      "id": "diogenes",
+      "name": "第欧根尼",
+      "englishName": "Diogenes of Sinope",
+      "volume": 1,
+      "era": "古希腊（后亚里士多德）",
+      "school": "犬儒主义",
+      "summary": "犬儒学派代表人物，以极端的清贫和反习俗行为著称。主张回归自然、摒弃世俗欲望，追求自足（autarkeia）的道德自由。常以讽刺和挑衅的方式揭露社会虚伪。",
+      "keyWorks": [
+        "（无系统著作）"
+      ],
+      "oppositeIds": [
+        "plato",
+        "epicurus"
+      ],
+      "famousQuote": "别挡住我的阳光。"
+    },
+    {
+      "id": "zeno",
+      "name": "芝诺（斯多葛）",
+      "englishName": "Zeno of Citium",
+      "volume": 1,
+      "era": "古希腊（后亚里士多德）",
+      "school": "斯多葛主义",
+      "summary": "斯多葛学派创始人。主张宇宙由理性（逻各斯）主宰，人应当顺应自然理性生活，控制欲望、接受命运。强调德性是唯一的善，外在事物无关紧要。",
+      "keyWorks": [
+        "《论共和国》（失传）「, 」《论自然》（失传）"
+      ],
+      "oppositeIds": [
+        "epicurus",
+        "pyrrho"
+      ],
+      "famousQuote": "与宇宙的理性和谐一致地生活，就是德性的生活。"
+    },
+    {
+      "id": "epicurus",
+      "name": "伊壁鸠鲁",
+      "englishName": "Epicurus",
+      "volume": 1,
+      "era": "古希腊（后亚里士多德）",
+      "school": "伊壁鸠鲁学派",
+      "summary": "伊壁鸠鲁学派创始人。继承德谟克利特的原子论，主张快乐是人生的最高善（快乐主义），但强调精神快乐高于感官享乐，追求心灵的宁静（ataraxia）。反对迷信和死亡恐惧。",
+      "keyWorks": [
+        "《论自然》（残篇）「, 」《准则学》（残篇）"
+      ],
+      "oppositeIds": [
+        "zeno",
+        "diogenes",
+        "plotinus"
+      ],
+      "famousQuote": "死亡与我们无关，因为当我们存在时，死亡尚未到来；当死亡到来时，我们已经不存在了。"
+    },
+    {
+      "id": "pyrrho",
+      "name": "皮浪",
+      "englishName": "Pyrrho",
+      "volume": 1,
+      "era": "古希腊（后亚里士多德）",
+      "school": "怀疑论",
+      "summary": "怀疑论（皮浪主义）创始人。主张对一切事物的真实本性不做判断（epoche），因为感官和理性都不可靠。悬搁判断能带来心灵的宁静（ataraxia），这是最高的幸福。",
+      "keyWorks": [
+        "（无直接著作，学说由弟子蒂蒙传述）"
+      ],
+      "oppositeIds": [
+        "aristotle",
+        "zeno",
+        "plato"
+      ],
+      "famousQuote": "不做任何判断，才能获得心灵的不动心。"
+    },
+    {
+      "id": "plotinus",
+      "name": "普罗提诺",
+      "englishName": "Plotinus",
+      "volume": 1,
+      "era": "古希腊（晚期）",
+      "school": "新柏拉图主义",
+      "summary": "新柏拉图主义创始人，将柏拉图哲学与东方神秘主义结合。提出「太一」（The One）作为终极实在，万物从太一中流溢而出，灵魂通过沉思回归太一。",
+      "keyWorks": [
+        "《九章集》"
+      ],
+      "oppositeIds": [
+        "epicurus",
+        "democritus"
+      ],
+      "famousQuote": "太一是超越存在的，它是一切事物的源泉。"
+    },
+    {
+      "id": "augustine",
+      "name": "奥古斯丁",
+      "englishName": "Augustine of Hippo",
+      "volume": 2,
+      "era": "中世纪（教父哲学）",
+      "school": "教父哲学",
+      "summary": "基督教教父哲学的集大成者。融合新柏拉图主义与基督教神学，提出「上帝之城」与「世俗之城」的二元历史观。论证原罪、恩典与自由意志的关系，深刻影响了西方基督教思想。",
+      "keyWorks": [
+        "《忏悔录》「, 」《上帝之城》「, 」《论三位一体》"
+      ],
+      "oppositeIds": [
+        "ockham",
+        "machiavelli"
+      ],
+      "famousQuote": "上帝啊，你为自己创造了我们，我们的心若不安息在你怀中，便永远不得安宁。"
+    },
+    {
+      "id": "aquinas",
+      "name": "托马斯·阿奎那",
+      "englishName": "Thomas Aquinas",
+      "volume": 2,
+      "era": "中世纪（经院哲学）",
+      "school": "经院哲学",
+      "summary": "经院哲学的巅峰人物，将亚里士多德哲学融入基督教神学。提出「五路论证」证明上帝存在，区分了自然神学与启示神学，认为理性与信仰可以调和。",
+      "keyWorks": [
+        "《神学大全》「, 」《反异教大全》"
+      ],
+      "oppositeIds": [
+        "duns_scotus",
+        "ockham",
+        "augustine"
+      ],
+      "famousQuote": "恩典并不摧毁自然，而是成全自然。"
+    },
+    {
+      "id": "duns_scotus",
+      "name": "邓斯·司各脱",
+      "englishName": "Duns Scotus",
+      "volume": 2,
+      "era": "中世纪（经院哲学）",
+      "school": "经院哲学",
+      "summary": "经院哲学的重要代表，强调意志高于理智的唯意志论。提出「此性」概念解释个体化原则，主张神学与哲学分离。其精细论证风格被誉为「精微博士」。",
+      "keyWorks": [
+        "《牛津评注》「, 」《巴黎记录》"
+      ],
+      "oppositeIds": [
+        "aquinas"
+      ],
+      "famousQuote": "意志高于理智，爱比知更卓越。"
+    },
+    {
+      "id": "ockham",
+      "name": "奥卡姆的威廉",
+      "englishName": "William of Ockham",
+      "volume": 2,
+      "era": "中世纪（经院哲学晚期）",
+      "school": "经院哲学",
+      "summary": "经院哲学晚期的批判者，以「奥卡姆剃刀」闻名——如无必要勿增实体。主张唯名论，否定共相的实在性，认为只有个体存在。强调上帝的全能性，动摇理性神学的基础。",
+      "keyWorks": [
+        "《箴言注疏》「, 」《逻辑大全》"
+      ],
+      "oppositeIds": [
+        "aquinas",
+        "augustine"
+      ],
+      "famousQuote": "如无必要，勿增实体。"
+    },
+    {
+      "id": "machiavelli",
+      "name": "马基雅维利",
+      "englishName": "Niccolò Machiavelli",
+      "volume": 3,
+      "era": "文艺复兴",
+      "school": "文艺复兴政治哲学",
+      "summary": "近代政治哲学的奠基人，将政治从伦理和宗教中独立出来。提出「为达目的可不择手段」的现实主义政治观，主张君主应兼具狮子的凶猛和狐狸的狡猾。",
+      "keyWorks": [
+        "《君主论》「, 」《李维史论》"
+      ],
+      "oppositeIds": [
+        "augustine",
+        "rousseau",
+        "plato"
+      ],
+      "famousQuote": "目的总是为手段辩护。"
+    },
+    {
+      "id": "bacon",
+      "name": "弗兰西斯·培根",
+      "englishName": "Francis Bacon",
+      "volume": 3,
+      "era": "文艺复兴晚期",
+      "school": "经验主义",
+      "summary": "近代经验主义和科学方法的倡导者。提出「知识就是力量」的口号，批判「四假相」学说，主张通过归纳法从经验事实中推导出普遍原理，开创了现代实验科学哲学。",
+      "keyWorks": [
+        "《新工具》「, 」《学术的进展》「, 」《新大西岛》"
+      ],
+      "oppositeIds": [
+        "descartes",
+        "hegel"
+      ],
+      "famousQuote": "知识就是力量。"
+    },
+    {
+      "id": "descartes",
+      "name": "笛卡尔",
+      "englishName": "René Descartes",
+      "volume": 3,
+      "era": "17世纪",
+      "school": "理性主义",
+      "summary": "近代哲学之父，提出「我思故我在」的第一原理。通过普遍怀疑建立理性主义认识论，主张心物二元论。首创解析几何，将数学方法引入哲学思考。",
+      "keyWorks": [
+        "《第一哲学沉思集》「, 」《方法论》「, 」《哲学原理》"
+      ],
+      "oppositeIds": [
+        "hume",
+        "bacon",
+        "locke"
+      ],
+      "famousQuote": "我思故我在。"
+    },
+    {
+      "id": "spinoza",
+      "name": "斯宾诺莎",
+      "englishName": "Baruch Spinoza",
+      "volume": 3,
+      "era": "17世纪",
+      "school": "理性主义",
+      "summary": "用几何学方法构建哲学体系，提出实体即自然、上帝即自然的泛神论。认为一切都是必然的，自由是对必然的认识。主张以理性克制情感，达到心灵的至福。",
+      "keyWorks": [
+        "《伦理学》「, 」《神学政治论》「, 」《知性改进论》"
+      ],
+      "oppositeIds": [
+        "leibniz",
+        "hume"
+      ],
+      "famousQuote": "自由是对必然的认识。"
+    },
+    {
+      "id": "leibniz",
+      "name": "莱布尼茨",
+      "englishName": "Gottfried Wilhelm Leibniz",
+      "volume": 3,
+      "era": "17-18世纪",
+      "school": "理性主义",
+      "summary": "提出单子论，认为世界由无数不可分的精神实体（单子）构成，单子之间通过「前定和谐」协调。主张「所有可能世界中最完美的世界」的神正论，也是微积分的共同发明者。",
+      "keyWorks": [
+        "《单子论》「, 」《人类理智新论》「, 」《神正论》"
+      ],
+      "oppositeIds": [
+        "spinoza",
+        "locke"
+      ],
+      "famousQuote": "我们的世界是所有可能世界中最好的世界。"
+    },
+    {
+      "id": "locke",
+      "name": "洛克",
+      "englishName": "John Locke",
+      "volume": 3,
+      "era": "17世纪",
+      "school": "经验主义",
+      "summary": "古典经验主义代表人物，提出「白板说」（Tabula Rasa），认为一切知识来源于经验。区分了第一性质和第二性质，主张有限政府、自然权利和宗教宽容，深刻影响了自由主义政治哲学。",
+      "keyWorks": [
+        "《人类理解论》「, 」《政府论》「, 」《论宗教宽容》"
+      ],
+      "oppositeIds": [
+        "leibniz",
+        "descartes",
+        "plato"
+      ],
+      "famousQuote": "心灵如同一张白纸，一切观念皆来自经验。"
+    },
+    {
+      "id": "berkeley",
+      "name": "贝克莱",
+      "englishName": "George Berkeley",
+      "volume": 3,
+      "era": "18世纪",
+      "school": "经验主义",
+      "summary": "主观唯心主义经验论的代表，提出「存在即被感知」。认为物质实体不存在，万物只是心灵中的观念集合，世界的持续存在依赖于上帝这个永恒感知者的心灵。",
+      "keyWorks": [
+        "《人类知识原理》「, 」《海拉斯与斐洛诺斯对话三篇》"
+      ],
+      "oppositeIds": [
+        "hume",
+        "democritus"
+      ],
+      "famousQuote": "存在即被感知。"
+    },
+    {
+      "id": "hume",
+      "name": "休谟",
+      "englishName": "David Hume",
+      "volume": 3,
+      "era": "18世纪",
+      "school": "经验主义",
+      "summary": "经验主义的极端化发展，将洛克的经验论推向怀疑论。否定因果关系是客观必然联系，认为只是心理习惯联想。批判实体概念和心灵实体，对康德产生了决定性影响。",
+      "keyWorks": [
+        "《人性论》「, 」《人类理解研究》「, 」《自然宗教对话录》"
+      ],
+      "oppositeIds": [
+        "descartes",
+        "kant",
+        "spinoza",
+        "berkeley"
+      ],
+      "famousQuote": "理性是并且也应当是情感的奴隶。"
+    },
+    {
+      "id": "rousseau",
+      "name": "卢梭",
+      "englishName": "Jean-Jacques Rousseau",
+      "volume": 3,
+      "era": "18世纪",
+      "school": "社会契约论",
+      "summary": "启蒙运动的重要思想家，提出「人生而自由却无往不在枷锁中」。主张社会契约论与人民主权，认为文明腐化了人的自然善性，崇尚情感高于理性。",
+      "keyWorks": [
+        "《社会契约论》「, 」《论人类不平等的起源》「, 」《爱弥儿》"
+      ],
+      "oppositeIds": [
+        "machiavelli",
+        "augustine"
+      ],
+      "famousQuote": "人生而自由，却无往不在枷锁之中。"
+    },
+    {
+      "id": "kant",
+      "name": "康德",
+      "englishName": "Immanuel Kant",
+      "volume": 3,
+      "era": "18世纪",
+      "school": "德国古典哲学",
+      "summary": "德国古典哲学创始人，发动「哥白尼式革命」，提出先天综合判断和物自体不可知。区分了现象界与本体界，以三大批判构建了真、善、美的哲学体系，为理性划界。",
+      "keyWorks": [
+        "《纯粹理性批判》「, 」《实践理性批判》「, 」《判断力批判》"
+      ],
+      "oppositeIds": [
+        "hume",
+        "bentham",
+        "schopenhauer"
+      ],
+      "famousQuote": "有两样东西，愈是经常和持久地思考它们，就愈使心灵充满常新而日增的惊奇和敬畏：头顶的星空和心中的道德律。"
+    },
+    {
+      "id": "hegel",
+      "name": "黑格尔",
+      "englishName": "Georg Wilhelm Friedrich Hegel",
+      "volume": 3,
+      "era": "19世纪",
+      "school": "德国古典哲学",
+      "summary": "德国古典哲学的顶峰，提出绝对精神在辩证法的正-反-合运动中自我实现。主张「凡是现实的都是合理的，凡是合理的都是现实的」，建立了庞大而严密的思辨哲学体系。",
+      "keyWorks": [
+        "《精神现象学》「, 」《逻辑学》「, 」《法哲学原理》「, 」《历史哲学讲演录》"
+      ],
+      "oppositeIds": [
+        "schopenhauer",
+        "james",
+        "frege",
+        "bacon",
+        "wittgenstein"
+      ],
+      "famousQuote": "凡是现实的都是合理的，凡是合理的都是现实的。"
+    },
+    {
+      "id": "schopenhauer",
+      "name": "叔本华",
+      "englishName": "Arthur Schopenhauer",
+      "volume": 3,
+      "era": "19世纪",
+      "school": "唯意志论",
+      "summary": "唯意志论创始人，认为世界的本质是盲目的生命意志（Will），意志高于理性。人生因意志永不满足而充满痛苦，唯有通过艺术审美、道德同情和佛教式的否定意志才能获得解脱。",
+      "keyWorks": [
+        "《作为意志和表象的世界》「, 」《附录与补遗》"
+      ],
+      "oppositeIds": [
+        "hegel",
+        "kant",
+        "leibniz",
+        "wittgenstein"
+      ],
+      "famousQuote": "生命是一团欲望，欲望不满足便痛苦，满足便无聊，人生就在痛苦和无聊之间摇摆。"
+    },
+    {
+      "id": "nietzsche",
+      "name": "尼采",
+      "englishName": "Friedrich Nietzsche",
+      "volume": 3,
+      "era": "19世纪",
+      "school": "存在主义",
+      "summary": "提出「上帝死了」的宣告和「权力意志」概念，批判传统基督教道德为奴隶道德。主张「超人」哲学和永恒轮回，强调个体超越自我、创造价值，对存在主义和后现代主义影响深远。",
+      "keyWorks": [
+        "《查拉图斯特拉如是说》「, 」《善与恶的彼岸》「, 」《道德谱系学》「, 」《悲剧的诞生》"
+      ],
+      "oppositeIds": [
+        "mill",
+        "bentham",
+        "kant"
+      ],
+      "famousQuote": "上帝死了！是我们杀死了他。"
+    },
+    {
+      "id": "bentham",
+      "name": "边沁",
+      "englishName": "Jeremy Bentham",
+      "volume": 3,
+      "era": "18-19世纪",
+      "school": "功利主义",
+      "summary": "功利主义（Utilitarianism）创始人，提出「最大多数人的最大幸福」原则。主张以快乐和痛苦的量化计算作为道德和政治的评判标准，推动了英国法律和社会制度改革。",
+      "keyWorks": [
+        "《道德与立法原理导论》「, 」《政府片论》"
+      ],
+      "oppositeIds": [
+        "kant",
+        "nietzsche",
+        "hegel"
+      ],
+      "famousQuote": "最大多数人的最大幸福是衡量是非的标准。"
+    },
+    {
+      "id": "mill",
+      "name": "约翰·斯图亚特·密尔",
+      "englishName": "John Stuart Mill",
+      "volume": 3,
+      "era": "19世纪",
+      "school": "功利主义",
+      "summary": "边沁功利主义的继承和发展者，区分了快乐的质与量，认为理性的快乐高于感官的快乐。主张自由至上原则（伤害原则）和代议制民主，是古典自由主义的集大成者。",
+      "keyWorks": [
+        "《论自由》「, 」《功利主义》「, 」《代议制政府》「, 」《逻辑体系》"
+      ],
+      "oppositeIds": [
+        "nietzsche",
+        "hegel"
+      ],
+      "famousQuote": "个人自由在不伤害他人的前提下应当不受限制。"
+    },
+    {
+      "id": "james",
+      "name": "威廉·詹姆斯",
+      "englishName": "William James",
+      "volume": 3,
+      "era": "19-20世纪",
+      "school": "实用主义",
+      "summary": "实用主义哲学创始人之一，认为真理是「有用的观念」，其意义在于实际效果。提出「意识流」概念，在心理学和宗教哲学方面也有重要贡献，主张多元宇宙论。",
+      "keyWorks": [
+        "《实用主义》「, 」《心理学原理》「, 」《宗教经验之种种》"
+      ],
+      "oppositeIds": [
+        "hegel",
+        "frege"
+      ],
+      "famousQuote": "真理不过是思维中的权宜之计，就像权宜之计是行动中的真理一样。"
+    },
+    {
+      "id": "frege",
+      "name": "弗雷格",
+      "englishName": "Gottlob Frege",
+      "volume": 3,
+      "era": "19-20世纪",
+      "school": "分析哲学",
+      "summary": "现代分析哲学和数理逻辑的奠基人。区分了含义（Sinn）与指称（Bedeutung），开创了量化逻辑系统。其逻辑主义方案（数学可还原为逻辑）深刻影响了罗素和维特根斯坦。",
+      "keyWorks": [
+        "《概念文字》「, 」《算术基础》「, 」《论含义与指称》"
+      ],
+      "oppositeIds": [
+        "hegel",
+        "james"
+      ],
+      "famousQuote": "逻辑是数学的基础，算术是逻辑的延伸。"
+    },
+    {
+      "id": "wittgenstein",
+      "name": "维特根斯坦",
+      "englishName": "Ludwig Wittgenstein",
+      "volume": 3,
+      "era": "20世纪",
+      "school": "分析哲学",
+      "summary": "分析哲学的核心人物，早期提出「语言图像论」，认为哲学问题是语言逻辑的误用。后期转向「语言游戏」和「家族相似」概念，主张哲学的任务是治疗语言疾病。",
+      "keyWorks": [
+        "《逻辑哲学论》「, 」《哲学研究》"
+      ],
+      "oppositeIds": [
+        "hegel",
+        "schopenhauer"
+      ],
+      "famousQuote": "凡是可以说的，就能说清楚；对于不可说的，我们必须保持沉默。"
+    }
+  ],
+  "schools": [
+    {
+      "id": "milesian",
+      "name": "米利都学派",
+      "volume": 1,
+      "description": "古希腊最早的哲学流派，以米利都为中心，关注万物本原问题，主张用自然原因解释世界。"
+    },
+    {
+      "id": "pythagorean",
+      "name": "毕达哥拉斯学派",
+      "volume": 1,
+      "description": "以数是万物本原为核心的哲学-宗教团体，重视数学、音乐与灵魂净化。"
+    },
+    {
+      "id": "ephesian",
+      "name": "爱菲斯学派",
+      "volume": 1,
+      "description": "以赫拉克利特为代表的哲学流派，强调万物流变与对立统一的逻各斯。"
+    },
+    {
+      "id": "eleatic",
+      "name": "爱利亚学派",
+      "volume": 1,
+      "description": "以巴门尼德和芝诺为代表，主张存在是唯一、不变、不动的，强调逻辑论证。"
+    },
+    {
+      "id": "atomism",
+      "name": "原子论",
+      "volume": 1,
+      "description": "以德谟克利特为代表，认为万物由不可分割的原子和虚空构成，持唯物主义决定论。"
+    },
+    {
+      "id": "classical_greek",
+      "name": "古典希腊哲学",
+      "volume": 1,
+      "description": "以苏格拉底为代表的雅典哲学，关注伦理与辩证法，奠定了西方哲学核心问题。"
+    },
+    {
+      "id": "idealism",
+      "name": "理念论",
+      "volume": 1,
+      "description": "柏拉图创立的哲学体系，区分理念世界与物质世界，认为真实存在于理念之中。"
+    },
+    {
+      "id": "peripatetic",
+      "name": "逍遥学派",
+      "volume": 1,
+      "description": "亚里士多德创立的学派，注重经验观察与逻辑分析，研究范围涵盖全部知识领域。"
+    },
+    {
+      "id": "sophist",
+      "name": "智者派",
+      "volume": 1,
+      "description": "以普罗泰戈拉为代表的修辞与辩论教师群体，持相对主义立场，是古希腊启蒙运动的代表。"
+    },
+    {
+      "id": "cynicism",
+      "name": "犬儒主义",
+      "volume": 1,
+      "description": "以第欧根尼为代表，主张极端清贫与反习俗，追求自足的自由道德。"
+    },
+    {
+      "id": "stoicism",
+      "name": "斯多葛主义",
+      "volume": 1,
+      "description": "芝诺创立，主张顺应自然理性生活，控制欲望，接受命运，强调德性是唯一善。"
+    },
+    {
+      "id": "epicureanism",
+      "name": "伊壁鸠鲁学派",
+      "volume": 1,
+      "description": "伊壁鸠鲁创立，追求精神快乐的宁静生活，继承原子论，反对迷信和对死亡的恐惧。"
+    },
+    {
+      "id": "skepticism",
+      "name": "怀疑论",
+      "volume": 1,
+      "description": "皮浪创立，主张悬搁一切判断以获得心灵宁静，认为感官和理性都不可靠。"
+    },
+    {
+      "id": "neoplatonism",
+      "name": "新柏拉图主义",
+      "volume": 1,
+      "description": "普罗提诺创立，融合柏拉图哲学与神秘主义，提出太一流溢说和灵魂回归说。"
+    },
+    {
+      "id": "patristic",
+      "name": "教父哲学",
+      "volume": 2,
+      "description": "早期基督教哲学，以奥古斯丁为代表，融合希腊哲学与基督教信仰，奠定了中世纪神学基础。"
+    },
+    {
+      "id": "scholasticism",
+      "name": "经院哲学",
+      "volume": 2,
+      "description": "中世纪基督教哲学的主流，运用理性论证神学教义，以阿奎那为巅峰代表。"
+    },
+    {
+      "id": "renaissance_politics",
+      "name": "文艺复兴政治哲学",
+      "volume": 3,
+      "description": "以马基雅维利为代表，将政治从伦理和宗教中独立出来，持现实主义政治观。"
+    },
+    {
+      "id": "empiricism",
+      "name": "经验主义",
+      "volume": 3,
+      "description": "近代英国哲学传统，主张一切知识来源于感官经验，代表人物包括洛克、贝克莱、休谟。"
+    },
+    {
+      "id": "rationalism",
+      "name": "理性主义",
+      "volume": 3,
+      "description": "近代欧洲大陆哲学传统，主张理性是知识的可靠来源，代表人物为笛卡尔、斯宾诺莎、莱布尼茨。"
+    },
+    {
+      "id": "social_contract",
+      "name": "社会契约论",
+      "volume": 3,
+      "description": "以卢梭为代表，主张国家基于人民的契约建立，强调人民主权和自然权利。"
+    },
+    {
+      "id": "german_idealism",
+      "name": "德国古典哲学",
+      "volume": 3,
+      "description": "18世纪末至19世纪德国哲学巅峰，以康德、黑格尔为代表，探讨主体性与绝对精神。"
+    },
+    {
+      "id": "voluntarism",
+      "name": "唯意志论",
+      "volume": 3,
+      "description": "以叔本华为代表，认为意志是世界的本质，理性从属于意志，持悲观主义人生观。"
+    },
+    {
+      "id": "existentialism",
+      "name": "存在主义",
+      "volume": 3,
+      "description": "以尼采为先驱，强调个体自由、价值创造和超越自我，批判传统道德与宗教信仰。"
+    },
+    {
+      "id": "utilitarianism",
+      "name": "功利主义",
+      "volume": 3,
+      "description": "以边沁和密尔为代表，以最大幸福原则作为道德和政治的评判标准。"
+    },
+    {
+      "id": "pragmatism",
+      "name": "实用主义",
+      "volume": 3,
+      "description": "以詹姆斯为代表，认为真理的价值在于其实际效果，主张多元主义和经验主义。"
+    },
+    {
+      "id": "analytic_philosophy",
+      "name": "分析哲学",
+      "volume": 3,
+      "description": "以弗雷格、维特根斯坦为代表，通过语言分析和逻辑分析解决哲学问题，是20世纪主流哲学流派之一。"
+    }
+  ],
+  "volumes": [
+    {
+      "id": 1,
+      "name": "古代哲学",
+      "description": "从泰勒斯到普罗提诺，涵盖前苏格拉底自然哲学、希腊古典三杰、后亚里士多德各学派及新柏拉图主义。"
+    },
+    {
+      "id": 2,
+      "name": "天主教哲学",
+      "description": "从奥古斯丁到奥卡姆的威廉，涵盖教父哲学和经院哲学两个阶段。"
+    },
+    {
+      "id": 3,
+      "name": "近代哲学",
+      "description": "从马基雅维利到维特根斯坦，涵盖文艺复兴、理性主义、经验主义、德国古典哲学、功利主义、实用主义及分析哲学等流派。"
+    }
+  ]
+}

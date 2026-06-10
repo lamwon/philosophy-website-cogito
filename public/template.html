@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我在故我在 - 哲学与生活</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--primary:#1A3A5C;--bg:#F5F0EB;--accent:#C9A96E;--text:#2C1810;--muted:#8B7355;--card-bg:#FFF;--radius:12px;--font:'Noto Serif SC','STSong','SimSun',serif}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;line-height:1.8}
+.container{max-width:780px;margin:0 auto;padding:16px}
+.header{text-align:center;padding:36px 20px 20px;background:linear-gradient(135deg,#1A3A5C,#2C5F7A);color:#fff;border-radius:0 0 24px 24px;margin-bottom:20px}
+.header h1{font-size:26px;font-weight:700;letter-spacing:4px}
+.header p{font-size:13px;color:rgba(255,255,255,0.7);margin-top:4px}
+.steps{display:flex;justify-content:center;align-items:center;gap:6px;margin:16px 0 24px}
+.sdot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;background:#ddd;color:#999;transition:all .3s}
+.sdot.active{background:var(--primary);color:#fff;transform:scale(1.1)}
+.sdot.done{background:var(--accent);color:#fff}
+.sline{width:28px;height:2px;background:#ddd}
+.sline.done{background:var(--accent)}
+.card{background:var(--card-bg);border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,0.06);padding:20px;margin-bottom:16px}
+.card-title{font-size:17px;font-weight:700;margin-bottom:14px;color:var(--primary)}
+.cat-tag{padding:5px 14px;border-radius:20px;background:var(--bg);border:1px solid #ddd;cursor:pointer;font-size:12px;font-family:var(--font);transition:all .2s}
+.cat-tag:hover{border-color:var(--primary);background:#EBE5DE}
+.cat-tag.sel{background:var(--primary);color:#fff;border-color:var(--primary)}
+.q-item{padding:10px 14px;border-radius:8px;background:var(--bg);cursor:pointer;font-size:13px;border:2px solid transparent;transition:all .2s}
+.q-item:hover{background:#EBE5DE}
+.q-item.sel{border-color:var(--accent);background:#FFF8F0}
+.inp-row{display:flex;gap:8px;margin-top:14px}
+.inp-row input{flex:1;padding:10px 14px;border:2px solid #ddd;border-radius:8px;font-size:13px;font-family:var(--font);outline:none}
+.inp-row input:focus{border-color:var(--accent)}
+.inp-row button{padding:10px 20px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;font-size:13px;font-family:var(--font)}
+.btn{padding:7px 18px;border:2px solid var(--primary);border-radius:20px;background:transparent;color:var(--primary);cursor:pointer;font-size:12px;font-family:var(--font)}
+.btn:hover{background:var(--primary);color:#fff}
+.btn-gold{background:var(--accent);border:none;color:#fff;padding:10px 0;border-radius:8px;font-size:14px;font-family:var(--font);cursor:pointer;width:100%}
+.vol-tab{padding:6px 16px;border-radius:6px 6px 0 0;cursor:pointer;background:var(--bg);border:none;font-size:12px;font-family:var(--font)}
+.vol-tab.active{background:var(--card-bg);color:var(--primary);font-weight:700}
+.ph-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px}
+.ph-card{padding:12px;border-radius:var(--radius);background:var(--bg);cursor:pointer;text-align:center;border:2px solid transparent;transition:all .2s}
+.ph-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.1)}
+.ph-card.sel{border-color:var(--accent);background:#FFF8F0}
+.ph-av{width:42px;height:42px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-size:16px;font-weight:700}
+.ph-name{font-size:13px;font-weight:600}
+.ph-school{font-size:11px;color:var(--muted)}
+.srch{width:100%;padding:8px 14px;border:2px solid #ddd;border-radius:8px;font-size:13px;font-family:var(--font);outline:none;margin-bottom:10px}
+.srch:focus{border-color:var(--accent)}
+.act-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.ct-label{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.ct-label input{width:36px;height:18px;cursor:pointer}
+.spinner{width:44px;height:44px;margin:0 auto 20px;border:3px solid #EBE5DE;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sec{margin-bottom:16px}
+.sec .txt{font-size:14px;line-height:1.8;white-space:pre-wrap}
+.wis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.wis-card{padding:20px 12px;border-radius:var(--radius);text-align:center;cursor:pointer;border:3px solid transparent;transition:all .3s;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.wis-card:hover{transform:translateY(-3px)}
+.wis-card.sel{border-color:var(--accent)}
+.wis-card .wi{font-size:32px;margin-bottom:6px}
+.wis-card .wn{font-size:18px;font-weight:700}
+.wis-card.bud{background:linear-gradient(135deg,#FDF6F0,#F5E6DA);color:#D4836D}
+.wis-card.dao{background:linear-gradient(135deg,#F0F5F2,#E0EDE5);color:#5D7A6E}
+.wis-card.con{background:linear-gradient(135deg,#F5F0EB,#EDE0D5);color:#8B4513}
+.result-box{background:linear-gradient(135deg,var(--primary),#2C5F7A);color:#fff;border-radius:var(--radius);padding:28px;text-align:center}
+.result-box .rq{font-size:20px;line-height:1.8;margin-bottom:10px;font-style:italic}
+.result-box .rs{font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:14px}
+.result-box .re{font-size:14px;line-height:1.6;background:rgba(255,255,255,0.1);padding:14px;border-radius:8px;margin-bottom:16px}
+.share-btn{padding:8px 20px;border:2px solid rgba(255,255,255,0.3);border-radius:20px;background:transparent;color:#fff;cursor:pointer;font-size:12px;font-family:var(--font)}
+.share-btn:hover{background:rgba(255,255,255,0.1)}
+.step{display:none}
+.step.active{display:block}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--primary);color:#fff;padding:10px 20px;border-radius:8px;font-size:13px;z-index:1000;opacity:0;transition:opacity .3s}
+.toast.show{opacity:1}
+.cb{display:inline-block;width:2px;height:1em;background:var(--primary);margin-left:2px;animation:blink .8s infinite;vertical-align:text-bottom}
+@keyframes blink{50%{opacity:0}}
+@media(max-width:599px){.wis-grid{grid-template-columns:1fr}.ph-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="header"><h1>我在故我在</h1><p>思辨即生活</p></div>
+<div class="container">
+<div class="steps" id="steps"></div>
+
+<div class="step active" id="s1">
+<div class="card">
+<div class="card-title">你遇到了什么困惑？</div>
+<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px" id="cats"></div>
+<div id="qlist"></div>
+<div class="inp-row">
+<input id="customQ" placeholder="或者自己描述你的困惑..." />
+<button onclick="submitCustom()">确定</button>
+</div>
+</div></div>
+
+<div class="step" id="s2">
+<div class="card">
+<div class="card-title">选一位哲学家来回应你</div>
+<div class="act-row">
+<button class="btn" onclick="randomPick()">随缘试试</button>
+<label class="ct-label"><input type="checkbox" id="cmode" onchange="renderPhils()" />反差模式</label>
+</div>
+<input class="srch" id="philSrch" placeholder="搜索哲学家..." oninput="renderPhils()" />
+<div style="display:flex;gap:4px;margin-bottom:10px" id="vtabs"></div>
+<div class="ph-grid" id="pgrid"></div>
+</div></div>
+
+<div class="step" id="s3">
+<div class="card" id="acard">
+<div id="loadingState" style="text-align:center;padding:60px 20px;">
+<div class="spinner"></div>
+<div style="font-size:15px;color:var(--text);margin-bottom:8px" id="thinkName">正在思考...</div>
+<div style="font-size:13px;color:var(--muted)">从哲学的角度审视你的问题</div>
+</div>
+<div id="analysisOut" style="display:none;"></div>
+</div>
+<button class="btn-gold" id="toWisdomBtn" style="display:none;" onclick="go(4)">我要结语 →</button>
+</div>
+
+<div class="step" id="s4">
+<div class="card">
+<div class="card-title">以东方智慧收尾</div>
+<div class="wis-grid" id="wgrid"></div>
+</div>
+<div id="wresult" style="display:none;" class="result-box"></div>
+<button class="btn-gold" style="margin-top:20px;" onclick="restart()">再来一次</button>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var PHIL = {{PHIL_DATA}};
+var WIS = {{WIS_DATA}};
+var phs = PHIL.philosophers;
+var vols = PHIL.volumes;
+
+var st = {step:1,cat:null,q:null,phil:null,mism:false,vol:1,wisd:null};
+var ttxt = {};
+var tdone = false;
+var aSec = null;
+
+var cats = [
+  {id:"c1",n:"职场困惑",i:"💼",qs:["该不该跳槽？","领导不认可我的工作怎么办？","同事抢功怎么处理？","工作没有意义感怎么办？"]},
+  {id:"c2",n:"情感关系",i:"💕",qs:["该不该和TA继续走下去？","被伤害了该原谅吗？","如何在关系中保持自我？","异地恋能坚持吗？"]},
+  {id:"c3",n:"消费决策",i:"🛒",qs:["买不起但又很想要怎么办？","该花时间省钱还是花钱省时间？","跟风消费后总后悔","该不该借钱消费？"]},
+  {id:"c4",n:"道德困境",i:"⚖️",qs:["看到不公该挺身而出吗？","善意的谎言能说吗？","朋友犯错该举报吗？","利益和原则冲突时怎么选？"]},
+  {id:"c5",n:"人生意义",i:"🌅",qs:["活着的意义是什么？","为什么我总感觉不快乐？","努力了却没有结果怎么办？","如何面对死亡和失去？"]},
+  {id:"c6",n:"科技伦理",i:"🔬",qs:["AI会取代人类吗？","该把隐私交给大公司吗？","刷短视频停不下来怎么办？","科技让生活更好还是更糟了？"]}
+];
+
+function mock(q,p,mism,opp){
+  var n=p.name,s=p.school||"",e=p.era||"",w=(p.keyWorks||[])[0]||"",fq=p.famousQuote||"";
+  if(!mism) return {
+    o1:'你问"'+q+'"？'+n+'有言："'+fq+'"——答案就藏在这句话里。',
+    o2:'想象一下，你问"'+q+'"的时候，'+n+'不会直接回答，而是把TA的名言"'+fq+'"递给你说：你先读懂这句话，再回来看你问的"'+q+'"。'+s+'的智慧从来不是答题手册，而是一面镜子——你问的"'+q+'"照见的，往往是提问者自己。',
+    o3:'你问"'+q+'"。要理解'+n+'会如何看待你问的"'+q+'"，必须回到TA的原文。'+n+'（'+e+'）在'+w+'中写道："'+fq+'"。这句话表面在讨论'+s+'的理论命题，但把它放到你问的"'+q+'"面前，你会看到惊人的关联。你问"'+q+'"，用这个视角来看，表面的困境背后藏着一个被你忽略的前提。你问"'+q+'"，其实是在问一个更深的东西。',
+    o4:'针对你问的"'+q+'"，结合'+n+'的原文"'+fq+'"：第一，重读这句话三遍，写下它跟你处境的第一个直觉关联；第二，问自己——如果'+n+'说的对，那我应该改变什么？第三，做一件小事来验证这个改变。',
+    o5:'如果让'+opp+'来回答你问的"'+q+'"，他大概会说：你太执着了，'+n+'让你从原文中找答案，而'+opp+'会建议你换个目标——不是消除你问的"'+q+'"的困惑，而是和困惑共处。同一个问题，不同的哲学框架，导出完全不同的活法。'
+  };
+  return {
+    o1:'你问"'+q+'"？'+n+'的名言"'+fq+'"看似不相关——但拿它来回答你问的"'+q+'"，反而有意思。',
+    o2:'你问"'+q+'"，拿它去问'+n+'，就像把TA那句"'+fq+'"贴到你办公室墙上——表面跟你问的"'+q+'"不搭，但盯着看久了，你会发现它其实在说你的心事。',
+    o3:'你问"'+q+'"。'+n+'那句"'+fq+'"本身跟你问的"'+q+'"没有直接关系。'+s+'原本讨论的是另一回事。但当你硬把"'+fq+'"放到你问的"'+q+'"的语境里重新解读，你会看到原文被你"误读"出了新的意义。你问的"'+q+'"，用'+n+'的话来说，可能根本不是一个该被"回答"的问题，而是一个该被"消解"的困惑。',
+    o4:'针对你问的"'+q+'"，试试这个：把"'+fq+'"写下来，每天看一遍，连续三天。任何一句古老的智慧，盯久了都会在你的人生中找到落脚点。',
+    o5:opp+'听到你问的"'+q+'"，八成会反驳'+n+'说"你把事情搞复杂了"。关键是你问的"'+q+'"本身没有标准答案，选择站哪边、为什么站那边，才是哲学训练的真功夫。'
+  };
+}
+
+function updSteps(){
+  var el=document.getElementById("steps");el.innerHTML="";
+  var lb=["选问题","选哲学家","看分析","得结语"];
+  lb.forEach(function(l,i){
+    var d=document.createElement("div");d.className="sdot"+(st.step===i+1?" active":st.step>i+1?" done":"");
+    d.textContent=i+1;el.appendChild(d);
+    if(i<3){var ln=document.createElement("div");ln.className="sline"+(st.step>i+1?" done":"");el.appendChild(ln);}
+  });
+}
+
+function rCats(){
+  var c=document.getElementById("cats");c.innerHTML="";
+  cats.forEach(function(ca){
+    var e=document.createElement("div");e.className="cat-tag"+(st.cat===ca.id?" sel":"");
+    e.textContent=ca.i+" "+ca.n;
+    e.onclick=function(){st.cat=st.cat===ca.id?null:ca.id;rCats();rQs();};
+    c.appendChild(e);
+  });
+}
+
+function rQs(){
+  var c=document.getElementById("qlist");c.innerHTML="";
+  var all=st.cat?cats.find(function(x){return x.id===st.cat}).qs:[];
+  if(!st.cat)cats.forEach(function(ca){ca.qs.forEach(function(q){all.push(q);});});
+  all.forEach(function(q){
+    var e=document.createElement("div");e.className="q-item"+(st.q===q?" sel":"");
+    e.textContent=q;
+    e.onclick=function(){st.q=q;rQs();document.getElementById("customQ").value="";go(2);};
+    c.appendChild(e);
+  });
+}
+
+function submitCustom(){var v=document.getElementById("customQ").value.trim();if(!v){toast("请输入你的困惑");return;}st.q=v;go(2);}
+
+var curVol=1;
+function renderPhils(){
+  var t=document.getElementById("vtabs");t.innerHTML="";
+  vols.forEach(function(v){
+    var e=document.createElement("button");e.className="vol-tab"+(v.id===curVol?" active":"");
+    e.textContent="卷"+v.id+" "+v.name;
+    e.onclick=function(){curVol=v.id;renderPhils();};
+    t.appendChild(e);
+  });
+  var s=document.getElementById("philSrch").value.trim().toLowerCase();
+  var g=document.getElementById("pgrid");g.innerHTML="";
+  var f=phs.filter(function(p){return p.volume===curVol&&(!s||p.name.indexOf(s)>-1||p.englishName.toLowerCase().indexOf(s)>-1||p.school.indexOf(s)>-1||p.summary.indexOf(s)>-1);});
+  f.forEach(function(p){
+    var c=document.createElement("div");c.className="ph-card"+(st.phil&&st.phil.id===p.id?" sel":"");
+    c.innerHTML='<div class="ph-av">'+p.englishName.charAt(0)+'</div><div class="ph-name">'+p.name+'</div><div class="ph-school">'+p.school+'</div>';
+    c.onclick=function(){st.phil=p;st.mism=document.getElementById("cmode").checked;renderPhils();go(3);startA(p);};
+    g.appendChild(c);
+  });
+  if(!f.length)g.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">没有找到匹配的哲学家</div>';
+}
+
+function randomPick(){var p=phs.filter(function(p){return p.volume===curVol;});if(!p.length)return;var pk=p[Math.floor(Math.random()*p.length)];st.phil=pk;st.mism=document.getElementById("cmode").checked;renderPhils();go(3);startA(pk);}
+
+function startA(p){
+  document.getElementById("loadingState").style.display="block";
+  document.getElementById("analysisOut").style.display="none";
+  document.getElementById("toWisdomBtn").style.display="none";
+  document.getElementById("thinkName").textContent=p.name+" 正在思考...";
+  ttxt={};tdone=false;aSec=null;
+  var opp=p.oppositeIds&&p.oppositeIds[0]?(phs.find(function(ph){return ph.id===p.oppositeIds[0];})||{name:"相反派"}).name:"相反派";
+  var r=mock(st.q,p,st.mism,opp);
+  var keys=["o1","o2","o3","o4","o5"];
+  setTimeout(function(){
+    document.getElementById("loadingState").style.display="none";
+    document.getElementById("analysisOut").style.display="block";
+    document.getElementById("toWisdomBtn").style.display="block";
+    var lbs=["🧠 一句话说清楚：","📖 生活类比：","🔬 原文分析：","💡 行动建议：","🤔 换个角度："];
+    var td=0;
+    keys.forEach(function(k,i){
+      var ft=lbs[i]+r[k];var ch=[...ft];
+      if(i>0)td+=600;
+      setTimeout(function(){aSec=k;rendA(keys,r,lbs);},td);
+      ch.forEach(function(c,pos){setTimeout(function(){ttxt[k]=(ttxt[k]||"")+c;rendA(keys,r,lbs);},td+pos*28);});
+      td+=ch.length*28;
+    });
+    setTimeout(function(){tdone=true;rendA(keys,r,lbs);},td);
+  },1500);
+}
+
+function rendA(keys,r,lbs){
+  var h="";
+  keys.forEach(function(k,i){
+    var isA=k===aSec;var ht=ttxt[k]||"";
+    if(!ht&&!isA)return;
+    h+='<div class="sec"><div class="txt">'+ht+(isA&&!tdone?'<span class="cb"></span>':'')+'</div></div>';
+  });
+  document.getElementById("analysisOut").innerHTML=h;
+}
+
+function go(n){
+  st.step=n;
+  document.querySelectorAll(".step").forEach(function(e){e.classList.remove("active");});
+  document.getElementById("s"+n).classList.add("active");updSteps();
+  if(n===2)renderPhils();
+  if(n===4)rWis();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function rWis(){
+  var c=document.getElementById("wgrid");c.innerHTML="";
+  [{id:"buddhism",ic:"🕉",nm:"佛",cl:"bud"},{id:"daoism",ic:"☯",nm:"道",cl:"dao"},{id:"confucianism",ic:"📚",nm:"儒",cl:"con"}].forEach(function(ca){
+    var e=document.createElement("div");e.className="wis-card "+ca.cl+(st.wisd===ca.id?" sel":"");
+    e.innerHTML='<div class="wi">'+ca.ic+'</div><div class="wn">'+ca.nm+'</div>';
+    e.onclick=function(){selW(ca.id);};c.appendChild(e);
+  });
+}
+
+function selW(id){
+  st.wisd=id;rWis();
+  var li=WIS[id];if(!li||!li.length)return;
+  var d=li[Math.floor(Math.random()*li.length)];
+  var r=document.getElementById("wresult");r.style.display="block";
+  var tn=id==="buddhism"?"佛家·禅意":id==="daoism"?"道家·自然":"儒家·修身";
+  r.innerHTML='<div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:6px;">'+tn+'</div>'+
+    '<div class="rq">「'+d.text+'」</div><div class="rs">—— '+d.source+(d.chapter?' · '+d.chapter:'')+'</div>'+
+    '<div class="re">'+d.explanation+'</div>'+
+    '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">'+
+    '<button class="share-btn" onclick="shareWis()">📱 分享到朋友圈</button>'+
+    '<button class="share-btn" onclick="toast(\'长按上方卡片即可保存到相册 📷\')">📷 保存图片</button></div>';
+}
+
+function shareWis(){
+  var li=WIS[st.wisd];if(!li||!li.length)return;
+  var d=li[Math.floor(Math.random()*li.length)];
+  var txt="「"+d.text+"」—— "+d.source+"\n来自「我在故我在」哲学网站";
+  var ta=document.createElement("textarea");ta.value=txt;
+  document.body.appendChild(ta);ta.select();document.execCommand("copy");document.body.removeChild(ta);
+  toast("已复制到剪贴板，去朋友圈粘贴吧！🫶");
+}
+
+function restart(){
+  st={step:1,cat:null,q:null,phil:null,mism:false,vol:1,wisd:null};
+  ttxt={};tdone=false;aSec=null;
+  document.getElementById("cmode").checked=false;document.getElementById("philSrch").value="";
+  document.getElementById("customQ").value="";document.getElementById("wresult").style.display="none";
+  go(1);rCats();rQs();
+}
+
+function toast(m){var e=document.getElementById("toast");e.textContent=m;e.classList.add("show");setTimeout(function(){e.classList.remove("show");},3000);}
+
+updSteps();rCats();rQs();
+</script>
+</body>
+</html>
