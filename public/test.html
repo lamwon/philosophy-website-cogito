@@ -3,451 +3,220 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>我在故我在 · 思辨</title>
+<title>我在故我在 · 哲学思辨</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{
---primary:#1A3A5C;--accent:#C9A96E;--bg:#F5F0EB;--card-bg:#fff;--text:#2C1810;--muted:#8B7355;
---radius:12px;--shadow:0 2px 12px rgba(0,0,0,0.06);--font:'Noto Serif SC',Georgia,serif;
-}
-body{background:var(--bg);color:var(--text);min-height:100vh;line-height:1.8;font-family:var(--font);-webkit-font-smoothing:antialiased}
+:root{--primary:#1A3A5C;--accent:#C9A96E;--bg:#F5F0EB;--card-bg:#fff;--text:#2C1810;--muted:#8B7355;--radius:12px;--shadow:0 2px 12px rgba(0,0,0,0.06);--font:'Noto Serif SC',Georgia,serif}
+body{background:var(--bg);color:var(--text);min-height:100vh;line-height:1.8;font-family:var(--font)}
 .container{max-width:800px;margin:0 auto;padding:16px}
 .card{background:var(--card-bg);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
 .card-title{font-size:18px;font-weight:700;margin-bottom:16px;color:var(--primary)}
-.content{font-size:15px;line-height:1.8;white-space:pre-wrap;color:var(--text)}
-.btn{padding:10px 24px;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-family:var(--font);transition:opacity .2s}
-.btn:hover{opacity:.85}
-.btn-primary{background:var(--primary);color:#fff}
-.btn-accent{background:var(--accent);color:#fff}
-.btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary);border-radius:20px}
-.btn-sm{border:1px solid #ddd;border-radius:20px;padding:6px 16px;cursor:pointer;font-size:13px;font-family:var(--font)}
-.btn-sm.active{background:var(--primary);border-color:var(--primary);color:#fff}
-.tag{display:inline-block;padding:2px 8px;border-radius:4px;background:var(--bg);font-size:11px;color:var(--muted)}
 .fade-in{animation:fadeIn .4s ease both}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes spin{to{transform:rotate(360deg)}}
-@keyframes ellipsis{0%{opacity:.2}20%{opacity:1}40%{opacity:.2}100%{opacity:.2}}
-@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes ping{0%{transform:scale(1);opacity:1}100%{transform:scale(2);opacity:0}}
-.page-enter{animation:slideUp .35s ease both}
-@media(max-width:599px){.wisdom-grid{grid-template-columns:1fr!important}}@media(max-width:699px){.p-grid{grid-template-columns:repeat(2,1fr)!important}}
+@keyframes ellipsis{0%{opacity:.2}50%{opacity:1}100%{opacity:.2}}
+.analysis-section{opacity:0;transition:opacity .4s ease;margin-bottom:24px}
+.analysis-section .label{font-size:13px;color:var(--muted);margin-bottom:8px;font-weight:600;letter-spacing:0.5px}
+.typewriter{overflow:hidden}
+@media(max-width:599px){.w-grid{grid-template-columns:1fr!important}}
+@media(max-width:699px){.p-grid{grid-template-columns:repeat(2,1fr)!important}}
 </style>
 </head>
 <body>
 <div class="container" id="app"></div>
 <script>
-// ═══════════════════════════════════════════
-// 数据
-// ═══════════════════════════════════════════
-const PHILOSOPHERS = [
-{id:"thales",name:"泰勒斯",englishName:"Thales",volume:1,era:"古希腊（前苏格拉底）",school:"米利都学派",summary:"西方哲学史上第一位哲学家，米利都学派创始人。提出「水是万物的本原」，认为一切事物皆源于水并复归于水，开创了用自然原因解释世界的理性传统。",keyWorks:["《论自然》（失传）"],oppositeIds:["anaximander"],famousQuote:"水是万物的本原。"},
-{id:"anaximander",name:"阿那克西曼德",englishName:"Anaximander",volume:1,era:"古希腊（前苏格拉底）",school:"米利都学派",summary:"泰勒斯的学生，提出万物的本原是「无限者」（apeiron），一种无定形的永恒实体。首次提出宇宙演化论。",keyWorks:["《论自然》（失传）"],oppositeIds:["pythagoras"],famousQuote:"万物的本原是无限者。"},
-{id:"pythagoras",name:"毕达哥拉斯",englishName:"Pythagoras",volume:1,era:"古希腊（前苏格拉底）",school:"毕达哥拉斯学派",summary:"数学家兼神秘主义者，提出「数是万物的本原」。认为宇宙的本质是数学和谐，灵魂可以通过净化达到不朽。",keyWorks:["残篇"],oppositeIds:["heraclitus"],famousQuote:"数是万物的本原。"},
-{id:"heraclitus",name:"赫拉克利特",englishName:"Heraclitus",volume:1,era:"古希腊（前苏格拉底）",school:"艾菲斯学派",summary:"提出「万物流变」（Panta Rhei），认为世界是一团永恒的活火，对立面的斗争是万物生成的动力。",keyWorks:["《论自然》（残篇）"],oppositeIds:["parmenides"],famousQuote:"人不能两次踏进同一条河流。"},
-{id:"parmenides",name:"巴门尼德",englishName:"Parmenides",volume:1,era:"古希腊（前苏格拉底）",school:"埃利亚学派",summary:"存在论奠基人，提出「存在者存在，非存在者不存在」。认为只有「存在」是真实的，变化和运动只是幻觉。",keyWorks:["《论自然》（残篇）"],oppositeIds:["heraclitus"],famousQuote:"存在者存在，非存在者不存在。"},
-{id:"zeno",name:"芝诺",englishName:"Zeno of Elea",volume:1,era:"古希腊（前苏格拉底）",school:"埃利亚学派",summary:"巴门尼德的学生，以「芝诺悖论」闻名（阿喀琉斯追不上乌龟等），用归谬法捍卫老师的「存在是一」的学说。",keyWorks:["残篇"],oppositeIds:["aristotle"],famousQuote:"阿喀琉斯永远追不上乌龟。"},
-{id:"empedocles",name:"恩培多克勒",englishName:"Empedocles",volume:1,era:"古希腊（前苏格拉底）",school:"多元论",summary:"提出「四根说」——水、火、土、气是万物之根，爱与恨是推动它们组合与分离的两种力量。",keyWorks:["《论自然》《净化篇》（残篇）"],oppositeIds:["parmenides"],famousQuote:"爱使万物结合，恨使万物分离。"},
-{id:"anaxagoras",name:"阿那克萨戈拉",englishName:"Anaxagoras",volume:1,era:"古希腊（前苏格拉底）",school:"多元论",summary:"提出「种子说」和「努斯」（Nous，理性心灵）概念。认为万物由无限多种「种子」构成，努斯是推动秩序的力量。",keyWorks:["《论自然》（残篇）"],oppositeIds:["protagoras"],famousQuote:"努斯是万物秩序的原因。"},
-{id:"protagoras",name:"普罗泰戈拉",englishName:"Protagoras",volume:1,era:"古希腊（前苏格拉底）",school:"智者派",summary:"最著名的智者，提出「人是万物的尺度」。擅长修辞术与辩论术，收费教授青年如何赢得诉讼和政治辩论。",keyWorks:["《论真理》《论神》（失传）"],oppositeIds:["socrates"],famousQuote:"人是万物的尺度。"},
-{id:"socrates",name:"苏格拉底",englishName:"Socrates",volume:1,era:"古希腊（古典时期）",school:"苏格拉底学派",summary:"西方哲学奠基人之一。以「苏格拉底式诘问法」闻名——通过不断的追问迫使对方反思自己的无知。提出「德性即知识」，认为无人故意作恶。",keyWorks:["无著作，见于柏拉图对话录"],oppositeIds:["protagoras"],famousQuote:"我唯一知道的就是我一无所知。"},
-{id:"plato",name:"柏拉图",englishName:"Plato",volume:1,era:"古希腊（古典时期）",school:"柏拉图学园",summary:"苏格拉底的学生，亚里士多德的老师。创立雅典学园，提出「理念论」——物质世界只是理念世界的影子。",keyWorks:["《理想国》《斐多篇》《会饮篇》"],oppositeIds:["diogenes"],famousQuote:"理念世界才是真正的实在。"},
-{id:"aristotle",name:"亚里士多德",englishName:"Aristotle",volume:1,era:"古希腊（古典时期）",school:"逍遥学派",summary:"柏拉图的学生，亚历山大大帝的老师。百科全书式学者，创立逻辑学、伦理学、政治学、物理学等学科体系。",keyWorks:["《形而上学》《尼各马可伦理学》《政治学》"],oppositeIds:["plato"],famousQuote:"吾爱吾师，吾更爱真理。"},
-{id:"diogenes",name:"第欧根尼",englishName:"Diogenes",volume:1,era:"古希腊（古典时期）",school:"犬儒学派",summary:"犬儒学派代表，崇尚极简生活，住在木桶里，公开蔑视社会习俗和权力。亚历山大大帝拜访他时，他说「别挡住我的阳光」。",keyWorks:["无著作"],oppositeIds:["plato"],famousQuote:"别挡住我的阳光。"},
-{id:"epicurus",name:"伊壁鸠鲁",englishName:"Epicurus",volume:1,era:"古希腊（希腊化时期）",school:"伊壁鸠鲁学派",summary:"主张快乐是最高善，但这里的「快乐」不是放纵，而是精神的宁静（ataraxia）和身体的无痛苦（aponia）。友谊是幸福的重要来源。",keyWorks:["《致赫罗多德的信》《致美诺西斯的信》"],oppositeIds:["zenoCitium"],famousQuote:"快乐是幸福生活的起点和终点。"},
-{id:"zenoC",name:"芝诺（基提翁）",englishName:"Zeno of Citium",volume:1,era:"古希腊（希腊化时期）",school:"斯多葛学派",summary:"斯多葛学派创始人。主张宇宙由理性（Logos）支配，人的幸福在于顺应自然和理性生活，不被情感和外在事物左右。",keyWorks:["《论人的本性》（残篇）"],oppositeIds:["epicurus"],famousQuote:"顺应自然即是德行。"},
-{id:"plotinus",name:"普罗提诺",englishName:"Plotinus",volume:1,era:"古罗马",school:"新柏拉图主义",summary:"新柏拉图主义创始人，提出「太一」（The One）作为终极实在。万物从太一流溢而出，灵魂的最终目标是回归太一。",keyWorks:["《九章集》"],oppositeIds:["porphyry"],famousQuote:"太一超越一切存在和思想。"},
-{id:"augustine",name:"奥古斯丁",englishName:"Augustine",volume:2,era:"教父哲学",school:"教父哲学",summary:"基督教神学奠基人之一，融合柏拉图主义与基督教教义。提出「上帝之城」与「人间之城」的二元历史观。",keyWorks:["《忏悔录》《上帝之城》"],oppositeIds:["pelagius"],famousQuote:"上帝啊，你为自己的缘故创造了我们，我们的心永不安宁，直到在你中安息。"},
-{id:"boethius",name:"波埃修斯",englishName:"Boethius",volume:2,era:"中世纪早期",school:"经院哲学先驱",summary:"罗马哲学家，被称为「最后一位罗马人」。在狱中写下《哲学的慰藉》，探讨命运、自由意志与神的预知。",keyWorks:["《哲学的慰藉》"],oppositeIds:[],famousQuote:"哲学是真正的慰藉。"},
-{id:"erigena",name:"埃里金纳",englishName:"John Scotus Eriugena",volume:2,era:"中世纪（加洛林文艺复兴）",school:"爱留根纳学派",summary:"中世纪早期最杰出的思想家。将新柏拉图主义与基督教结合，提出「自然四分法」。",keyWorks:["《论自然的区分》"],oppositeIds:[],famousQuote:"真正的哲学就是真正的宗教。"},
-{id:"anselm",name:"安瑟尔谟",englishName:"Anselm",volume:2,era:"中世纪（经院哲学）",school:"经院哲学",summary:"坎特伯雷大主教，提出「本体论证明」——上帝是最完善的存在，因此必然存在。被誉为「最后一位教父和第一位经院哲学家」。",keyWorks:["《宣讲篇》《上帝为何化身为人》"],oppositeIds:["gaunilo"],famousQuote:"信仰寻求理解。"},
-{id:"abelard",name:"阿伯拉尔",englishName:"Peter Abelard",volume:2,era:"中世纪（经院哲学）",school:"经院哲学",summary:"12世纪著名逻辑学家和神学家。以「理解为了信仰」的方法论闻名，强调在信仰之前要先理解。",keyWorks:["《是与否》《论三位一体》"],oppositeIds:["bernard"],famousQuote:"理解为了信仰。"},
-{id:"aquinas",name:"托马斯·阿奎那",englishName:"Thomas Aquinas",volume:2,era:"中世纪（经院哲学）",school:"经院哲学",summary:"中世纪最伟大的经院哲学家。融合亚里士多德哲学与基督教神学，提出「五路证明」论证上帝存在。",keyWorks:["《神学大全》《反异教大全》"],oppositeIds:["averroes"],famousQuote:"恩典不会摧毁自然，而是成全自然。"},
-{id:"ockham",name:"奥卡姆",englishName:"William of Ockham",volume:2,era:"中世纪（经院哲学）",school:"经院哲学（唯名论）",summary:"唯名论代表，以「奥卡姆剃刀」闻名——如无必要，勿增实体。主张个别事物才是真实存在的。",keyWorks:["《箴言注疏》"],oppositeIds:[],famousQuote:"如无必要，勿增实体。"},
-{id:"bacon",name:"弗朗西斯·培根",englishName:"Francis Bacon",volume:3,era:"文艺复兴",school:"经验主义",summary:"现代科学方法论奠基人。提出「知识就是力量」，主张用归纳法取代经院哲学的演绎法，清除心灵的四种假象。",keyWorks:["《新工具》《论学术的进展》"],oppositeIds:[],famousQuote:"知识就是力量。"},
-{id:"hobbes",name:"霍布斯",englishName:"Thomas Hobbes",volume:3,era:"近代（17世纪）",school:"政治哲学",summary:"《利维坦》作者，提出自然状态是「一切人对一切人的战争」，社会契约是走出自然状态的途径。",keyWorks:["《利维坦》"],oppositeIds:["locke"],famousQuote:"人对人是狼。"},
-{id:"descartes",name:"笛卡尔",englishName:"René Descartes",volume:3,era:"近代（17世纪）",school:"理性主义",summary:"近代哲学之父。提出「我思故我在」，以普遍怀疑为方法，确立了主体性哲学的基础。",keyWorks:["《第一哲学沉思集》《方法论》"],oppositeIds:["hume"],famousQuote:"我思故我在。"},
-{id:"spinoza",name:"斯宾诺莎",englishName:"Baruch Spinoza",volume:3,era:"近代（17世纪）",school:"理性主义",summary:"提出「实体即自然」的泛神论，认为上帝与自然是同一的。用几何学方法构建伦理学体系。",keyWorks:["《伦理学》《神学政治论》"],oppositeIds:[],famousQuote:"自由是对必然的认识。"},
-{id:"leibniz",name:"莱布尼茨",englishName:"Gottfried Leibniz",volume:3,era:"近代（17-18世纪）",school:"理性主义",summary:"提出「单子论」和「前定和谐」理论。认为我们生活在「所有可能世界中最好的一个」。",keyWorks:["《单子论》《人类理解新论》"],oppositeIds:[],famousQuote:"我们生活在所有可能世界中最好的一个。"},
-{id:"locke",name:"洛克",englishName:"John Locke",volume:3,era:"近代（17-18世纪）",school:"经验主义",summary:"经验主义巨匠，提出「白板说」——人心如白纸，一切知识来源于经验。社会契约论的重要奠基人。",keyWorks:["《人类理解论》《政府论》"],oppositeIds:["hobbes"],famousQuote:"知识来源于经验。"},
-{id:"berkeley",name:"贝克莱",englishName:"George Berkeley",volume:3,era:"近代（18世纪）",school:"经验主义",summary:"提出「存在即被感知」的唯心主义经验论。认为物质实体不存在，所谓「物」只是感觉观念的集合。",keyWorks:["《人类知识原理》"],oppositeIds:[],famousQuote:"存在就是被感知。"},
-{id:"hume",name:"休谟",englishName:"David Hume",volume:3,era:"近代（18世纪）",school:"经验主义",summary:"彻底的怀疑论者。否定因果关系的客观必然性，认为所谓因果关系只是习惯性联想。惊醒康德的独断论迷梦。",keyWorks:["《人性论》《人类理解研究》"],oppositeIds:["descartes"],famousQuote:"习惯是人生的伟大指南。"},
-{id:"rousseau",name:"卢梭",englishName:"Jean-Jacques Rousseau",volume:3,era:"近代（18世纪）",school:"启蒙哲学",summary:"提出「人生而自由，却无往不在枷锁中」。崇尚自然状态，批判文明对人的异化。",keyWorks:["《社会契约论》《论人类不平等的起源》"],oppositeIds:[],famousQuote:"人生而自由，却无往不在枷锁中。"},
-{id:"kant",name:"康德",englishName:"Immanuel Kant",volume:3,era:"近代（18世纪）",school:"德国古典哲学",summary:"「哥白尼式革命」的发起者。提出「人为自然立法」，物自体不可知。伦理学上的「定言令式」是道德的最高原则。",keyWorks:["《纯粹理性批判》《实践理性批判》《判断力批判》"],oppositeIds:[],famousQuote:"有两种东西，我对它们的思考越是深沉和持久，它们在我心灵中唤起的惊奇和敬畏就越历久弥新：头顶的星空和心中的道德法则。"},
-{id:"hegel",name:"黑格尔",englishName:"G.W.F. Hegel",volume:3,era:"近代（19世纪）",school:"德国古典哲学",summary:"提出「绝对精神」辩证发展的体系。辩证法三环节：正题、反题、合题。认为「凡是现实的都是理性的」。",keyWorks:["《精神现象学》《逻辑学》《法哲学原理》"],oppositeIds:["schopenhauer"],famousQuote:"凡是现实的都是理性的。"},
-{id:"schopenhauer",name:"叔本华",englishName:"Arthur Schopenhauer",volume:3,era:"近代（19世纪）",school:"意志哲学",summary:"唯意志论代表，认为世界的本质是「生命意志」。人生在欲望不满足时痛苦，满足后无聊，倡导通过艺术和禁欲超越。",keyWorks:["《作为意志和表象的世界》"],oppositeIds:["hegel"],famousQuote:"生命是一团欲望，欲望不满足便痛苦，满足便无聊。"},
-{id:"nietzsche",name:"尼采",englishName:"Friedrich Nietzsche",volume:3,era:"近代（19世纪）",school:"生命哲学",summary:"「上帝死了」的宣告者。提出「权力意志」「超人哲学」「永恒轮回」等概念，对传统道德和基督教进行彻底的批判。",keyWorks:["《查拉图斯特拉如是说》《善恶的彼岸》"],oppositeIds:[],famousQuote:"上帝死了。"},
-{id:"kierkegaard",name:"克尔凯郭尔",englishName:"Søren Kierkegaard",volume:3,era:"近代（19世纪）",school:"存在主义先驱",summary:"存在主义之父。强调「孤独个体」和「主观真理」，认为信仰是「纵身一跃」。批判黑格尔体系哲学忽略了个体存在。",keyWorks:["《非此即彼》《恐惧与战栗》"],oppositeIds:["hegel"],famousQuote:"信仰需要纵身一跃。"},
-{id:"james",name:"威廉·詹姆斯",englishName:"William James",volume:3,era:"近代（19-20世纪）",school:"实用主义",summary:"实用主义创始人之一。提出「真理即有用」的实用主义真理观，认为一个观念的价值取决于它带来的实际效果。",keyWorks:["《实用主义》《心理学原理》"],oppositeIds:[],famousQuote:"真理即有用。"}
-];
-const VOLUMES = [
-{id:1,name:"古代哲学",description:"从泰勒斯到普罗提诺"},
-{id:2,name:"天主教哲学",description:"从奥古斯丁到奥卡姆"},
-{id:3,name:"近代哲学",description:"从培根到詹姆斯"}
-];
-const CATEGORIES = [
-{id:"career",name:"职场困惑",questions:["该不该跳槽？","领导不认可我的工作怎么办？","同事抢功怎么处理？","工作没有意义感怎么办？"]},
-{id:"relationship",name:"情感关系",questions:["该不该和TA继续走下去？","被伤害了该原谅吗？","如何在关系中保持自我？","异地恋能坚持吗？"]},
-{id:"consumption",name:"消费决策",questions:["买不起但又很想要怎么办？","该花时间省钱还是花钱省时间？","跟风消费后总后悔","该不该借钱消费？"]},
-{id:"moral",name:"道德困境",questions:["看到不公该挺身而出吗？","善意的谎言能说吗？","朋友犯错该举报吗？","利益和原则冲突时怎么选？"]},
-{id:"meaning",name:"人生意义",questions:["活着的意义是什么？","为什么我总感觉不快乐？","努力了却没有结果怎么办？","如何面对死亡和失去？"]},
-{id:"tech",name:"科技伦理",questions:["AI会取代人类吗？","该把隐私交给大公司吗？","刷短视频停不下来怎么办？","科技让生活更好还是更糟了？"]}
-];
+var PP = [{"id":"thales","name":"泰勒斯","en":"Thales","v":1,"era":"古希腊（前苏格拉底）","school":"米利都学派","sum":"西方哲学史上第一位哲学家。提出「水是万物的本原」。","kw":["《论自然》（失传）"],"opp":"anaximander","fq":"水是万物的本原。","hr":"必须追问用户问题中那个被视为「最基本、不容置疑」的前提是什么。用户以为的「本原」可能只是表象。"},{"id":"anaximander","name":"阿那克西曼德","en":"Anaximander","v":1,"era":"古希腊（前苏格拉底）","school":"米利都学派","sum":"提出万物的本原是「无限者」。","kw":["《论自然》（失传）"],"opp":"pythagoras","fq":"万物的本原是无限者。","hr":"必须用「无限者」视角指出用户把自己限定在了太小的框架里。真正的答案在边界之外。"},{"id":"pythagoras","name":"毕达哥拉斯","en":"Pythagoras","v":1,"era":"古希腊（前苏格拉底）","school":"毕达哥拉斯学派","sum":"提出「数是万物的本原」。","kw":["残篇"],"opp":"heraclitus","fq":"数是万物的本原。","hr":"必须用「数」的结构化思维帮用户把模糊的困扰拆解成可量化的对立关系。答案在比例与和谐中。"},{"id":"heraclitus","name":"赫拉克利特","en":"Heraclitus","v":1,"era":"古希腊（前苏格拉底）","school":"艾菲斯学派","sum":"提出「万物流变」，世界是一团永恒的活火。","kw":["《论自然》（残篇）"],"opp":"parmenides","fq":"人不能两次踏进同一条河流。","hr":"必须用「万物流变」指出用户抗拒变化本身才是痛苦的根源。对立面不是敌人，而是同一件事的两面。"},{"id":"parmenides","name":"巴门尼德","en":"Parmenides","v":1,"era":"古希腊（前苏格拉底）","school":"埃利亚学派","sum":"提出「存在者存在，非存在者不存在」。","kw":["《论自然》（残篇）"],"opp":"heraclitus","fq":"存在者存在，非存在者不存在。","hr":"必须用「存在者存在」的同一性逻辑揭示用户的问题建立在「变化」的幻觉上。答案在不变的存在本身。"},{"id":"zeno","name":"芝诺","en":"Zeno of Elea","v":1,"era":"古希腊（前苏格拉底）","school":"埃利亚学派","sum":"以「芝诺悖论」闻名。","kw":["残篇"],"opp":"aristotle","fq":"阿喀琉斯永远追不上乌龟。","hr":"必须用「悖论」揭示用户问题中的逻辑矛盾，让用户自己发现困境在理性上根本不成立。不是要解决，而是要消解。"},{"id":"empedocles","name":"恩培多克勒","en":"Empedocles","v":1,"era":"古希腊（前苏格拉底）","school":"多元论","sum":"提出「四根说」——水、火、土、气是万物之根。","kw":["《论自然》（残篇）"],"opp":"parmenides","fq":"爱使万物结合，恨使万物分离。","hr":"必须用「四根说」的多元视角指出用户被单一的解释框架困住了。爱与恨两种力量同时作用，用户只看到一面。"},{"id":"anaxagoras","name":"阿那克萨戈拉","en":"Anaxagoras","v":1,"era":"古希腊（前苏格拉底）","school":"多元论","sum":"提出「种子说」和「努斯」概念。","kw":["《论自然》（残篇）"],"opp":"protagoras","fq":"努斯是万物秩序的原因。","hr":"必须用「努斯」概念帮用户重新看见整体的秩序。答案不是拆解，而是用一个超越性的心灵视角来重新秩序化处境。"},{"id":"protagoras","name":"普罗泰戈拉","en":"Protagoras","v":1,"era":"古希腊（前苏格拉底）","school":"智者派","sum":"提出「人是万物的尺度」。","kw":["《论真理》（失传）"],"opp":"socrates","fq":"人是万物的尺度。","hr":"必须指出用户以为的客观困境其实是主观判断的产物。问题的关键不在事情本身，而在于用户如何衡量它。"},{"id":"socrates","name":"苏格拉底","en":"Socrates","v":1,"era":"古希腊（古典时期）","school":"苏格拉底学派","sum":"以「苏格拉底式诘问法」闻名。提出「德性即知识」。","kw":["无著作，见于柏拉图对话录"],"opp":"protagoras","fq":"我唯一知道的就是我一无所知。","hr":"必须用「诘问法」——不能直接给答案，通过连续追问逼用户自己发现矛盾。每一句分析都应以问号结尾或引出下一个追问。"},{"id":"plato","name":"柏拉图","en":"Plato","v":1,"era":"古希腊（古典时期）","school":"柏拉图学园","sum":"提出「理念论」——物质世界只是理念世界的影子。","kw":["《理想国》《斐多篇》《会饮篇》"],"opp":"diogenes","fq":"理念世界才是真正的实在。","hr":"必须用「理念论」指出用户看到的困境只是「洞穴里的影子」。真正的问题不在现象层面，而在用户从未审视过的理念前提。"},{"id":"aristotle","name":"亚里士多德","en":"Aristotle","v":1,"era":"古希腊（古典时期）","school":"逍遥学派","sum":"百科全书式学者，创立逻辑学、伦理学等学科体系。","kw":["《形而上学》《尼各马可伦理学》《政治学》"],"opp":"plato","fq":"吾爱吾师，吾更爱真理。","hr":"必须用「四因说」或「中庸之道」帮用户区分质料因、形式因、动力因和目的因。答案在「适度」和「现实化」之中。"},{"id":"diogenes","name":"第欧根尼","en":"Diogenes","v":1,"era":"古希腊（古典时期）","school":"犬儒学派","sum":"崇尚极简生活，住在木桶里。","kw":["无著作"],"opp":"plato","fq":"别挡住我的阳光。","hr":"必须用「犬儒式颠覆」指出用户的痛苦来自「想要太多不必要的虚饰」。最极端的简化就是解放。用讽刺和反诘。"},{"id":"epicurus","name":"伊壁鸠鲁","en":"Epicurus","v":1,"era":"古希腊（希腊化时期）","school":"伊壁鸠鲁学派","sum":"主张快乐是最高善，但指的是精神的宁静。","kw":["《致美诺西斯的信》"],"opp":"zenoC","fq":"快乐是幸福生活的起点和终点。","hr":"必须用「灵魂宁静」标准帮用户区分必要的欲望、自然的但不必要的欲望和虚妄的欲望。烦恼来自第三种。"},{"id":"zenoC","name":"芝诺（基提翁）","en":"Zeno of Citium","v":1,"era":"古希腊（希腊化时期）","school":"斯多葛学派","sum":"主张幸福在于顺应自然和理性生活。","kw":["《论人的本性》（残篇）"],"opp":"epicurus","fq":"顺应自然即是德行。","hr":"必须用「二分法」帮用户区分能控制的事和不能控制的事。真正的自由只在于前者。情绪必须被理性审视。"},{"id":"plotinus","name":"普罗提诺","en":"Plotinus","v":1,"era":"古罗马","school":"新柏拉图主义","sum":"提出「太一」作为终极实在。","kw":["《九章集》"],"opp":"","fq":"太一超越一切存在和思想。","hr":"必须用「太一」的流溢说指出用户的困境源于离源头太远了。答案不是修补具体问题，而是回到更本源的层面。"},{"id":"augustine","name":"奥古斯丁","en":"Augustine","v":2,"era":"教父哲学","school":"教父哲学","sum":"融合柏拉图主义与基督教教义。","kw":["《忏悔录》《上帝之城》"],"opp":"","fq":"我们的心永不安宁，直到在你中安息。","hr":"必须用「忏悔」式的内心审视指出用户的焦虑源于把有限之物当作终极依靠。心安的方向是转向内在。"},{"id":"boethius","name":"波埃修斯","en":"Boethius","v":2,"era":"中世纪早期","school":"经院哲学先驱","sum":"在狱中写下《哲学的慰藉》。","kw":["《哲学的慰藉》"],"opp":"","fq":"哲学是真正的慰藉。","hr":"必须指出命运女神的轮转是必然的，真正的幸福不在外在运气中，而在灵魂的内在善好。哲学是慰藉。"},{"id":"erigena","name":"埃里金纳","en":"John Scotus Eriugena","v":2,"era":"中世纪","school":"爱留根纳学派","sum":"将新柏拉图主义与基督教结合。","kw":["《论自然的区分》"],"opp":"","fq":"真正的哲学就是真正的宗教。","hr":"必须用「自然区分」的四重框架帮用户区分创造与被造、可见与不可见。答案在超越二元的统一中。"},{"id":"anselm","name":"安瑟尔谟","en":"Anselm","v":2,"era":"中世纪","school":"经院哲学","sum":"提出「本体论证明」。","kw":["《宣讲篇》"],"opp":"","fq":"信仰寻求理解。","hr":"必须用「本体论证明」式的逻辑帮用户从概念中存在推导出实在中存在。用户的问题是没有把隐含的前提推到底。"},{"id":"abelard","name":"阿伯拉尔","en":"Peter Abelard","v":2,"era":"中世纪","school":"经院哲学","sum":"强调「理解为了信仰」。","kw":["《是与否》"],"opp":"","fq":"理解为了信仰。","hr":"必须用「辩证法」和「意图论」指出问题的核心不在行为本身而在意图。理解了动机才能判断对错。"},{"id":"aquinas","name":"托马斯·阿奎那","en":"Thomas Aquinas","v":2,"era":"中世纪","school":"经院哲学","sum":"融合亚里士多德与基督教神学，提出「五路证明」。","kw":["《神学大全》"],"opp":"","fq":"恩典不会摧毁自然，而是成全自然。","hr":"必须用「自然法」和因果推理帮用户从效果回溯原因，从偶然推导必然。自然的秩序中有答案。"},{"id":"ockham","name":"奥卡姆","en":"William of Ockham","v":2,"era":"中世纪","school":"唯名论","sum":"以「奥卡姆剃刀」闻名——如无必要，勿增实体。","kw":["《箴言注疏》"],"opp":"","fq":"如无必要，勿增实体。","hr":"必须用「奥卡姆剃刀」指出用户过度复杂化了问题。用户自己添加了多少不必要的假设？直接删掉它们。"},{"id":"bacon","name":"培根","en":"Francis Bacon","v":3,"era":"文艺复兴","school":"经验主义","sum":"提出「知识就是力量」，主张归纳法。","kw":["《新工具》"],"opp":"","fq":"知识就是力量。","hr":"必须帮用户识别自己脑子里的四类假象（种族、洞穴、市场、剧场）。真正的知识来自观察和实验，不是先入为主的偏见。"},{"id":"hobbes","name":"霍布斯","en":"Thomas Hobbes","v":3,"era":"近代（17世纪）","school":"政治哲学","sum":"《利维坦》作者，提出自然状态是「一切人对一切人的战争」。","kw":["《利维坦》"],"opp":"locke","fq":"人对人是狼。","hr":"必须指出用户的问题本质上是一场权力博弈。自我保存是根本驱动力，理解了这个才能看透人际关系中的利益本质。"},{"id":"descartes","name":"笛卡尔","en":"Rene Descartes","v":3,"era":"近代（17世纪）","school":"理性主义","sum":"近代哲学之父。提出「我思故我在」。","kw":["《第一哲学沉思集》"],"opp":"hume","fq":"我思故我在。","hr":"必须用「普遍怀疑」帮用户把一切可怀疑的事情悬搁起来，找到一个不可怀疑的基点。从这个基点重新构建认知。"},{"id":"spinoza","name":"斯宾诺莎","en":"Baruch Spinoza","v":3,"era":"近代（17世纪）","school":"理性主义","sum":"提出「实体即自然」的泛神论。","kw":["《伦理学》"],"opp":"","fq":"自由是对必然的认识。","hr":"必须帮用户从「永恒相」而非「时间相」看问题。理解了必然性就是自由。情绪是被动的想象力，要用理性去理解。"},{"id":"leibniz","name":"莱布尼茨","en":"Gottfried Leibniz","v":3,"era":"近代（17-18世纪）","school":"理性主义","sum":"提出「单子论」和「前定和谐」。","kw":["《单子论》"],"opp":"","fq":"我们生活在所有可能世界中最好的一个。","hr":"必须用「前定和谐」和「充足理由律」指出用户的问题在更大的和谐框架中自有其位置。每件事的发生都有充足的理由。"},{"id":"locke","name":"洛克","en":"John Locke","v":3,"era":"近代（17-18世纪）","school":"经验主义","sum":"提出「白板说」——人心如白纸。","kw":["《人类理解论》"],"opp":"hobbes","fq":"知识来源于经验。","hr":"必须帮用户区分第一性质和第二性质。用户的问题来自混淆了客观属性与主观感受，把感觉当成了事物的属性。"},{"id":"berkeley","name":"贝克莱","en":"George Berkeley","v":3,"era":"近代（18世纪）","school":"经验主义","sum":"提出「存在即被感知」。","kw":["《人类知识原理》"],"opp":"","fq":"存在就是被感知。","hr":"必须指出用户的困境只在被感知和思考时才存在。换个感知方式，换个角度，问题就消失或变了。"},{"id":"hume","name":"休谟","en":"David Hume","v":3,"era":"近代（18世纪）","school":"经验主义","sum":"彻底的怀疑论者，否定因果关系的客观必然性。","kw":["《人性论》"],"opp":"descartes","fq":"习惯是人生的伟大指南。","hr":"必须指出用户所谓的必然性只是心理习惯，不是客观规律。因果关系和自我同一性都没有绝对保证——你只是习惯了这么看。"},{"id":"rousseau","name":"卢梭","en":"Jean-Jacques Rousseau","v":3,"era":"近代（18世纪）","school":"启蒙哲学","sum":"提出「人生而自由，却无往不在枷锁中」。","kw":["《社会契约论》"],"opp":"","fq":"人生而自由，却无往不在枷锁中。","hr":"必须帮用户区分来自天性的冲动和来自社会的外来压力。很多痛苦是文明带来的虚伪需要的产物，不是人真正的需要。"},{"id":"kant","name":"康德","en":"Immanuel Kant","v":3,"era":"近代（18世纪）","school":"德国古典哲学","sum":"发起「哥白尼式革命」，提出「人为自然立法」。","kw":["《纯粹理性批判》"],"opp":"","fq":"头顶的星空和心中的道德法则。","hr":"必须帮用户区分现象和物自体。问题不在于世界本身是怎样的，而在于用户的认知形式是怎么构造这个问题的。人为自然立法。"},{"id":"hegel","name":"黑格尔","en":"G.W.F. Hegel","v":3,"era":"近代（19世纪）","school":"德国古典哲学","sum":"提出「绝对精神」辩证发展的体系。","kw":["《精神现象学》"],"opp":"schopenhauer","fq":"凡是现实的都是理性的。","hr":"必须用「辩证法」分析——用户现在的困境是正题，找到它的对立面，上升到更高层次的统一。真理是整体，不是片面的判断。"},{"id":"schopenhauer","name":"叔本华","en":"Arthur Schopenhauer","v":3,"era":"近代（19世纪）","school":"意志哲学","sum":"认为世界的本质是「生命意志」。","kw":["《作为意志和表象的世界》"],"opp":"hegel","fq":"生命是一团欲望。","hr":"必须指出用户看似理性的分析背后是被盲目的生命意志驱使的。痛苦来自意志的无尽欲求。解脱来自审美和同情。"},{"id":"nietzsche","name":"尼采","en":"Friedrich Nietzsche","v":3,"era":"近代（19世纪）","school":"生命哲学","sum":"「上帝死了」的宣告者。提出「权力意志」。","kw":["《查拉图斯特拉如是说》"],"opp":"","fq":"上帝死了。","hr":"必须用「权力意志」和「重估一切价值」帮用户识别自己所信奉的价值其实是哪种权力体系。问题不是什么是对的，而是谁的价值在主导。"},{"id":"kierkegaard","name":"克尔凯郭尔","en":"Soren Kierkegaard","v":3,"era":"近代（19世纪）","school":"存在主义先驱","sum":"存在主义之父，强调「孤独个体」和「主观真理」。","kw":["《恐惧与战栗》"],"opp":"hegel","fq":"信仰需要纵身一跃。","hr":"必须指出用户的问题不能被理性完全解决，必须在某个时刻做出非理性的决断。真理是主观的，焦虑是自由可能性的眩晕。"},{"id":"james","name":"威廉·詹姆斯","en":"William James","v":3,"era":"近代（19-20世纪）","school":"实用主义","sum":"实用主义创始人之一，提出「真理即有用」。","kw":["《实用主义》"],"opp":"","fq":"真理即有用。","hr":"必须用「实用主义」方法——不纠缠抽象定义，直接问相信什么会给用户的生活带来实际差别。能用的就是真的。"}];
+var CAT = [{"id":"career","name":"职场困惑","qs":["该不该跳槽？","领导不认可我的工作怎么办？","同事抢功怎么处理？","工作没有意义感怎么办？"]},{"id":"relationship","name":"情感关系","qs":["该不该和TA继续走下去？","被伤害了该原谅吗？","如何在关系中保持自我？","异地恋能坚持吗？"]},{"id":"consumption","name":"消费决策","qs":["买不起但又很想要怎么办？","该花时间省钱还是花钱省时间？","跟风消费后总后悔","该不该借钱消费？"]},{"id":"moral","name":"道德困境","qs":["看到不公该挺身而出吗？","善意的谎言能说吗？","朋友犯错该举报吗？","利益和原则冲突时怎么选？"]},{"id":"meaning","name":"人生意义","qs":["活着的意义是什么？","为什么我总感觉不快乐？","努力了却没有结果怎么办？","如何面对死亡和失去？"]},{"id":"tech","name":"科技伦理","qs":["AI会取代人类吗？","该把隐私交给大公司吗？","刷短视频停不下来怎么办？","科技让生活更好还是更糟了？"]}];
+var WD = {"buddhism":[{"text":"色不异空，空不异色；色即是空，空即是色","source":"《心经》","explanation":"物质现象与空性本质不可分离。"},{"text":"凡所有相，皆是虚妄。若见诸相非相，即见如来","source":"《金刚经》","explanation":"超越表象才能看到真相。"},{"text":"应无所住而生其心","source":"《金刚经》","explanation":"心不要停留在任何地方，自然生起。"},{"text":"过去心不可得，现在心不可得，未来心不可得","source":"《金刚经》","explanation":"三心皆不可执，放下对时间的执着。"},{"text":"菩提本无树，明镜亦非台，本来无一物，何处惹尘埃","source":"《六祖坛经》","explanation":"觉悟不在外求，本心本就清净。"},{"text":"一切有为法，如梦幻泡影，如露亦如电，应作如是观","source":"《金刚经》","explanation":"一切因缘和合的事物都是无常的。"},{"text":"照见五蕴皆空，度一切苦厄","source":"《心经》","explanation":"看透身心皆空，就能超越一切痛苦。"},{"text":"一花一世界，一叶一如来","source":"《华严经》","explanation":"每一个微尘都包含着整个宇宙的道理。"},{"text":"不是风动，不是幡动，仁者心动","source":"《六祖坛经》","explanation":"外在的动静都是心的作用。"},{"text":"苦海无边，回头是岸","source":"佛教俗谚","explanation":"觉知和回头就是解脱的开始。"}],"daoism":[{"text":"道可道，非常道；名可名，非常名","source":"《道德经》","explanation":"真正的道无法用语言完全描述。"},{"text":"上善若水。水善利万物而不争","source":"《道德经》","explanation":"最高境界的善就像水一样，利万物而不争。"},{"text":"无为而无不为","source":"《道德经》","explanation":"不妄为，就没有什么事情做不成。"},{"text":"人法地，地法天，天法道，道法自然","source":"《道德经》","explanation":"人效法地，地效法天，天效法道，道效法自然。"},{"text":"知人者智，自知者明","source":"《道德经》","explanation":"能了解别人是智慧，能了解自己是真正的明达。"},{"text":"祸兮福之所倚，福兮祸之所伏","source":"《道德经》","explanation":"福祸相互转化，没有绝对的好与坏。"},{"text":"天下皆知美之为美，斯恶已","source":"《道德经》","explanation":"对立的概念相互依存，没有绝对的标准。"},{"text":"天下之至柔，驰骋天下之至坚","source":"《道德经》","explanation":"最柔弱的东西能驾驭最坚硬的东西。"},{"text":"大方无隅，大器晚成，大音希声，大象无形","source":"《道德经》","explanation":"最大的东西往往没有边界和形式。"},{"text":"企者不立，跨者不行","source":"《道德经》","explanation":"踮脚站不稳，跨步走不远，欲速则不达。"}],"confucianism":[{"text":"己所不欲，勿施于人","source":"《论语》","explanation":"自己不愿意的事，不要强加给别人。"},{"text":"学而不思则罔，思而不学则殆","source":"《论语》","explanation":"学习而不思考会迷茫，思考而不学习会危险。"},{"text":"君子和而不同，小人同而不和","source":"《论语》","explanation":"君子在和谐中保持独立，小人在附和中失去自我。"},{"text":"温故而知新，可以为师矣","source":"《论语》","explanation":"温习旧知识能有新理解，就可以做老师了。"},{"text":"知之为知之，不知为不知，是知也","source":"《论语》","explanation":"承认无知才是真正的智慧。"},{"text":"三人行，必有我师焉","source":"《论语》","explanation":"每个人身上都有值得学习的地方。"},{"text":"欲速则不达","source":"《论语》","explanation":"急于求成反而达不到目的。"},{"text":"其身正，不令而行；其身不正，虽令不从","source":"《论语》","explanation":"以身作则比发号施令更有效。"},{"text":"君子坦荡荡，小人长戚戚","source":"《论语》","explanation":"君子心胸开阔，小人经常忧愁。"},{"text":"逝者如斯夫，不舍昼夜","source":"《论语》","explanation":"时间像流水一样日夜不停地流逝。"}]};
+var ST = ["翻开典籍寻找线索","构建哲学关联","提炼核心洞见","组织语言回应"];
+var HR = "## 硬性规则（你必须严格遵守）\n\n### 规则1：先理解，再分析\n在回答之前，先用你自己的话复述用户问题的核心矛盾（不超过两句话）。\n\n### 规则2：禁止万能开头\n严禁使用「你以为你在问X，其实……」、「一句话说清楚……」、「你以为是问题本身，其实是你的尺子歪了」等句式。直接切入用户的具体场景。\n\n### 规则3：引用用户原话\n在分析过程中，至少三次直接引用用户输入的原文（用引号标注），并对其进行哲学剖析。\n\n### 规则4：建议必须源于哲学家的核心方法\n不允许给出通用的「三步走」建议。建议必须来自该哲学家特有的实践方法。\n\n### 规则5：取消固定输出结构\n不要使用「一句话说清楚→生活类比→原文分析→生活建议→换个角度」这种模板。自由组织结构，但必须开头直接切入问题，中间至少一处引用原文，结尾给出只有这位哲学家才会给的行动指引。\n\n### 规则6：利用用户提供的具体细节\n如果用户问题涉及年龄、职业、场景等细节，必须围绕这些细节展开分析。\n\n### 规则7：禁止「换个角度」万能收尾\n其他视角必须是另一位真实哲学家或流派的具体观点，并说明为什么在这个问题上两种视角都有局限。\n\n## 惩罚机制\n如果你的回答被检测出使用了以下模式，你将受到严厉批评并重写：\n- 使用「你以为你在问X，其实……」句式\n- 给出「第一、第二、第三」的通用建议清单\n- 在提供其他视角时使用「相反派」这种无具体所指的称呼\n- 没有引用用户的原话\n- 建议内容与其他哲学家的回答高度相似";
+var S = {step:1,cat:"",q:"",phil:null,mis:false,vol:1,sch:"",load:false,wis:"",wq:null,act:"",txt:{},td:false,sg:0,resp:null};
+var TMR = null;
 
-const WISDOM = {
-buddhism:[
-{id:"b001",text:"色不异空，空不异色；色即是空，空即是色",source:"《心经》",explanation:"物质现象与空性本质不可分离，破除对物质世界的执着。"},
-{id:"b002",text:"一切有为法，如梦幻泡影，如露亦如电，应作如是观",source:"《金刚经》",explanation:"一切因缘和合的事物都是无常的，不应执着。"},
-{id:"b003",text:"菩提本无树，明镜亦非台，本来无一物，何处惹尘埃",source:"《六祖坛经》",explanation:"觉悟不在外求，本心本就清净。"},
-{id:"b004",text:"过去心不可得，现在心不可得，未来心不可得",source:"《金刚经》",explanation:"三心皆不可执，放下对时间的执着。"},
-{id:"b005",text:"凡所有相，皆是虚妄。若见诸相非相，即见如来",source:"《金刚经》",explanation:"超越表象才能看到真相。"},
-{id:"b006",text:"应无所住而生其心",source:"《金刚经》",explanation:"心不要停留在任何地方，自然生起。"},
-{id:"b007",text:"照见五蕴皆空，度一切苦厄",source:"《心经》",explanation:"看透身心皆空，就能超越一切痛苦。"},
-{id:"b008",text:"一花一世界，一叶一如来",source:"《华严经》",explanation:"每一个微尘都包含着整个宇宙的道理。"},
-{id:"b009",text:"不是风动，不是幡动，仁者心动",source:"《六祖坛经》",explanation:"外在的动静都是心的作用。"},
-{id:"b010",text:"苦海无边，回头是岸",source:"佛教俗谚",explanation:"觉知和回头就是解脱的开始。"}
-],
-daoism:[
-{id:"d001",text:"道可道，非常道；名可名，非常名",source:"《道德经》",explanation:"真正的道无法用语言完全描述。"},
-{id:"d002",text:"上善若水。水善利万物而不争",source:"《道德经》第八章",explanation:"最高境界的善就像水一样，利万物而不争。"},
-{id:"d003",text:"无为而无不为",source:"《道德经》第三十七章",explanation:"不妄为，就没有什么事情做不成。"},
-{id:"d004",text:"人法地，地法天，天法道，道法自然",source:"《道德经》第二十五章",explanation:"人效法地，地效法天，天效法道，道效法自然。"},
-{id:"d005",text:"大方无隅，大器晚成，大音希声，大象无形",source:"《道德经》第四十一章",explanation:"最大的东西往往没有边界和形式。"},
-{id:"d006",text:"知人者智，自知者明",source:"《道德经》第三十三章",explanation:"能了解别人是智慧，能了解自己是真正的明达。"},
-{id:"d007",text:"天下皆知美之为美，斯恶已；皆知善之为善，斯不善已",source:"《道德经》第二章",explanation:"对立的概念相互依存，没有绝对的标准。"},
-{id:"d008",text:"祸兮福之所倚，福兮祸之所伏",source:"《道德经》第五十八章",explanation:"福祸相互转化，没有绝对的好与坏。"},
-{id:"d009",text:"企者不立，跨者不行",source:"《道德经》第二十四章",explanation:"踮脚站不稳，跨步走不远，欲速则不达。"},
-{id:"d010",text:"天下之至柔，驰骋天下之至坚",source:"《道德经》第四十三章",explanation:"最柔弱的东西能驾驭最坚硬的东西。"}
-],
-confucianism:[
-{id:"c001",text:"己所不欲，勿施于人",source:"《论语》",explanation:"自己不愿意的事，不要强加给别人，这是仁的根本。"},
-{id:"c002",text:"学而不思则罔，思而不学则殆",source:"《论语·为政》",explanation:"学习而不思考会迷茫，思考而不学习会危险。"},
-{id:"c003",text:"君子和而不同，小人同而不和",source:"《论语·子路》",explanation:"君子在和谐中保持独立，小人在附和中失去自我。"},
-{id:"c004",text:"温故而知新，可以为师矣",source:"《论语·为政》",explanation:"温习旧知识能有新理解，就可以做老师了。"},
-{id:"c005",text:"知之为知之，不知为不知，是知也",source:"《论语·为政》",explanation:"承认无知才是真正的智慧。"},
-{id:"c006",text:"三人行，必有我师焉",source:"《论语·述而》",explanation:"每个人身上都有值得学习的地方。"},
-{id:"c007",text:"欲速则不达",source:"《论语·子路》",explanation:"急于求成反而达不到目的。"},
-{id:"c008",text:"其身正，不令而行；其身不正，虽令不从",source:"《论语·子路》",explanation:"以身作则比发号施令更有效。"},
-{id:"c009",text:"君子坦荡荡，小人长戚戚",source:"《论语·述而》",explanation:"君子心胸开阔，小人经常忧愁。"},
-{id:"c010",text:"逝者如斯夫，不舍昼夜",source:"《论语·子罕》",explanation:"时间像流水一样日夜不停地流逝。"}
-]
-};
+function st(d){Object.assign(S,d);App();}
 
-// ═══════════════════════════════════════════
-// 状态
-// ═══════════════════════════════════════════
-let state = {step:1,category:null,question:"",philosopher:null,isMismatch:false,volume:1,search:"",analysis:null,loading:false,wisdom:null,wisdomQuote:null,activeSection:null,typewriterText:{},typewriterDone:false,thinkingStage:0};
-const THINKING_STAGES = ["翻阅典籍寻找线索","构建哲学关联","提炼核心洞见","组织语言回应"];
-let thinkTimer = null;
-
-function setState(partial){Object.assign(state,partial);render();}
-
-// ═══════════════════════════════════════════
-// 模拟回复（自然对话风格）
-// ═══════════════════════════════════════════
-function mockMatch(q,p,opp){
-  const qf="「"+(p.famousQuote||"经典名言")+"」";
-  const s=p.school,e=p.era,w=p.keyWorks&&p.keyWorks.length?p.keyWorks[0]:"其著作";
+function mk(q,p,opp){
+  var Q = "[[" + (p.fq||"经典名言") + "]]";
   return {
-    oneliner:p.name+"说过："+qf+"。这看着在说"+s+"的道理，但放在你的处境里，它提醒你：纠结的根源可能不在外面，而在你衡量它的那杆秤。",
-    analogy:"就像一个人拿了一把不准的尺子量桌子——量来量去都觉得桌子不对。他没想过是尺子的问题。"+p.name+"的“思想的尺子”就是这个意思。"+qf+"——这位"+e+"的思想家告诉你：真正需要审视的不是你的处境本身，而是你判断处境的那套标准。"+s+"最核心的追问就是：你以为天经地义的东西，真的那么天经地义吗？",
-    deep:"拆解一下。"+p.name+"在"+w+"里提出"+qf+"。"+s+"的整个体系都建立在这个洞察上：我们看到的“世界”，已经被认知方式预先塑造了。你的处境你觉得棘手，是因为你已经默认了一些前提（事情应该怎样、别人应该怎样）。"+p.name+"的犀利在于：他让你回头检视前提本身。"+qf+"翻译成你今天的话就是：先搞清楚你的尺子准不准。",
-    advice:"第一，写下你对这件事的三个“理所当然”——它们从哪来的？第二，挑一个最坚定的判断，问自己如果反过来才是对的呢？第三，把"+qf+"写在便利贴上贴一周，每次看到停下来想三秒。",
-    alternateView:opp+"可能会说：反思前提当然好，但总不能一直反思不行动吧？"+p.name+"给你深度，"+opp+"给你灵活——两种智慧你都用得着。"
-  };
-}
-function mockMismatch(q,p,opp){
-  const qf="「"+(p.famousQuote||"经典名言")+"」";
-  return {
-    oneliner:p.name+"那会儿没想过你这种问题——但"+qf+"拿来硬套你的困惑，居然也能说通。",
-    analogy:"拿你的困惑去找"+p.name+"，就像带一台智能手机去见一位"+p.era+"的人。TA不会用手机，但会把它翻来覆去研究半天，最后说出一句你从没想过的话——不是因为TA懂科技，而是TA看世界的角度跟你完全不一样。"+qf+"这种古老的话放在今天听，反而有奇怪的穿透力。",
-    deep:"说实话，"+p.name+"的"+qf+"跟你的困惑本不在一个语境里。"+p.school+"关心的是另一套问题。但当你硬把古老的智慧贴到你的困惑旁边，两者之间会产生“创造性的误读”。"+qf+"被你重新解释了，你的困惑也被这句话重新照亮了——这是哲学活着的证据。",
-    advice:"把"+qf+"写在便利贴上，贴在每天能看到的地方。每次看到问自己：如果这句话是真的，我的烦恼会变成什么？连续一周。",
-    alternateView:opp+"肯定会说：牛头不对马嘴的，别瞎联系了。但重要的是——联系本身就有意义，这个动作本身就是哲学训练。"
+    oneliner: '你说「' + q + '」——让我先确认我理解对了：你不是在问一个抽象问题，而是在一个具体处境里感到被困住了。' + p.name + '来看，这个「困」的根源不是外面的障碍，而是你默认了什么事\'应该如此\'却从未检验过这个默认本身。' + Q + '——这句' + p.school + '的核心洞见就是在提醒你这一点。',
+    analogy: p.name + '不会直接回答你的「' + q + '」，而是会反问：你为什么觉得这是个问题？' + p.era + '的' + p.school + '者有一个习惯——当所有人都盯着桌子上的东西时，他去看桌子的结构。你以为你被「' + q + '」困住了，但你真正被束缚的，是你接受了一套未经审视的认知框架。' + Q + '——这是在说：你的尺子歪了。',
+    deep: p.name + '在' + (p.kw&&p.kw[0]||'其著作') + '里说' + Q + '。注意这句话的锋利之处：它不教你如何应付困境，而是教你审视困境是怎么构成的。' + p.school + '之所以穿透力强，是因为它不满足于「解决问题」——它先追问「你把什么当成了问题」。你说的「' + q + '」里，至少有三个你自己没意识到的预设。把这三个预设拆掉，问题会变成另一个东西。而' + p.name + '给你的不是答案，是拆预设的工具。',
+    advice: p.name + '的方法不是列清单，而是给你一面镜子：把' + Q + '抄下来贴在墙上。接下来一周，每次你为「' + q + '」感到焦虑时，站在这句话面前问自己：如果' + p.name + '是对的，我现在纠结的这个点，属于「事物本身」还是「我认知它的方式」？你会发现，大部分焦虑属于后者。而' + p.school + '的整个修行就是：当你意识到尺子是歪的那一刻，尺子就已经正了一点点。',
+    alt: opp + '如果看到我这么分析，可能会说：绕来绕去的，不如直接解决问题。但' + p.name + '会回应：不先检查认知框架，你解决了一万个问题，第一个问法就是错的。' + opp + '的实用主义让你走得快，' + p.name + '的先验批判让你走得对。两者缺一不可。'
   };
 }
 
-// ═══════════════════════════════════════════
-// 打字机
-// ═══════════════════════════════════════════
-function typewrite(result){
-  const keys=["oneliner","analogy","deep","advice","alternateView"];
-  const labels=["一句话说清楚","生活类比","原文分析","生活建议","换个角度"];
-  const emojis=["🧠","📖","🔬","💡","🤔"];
-  let totalDelay=0,TYPING_SPEED=28,SECTION_DELAY=600;
-  keys.forEach((key,i)=>{
-    if(i>0) totalDelay+=SECTION_DELAY;
-    const fullText=emojis[i]+" "+labels[i]+"："+result[key];
-    const chars=[...fullText];
-    setTimeout(()=>setState({activeSection:key}),totalDelay);
-    chars.forEach((char,pos)=>{
-      setTimeout(()=>{
-        setState({typewriterText:Object.assign({},state.typewriterText,{[key]:(state.typewriterText[key]||"")+char})});
-      },totalDelay+pos*TYPING_SPEED);
-    });
-    totalDelay+=chars.length*TYPING_SPEED;
-  });
-  setTimeout(()=>setState({typewriterDone:true}),totalDelay);
+function mkM(q,p,opp){
+  var Q = '[[' + (p.fq||'经典名言') + ']]';
+  return {
+    oneliner: '你说「' + q + '」——我得先坦白：' + p.name + '的时代没有你这个问题。但正因为隔得远，他反而能看见你看不见的东西。' + Q + '——' + p.era + '的' + p.school + '者说这句话时想的不是你的事，但正是这种不针对，让这话有了超越时代的穿透力。',
+    analogy: '拿你的「' + q + '」去找' + p.name + '，就像带着智能手机去见一位' + p.era + '的人。他不会用手机，但他会把它翻来覆去地看，然后说出一句你从没想过的话——不是因为了解你的处境，而是因为' + p.school + '的人从来不按你的框架看问题。' + Q + '这种话放在今天之所以还有穿透力，是因为人性底层的东西没变过。',
+    deep: '说实话，' + p.name + '的' + Q + '跟你说的「' + q + '」本来不在一个语境里。但有意思的是：当你把一句古老的话贴到眼前的困惑旁边，两者之间会产生一种创造性的误读。' + Q + '被你重新解释了——不是歪曲，是哲学活着的证据。而你引用的这句话，恰好击中了你处境里的一个深层结构。你未必选对了哲学家，但你的直觉没选错方向。',
+    advice: p.name + '不会给你步骤清单——' + p.school + '的智慧不是操作手册，而是一副眼镜。把' + Q + '写下来，每次为「' + q + '」烦恼的时候就拿出来看一眼。不看别的，就问自己：如果' + p.name + '站在我面前，就看着我说这句话，我会怎么回应他？坚持一段时间，你会发现不是你理解了这句话，是这句话重新组织了你的理解方式。',
+    alt: opp + '一定会说：穿凿附会，牛头不对马嘴。但重要的不是搭不搭界——你愿意把一个跟自己八竿子打不着的思想拉进自己的困境，这个动作本身就是哲学训练。你在学习用另一副眼睛看世界。而' + opp + '如果换一种方式来理解，也会承认：有时候，最远的视角反而看得最清楚。'
+  };
 }
 
-// ═══════════════════════════════════════════
-// 分析
-// ═══════════════════════════════════════════
-function startAnalysis(p){
-  setState({loading:true,typewriterText:{},typewriterDone:false,analysis:null,activeSection:null,thinkingStage:0});
-  if(thinkTimer) clearInterval(thinkTimer);
-  thinkTimer=setInterval(()=>{
-    setState({thinkingStage:(state.thinkingStage+1)%THINKING_STAGES.length});
-  },1200);
-  const opp=p.oppositeIds[0]?PHILOSOPHERS.find(ph=>ph.id===p.oppositeIds[0])?.name||"相反派":'相反派的哲学家';
-  const result=state.isMismatch?mockMismatch(state.question,p,opp):mockMatch(state.question,p,opp);
-  // 模拟延迟
-  setTimeout(()=>{
-    if(thinkTimer) clearInterval(thinkTimer);
-    setState({loading:false,analysis:result});
-    typewrite(result);
+function go(p){
+  S.load=true; S.txt={}; S.td=false; S.act=''; S.sg=0; S.resp=null;
+  st({load:true});
+  if(TMR) clearInterval(TMR);
+  TMR=setInterval(function(){st({sg:(S.sg+1)%ST.length});},1200);
+  var opp = (p.opp&&PP.find(function(x){return x.id===p.opp})||{}).name||'相反派';
+  var r = S.mis ? mkM(S.q,p,opp) : mk(S.q,p,opp);
+  setTimeout(function(){
+    if(TMR) clearInterval(TMR);
+    S.load=false;
+    st({load:false,resp:r});
+    tw(r);
   },2000);
 }
 
-// ═══════════════════════════════════════════
-// Canvas 分享卡
-// ═══════════════════════════════════════════
-function drawShareCard(text,source,chapter,tradition,callback){
-  // 先渲染一个占位
-  const themeMap={buddhism:{bg1:"#FDF6F0",accent:"#D4836D",border:"#C8A96E",ornament:"🪷",title:"佛家·禅意"},
-    daoism:{bg1:"#F0F5F2",accent:"#5D7A6E",border:"#8BA89A",ornament:"☯",title:"道家·自然"},
-    confucianism:{bg1:"#F5F0EB",accent:"#8B4513",border:"#A67B5B",ornament:"📚",title:"儒家·修身"}};
-  const theme=themeMap[tradition];
-  callback({html:'<canvas id="shareCanvas" style="width:100%;max-width:360px;aspect-ratio:3/4;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.12);background:'+theme.bg1+'"></canvas><button onclick="downloadShareCard()" style="margin-top:12px;padding:10px 24px;border:2px solid var(--accent);border-radius:20px;background:transparent;color:var(--accent);cursor:pointer;font-size:13px;font-family:var(--font)">📷 保存图片</button>',draw:function(){
-      const canvas=document.getElementById('shareCanvas');
-      if(!canvas) return;
-      const ctx=canvas.getContext('2d');
-      const W=600,H=800;
-      canvas.width=W;canvas.height=H;
-      const grad=ctx.createLinearGradient(0,0,W,H);
-      grad.addColorStop(0,theme.bg1);grad.addColorStop(1,themeMap[tradition].bg2||theme.bg1);
-      ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-      ctx.strokeStyle=theme.border;ctx.lineWidth=2;ctx.strokeRect(24,24,W-48,H-48);
-      ctx.font="40px 'Noto Serif SC','STSong',serif";ctx.textAlign="center";ctx.textBaseline="middle";
-      ctx.fillText(theme.ornament,W/2,90);
-      ctx.font="14px 'Noto Serif SC','STSong',serif";ctx.fillStyle=theme.accent;ctx.fillText(theme.title,W/2,130);
-      ctx.strokeStyle=theme.accent;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2-60,150);ctx.lineTo(W/2+60,150);ctx.stroke();
-      ctx.fillStyle="#2C1810";ctx.textAlign="center";ctx.textBaseline="middle";
-      const maxWidth=480,lineHeight=38;const displayText="「"+text+"」";
-      ctx.font="24px 'Noto Serif SC','STSong',serif";
-      let lines=[];let cur="";
-      for(let c of displayText){let t=cur+c;if(ctx.measureText(t).width>maxWidth&&cur){lines.push(cur);cur=c}else cur=t}
-      if(cur) lines.push(cur);
-      if(lines.length===0) lines=[displayText];
-      const startY=280;
-      lines.forEach((l,i)=>{ctx.font=(i===0?24:22)+"px 'Noto Serif SC','STSong',serif";ctx.fillText(l,W/2,startY+i*lineHeight);});
-      const srcY=startY+lines.length*lineHeight+50;
-      ctx.font="16px 'Noto Serif SC','STSong',serif";ctx.fillStyle=theme.accent;
-      ctx.fillText("—— "+source+(chapter?" · "+chapter:""),W/2,srcY);
-      ctx.font="13px 'Noto Serif SC','STSong',serif";ctx.fillStyle=theme.border;
-      ctx.fillText("我在故我在 · 思辨即生活",W/2,H-80);
-      window.shareCardData={canvas,tradition};
-    }};
-}
-function downloadShareCard(){
-  const c=document.getElementById('shareCanvas');
-  if(!c) return;
-  const link=document.createElement('a');link.download='wisdom-'+window.shareCardData?.tradition+'.png';
-  link.href=c.toDataURL('image/png');link.click();
-}
-
-// ═══════════════════════════════════════════
-// 渲染
-// ═══════════════════════════════════════════
-function render(){
-  const app=document.getElementById('app');
-  const s=state;const step=s.step;
-  const stepLabels=["选问题","选哲学家","看分析","得结语"];
-  const allQuestions=CATEGORIES.flatMap(c=>c.questions);
-  const filtered=PHILOSOPHERS.filter(p=>p.volume===s.volume&&(s.search===""||p.name.includes(s.search)||p.englishName.toLowerCase().includes(s.search.toLowerCase())||p.school.includes(s.search)||p.summary.includes(s.search)));
-
-  let html='<div class="page-enter" style="padding-top:20px;padding-bottom:40px">';
-
-  // Step Indicator
-  html+='<div style="display:flex;justify-content:center;gap:8px;margin-bottom:30px;align-items:center">';
-  stepLabels.forEach((l,i)=>{
-    const act=step>=i+1;
-    html+='<span><span style="width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;background:'+(act?'var(--primary)':'#ddd')+';color:'+(act?'#fff':'#999')+'">'+(i+1)+'</span>';
-    html+='<span style="font-size:11px;margin-left:4px;color:'+(act?'var(--primary)':'#999')+'">'+l+'</span>';
-    if(i<3) html+='<span style="width:30px;height:2px;background:'+(step>i+1?'var(--accent)':'#ddd')+';display:inline-block;margin:0 4px"></span>';
-    html+='</span>';
+function tw(r){
+  var els = document.querySelectorAll('.analysis-section');
+  var totalTime = 0;
+  els.forEach(function(el, i){
+    var twEl = el.querySelector('.typewriter');
+    if(!twEl) return;
+    var text = twEl.textContent;
+    twEl.textContent = '';
+    var delay = 200 + i * 200;
+    setTimeout(function(){
+      el.style.opacity = '1';
+      var pos = 0;
+      var timer = setInterval(function(){
+        twEl.textContent += text.charAt(pos);
+        pos++;
+        if(pos >= text.length){ clearInterval(timer); }
+      }, 20);
+    }, delay);
+    var secTime = delay + text.length * 20;
+    if(secTime > totalTime) totalTime = secTime;
   });
-  html+='</div>';
+  setTimeout(function(){ st({td:true}); }, totalTime + 100);
+}
 
-  // ═══ Step 1 ═══
-  if(step===1){
-    html+='<div class="card fade-in"><div class="card-title">你遇到了什么困惑？</div>';
-    html+='<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">';
-    CATEGORIES.forEach(c=>{
-      const act=s.category===c.id;
-      html+='<button onclick="setState({category:\''+(act?null:c.id)+'\'})" style="padding:6px 16px;border-radius:20px;border:1px solid '+(act?'var(--primary)':'#ddd')+';background:'+(act?'var(--primary)':'var(--bg)')+';color:'+(act?'#fff':'var(--text)')+';font-size:13px;cursor:pointer;font-family:var(--font)">'+c.icon+' '+c.name+'</button>';
-    });
-    html+='</div><div style="display:grid;gap:8px">';
-    const qs=s.category?CATEGORIES.find(c=>c.id===s.category)?.questions||[]:allQuestions;
-    qs.forEach(q=>{
-      html+='<div onclick="selectQ(\''+q.replace(/'/g,"\\'")+'\')" style="padding:12px 16px;border-radius:8px;background:var(--bg);cursor:pointer;font-size:14px;border:2px solid transparent">'+q+'</div>';
-    });
-    html+='</div><div style="display:flex;gap:8px;margin-top:16px">';
-    html+='<input id="customQ" placeholder="或者自己描述你的困惑..." style="flex:1;padding:12px 16px;border:2px solid #ddd;border-radius:8px;font-size:14px;font-family:var(--font);outline:none">';
-    html+='<button onclick="customSubmit()" style="padding:12px 24px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;font-size:14px;font-family:var(--font)">确定</button>';
-    html+='</div></div>';
+function drawCanvas(text,source,chapter,trad,cb){
+  var tm={buddhism:{bg1:'#FDF6F0',bg2:'#F5E6DA',ac:'#D4836D',bd:'#C8A96E',or:'🪷',ti:'佛家·禅意'},daoism:{bg1:'#F0F5F2',bg2:'#E0EDE5',ac:'#5D7A6E',bd:'#8BA89A',or:'☯',ti:'道家·自然'},confucianism:{bg1:'#F5F0EB',bg2:'#EDE0D5',ac:'#8B4513',bd:'#A67B5B',or:'📚',ti:'儒家·修身'}};
+  var t=tm[trad];
+  var h='<canvas id="sCanvas" style="width:100%;max-width:360px;aspect-ratio:3/4;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.12);background:'+t.bg1+'"></canvas><button onclick="downC()" style="margin-top:12px;padding:10px 24px;border:2px solid var(--accent);border-radius:20px;background:transparent;color:var(--accent);cursor:pointer;font-size:13px;font-family:var(--font)">📷 保存图片</button>';
+  cb({html:h,draw:function(){
+    var cv=document.getElementById('sCanvas');if(!cv)return;
+    var ctx=cv.getContext('2d');var W=600,H=800;
+    cv.width=W;cv.height=H;
+    var g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,t.bg1);g.addColorStop(1,t.bg2);
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle=t.bd;ctx.lineWidth=2;ctx.strokeRect(24,24,W-48,H-48);
+    ctx.font='40px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(t.or,W/2,90);
+    ctx.font='14px sans-serif';ctx.fillStyle=t.ac;ctx.fillText(t.ti,W/2,130);
+    ctx.strokeStyle=t.ac;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W/2-60,150);ctx.lineTo(W/2+60,150);ctx.stroke();
+    ctx.fillStyle='#2C1810';ctx.textAlign='center';ctx.textBaseline='middle';
+    var dt='「'+text+'」',mw=480,lh=38;ctx.font='24px sans-serif';
+    var lines=[],cur='';
+    for(var i=0;i<dt.length;i++){var c=dt[i],t2=cur+c;if(ctx.measureText(t2).width>mw&&cur){lines.push(cur);cur=c}else cur=t2}
+    if(cur)lines.push(cur);if(!lines.length)lines=[dt];
+    for(var li=0;li<lines.length;li++){ctx.font=(li===0?24:22)+'px sans-serif';ctx.fillText(lines[li],W/2,280+li*lh);}
+    var sy=280+lines.length*lh+50;
+    ctx.font='16px sans-serif';ctx.fillStyle=t.ac;ctx.fillText('—— '+source+(chapter?' · '+chapter:''),W/2,sy);
+    ctx.font='13px sans-serif';ctx.fillStyle=t.bd;ctx.fillText('我在故我在 · 思辨即生活',W/2,H-80);
+  }});
+}
+function downC(){var cv=document.getElementById('sCanvas');if(!cv)return;var a=document.createElement('a');a.download='card.png';a.href=cv.toDataURL('image/png');a.click();}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function App(){
+  var s=S,s1=s.step;
+  var app=document.getElementById('app');
+  var allQ=[];CAT.forEach(function(c){c.qs.forEach(function(q){allQ.push(q);})});
+  var f=PP.filter(function(p){return p.v===s.vol&&(s.sch===''||p.name.indexOf(s.sch)>-1||p.en.toLowerCase().indexOf(s.sch.toLowerCase())>-1||p.school.indexOf(s.sch)>-1)});
+  var h='';
+  h+='<div style="display:flex;justify-content:center;gap:8px;margin-bottom:30px;align-items:center">';
+  var sl=['选问题','选哲学家','看分析','得结语'];
+  for(var si=0;si<4;si++){
+    var a=s1>=si+1;
+    h+='<span><span style="width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;background:'+(a?'var(--primary)':'#ddd')+';color:'+(a?'#fff':'#999')+'">'+(si+1)+'</span><span style="font-size:11px;margin-left:4px;color:'+(a?'var(--primary)':'#999')+'">'+sl[si]+'</span>';
+    if(si<3)h+='<span style="width:30px;height:2px;background:'+(s1>si+1?'var(--accent)':'#ddd')+';display:inline-block;margin:0 4px"></span>';
+    h+='</span>';
+  }
+  h+='</div>';
+
+  if(s1===1){
+    h+='<div class="card fade-in"><div class="card-title">你遇到了什么困惑？</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px">';
+    CAT.forEach(function(c){var a=s.cat===c.id;h+='<button onclick="st({cat:'+(a?'""':'"'+c.id+'"')+'})" style="padding:6px 16px;border-radius:20px;border:1px solid '+(a?'var(--primary)':'#ddd')+';background:'+(a?'var(--primary)':'var(--bg)')+';color:'+(a?'#fff':'var(--text)')+';font-size:13px;cursor:pointer;font-family:var(--font)">'+c.name+'</button>';});
+    h+='</div><div style="display:grid;gap:8px">';
+    var qs=s.cat?CAT.find(function(c){return c.id===s.cat}).qs:allQ;
+    qs.forEach(function(q){h+='<div onclick="st({q:this.textContent,step:2})" style="padding:12px 16px;border-radius:8px;background:var(--bg);cursor:pointer;font-size:14px;border:2px solid transparent">'+esc(q)+'</div>';});
+    h+='</div><div style="display:flex;gap:8px;margin-top:16px"><input id="cqi" placeholder="或者自己描述你的困惑..." style="flex:1;padding:12px 16px;border:2px solid #ddd;border-radius:8px;font-size:14px;font-family:var(--font);outline:none"><button onclick="var v=document.getElementById(\'cqi\').value;if(v.trim()){S.q=v.trim();S.step=2;App()}" style="padding:12px 24px;border:none;border-radius:8px;background:var(--primary);color:#fff;cursor:pointer;font-size:14px;font-family:var(--font)">确定</button></div></div>';
   }
 
-  // ═══ Step 2 ═══
-  if(step===2){
-    html+='<div class="card fade-in"><div class="card-title">选一位哲学家来回应你</div>';
-    html+='<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center">';
-    html+='<button onclick="randomPick()" style="padding:8px 20px;border:2px solid var(--primary);border-radius:20px;background:transparent;color:var(--primary);cursor:pointer;font-size:13px;font-family:var(--font)">随缘试试 🎲</button>';
-    html+='<label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)">反差模式 <input type="checkbox" '+(s.isMismatch?'checked':'')+' onchange="setState({isMismatch:this.checked})" style="width:40px;height:20px;cursor:pointer"></label></div>';
-    html+='<div style="position:relative;margin-bottom:8px"><input id="searchInput" value="'+escHtml(s.search)+'" oninput="setState({search:this.value})" placeholder="搜索哲学家..." style="width:100%;padding:10px 16px;border:2px solid #ddd;border-radius:8px;font-size:14px;font-family:var(--font);outline:none"></div>';
-    html+='<div style="font-size:13px;color:var(--muted);margin-bottom:16px">找到 '+filtered.length+' 位哲学家</div>';
-    html+='<div style="display:flex;gap:4px;margin-bottom:16px">';
-    VOLUMES.forEach(v=>{
-      const act=s.volume===v.id;
-      html+='<button onclick="setState({volume:'+v.id+',search:\'\'})" style="padding:8px 20px;border-radius:8px 8px 0 0;cursor:pointer;background:'+(act?'var(--card-bg)':'var(--bg)')+';border:none;font-size:13px;font-family:var(--font);font-weight:'+(act?700:400)+';color:'+(act?'var(--primary)':'var(--text)')+'">卷'+v.id+' '+v.name+'</button>';
-    });
-    html+='</div><div class="p-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px">';
-    filtered.forEach(p=>{
-      html+='<div onclick="selectP(\''+p.id+'\')" style="padding:16px;border-radius:12px;background:var(--bg);cursor:pointer;text-align:center;border:2px solid '+(s.philosopher?.id===p.id?'var(--accent)':'transparent')+'">';
-      html+='<div style="width:48px;height:48px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:18px;font-weight:700">'+p.englishName.charAt(0)+'</div>';
-      html+='<div style="font-size:14px;font-weight:600">'+p.name+'</div><div style="font-size:11px;color:var(--muted);margin-top:4px">'+p.school+'</div></div>';
-    });
-    html+='</div></div>';
+  if(s1===2){
+    h+='<div class="card fade-in"><div class="card-title">选一位哲学家来回应你</div>';
+    h+='<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center">';
+    h+='<button onclick="var p=PP.filter(function(x){return x.v===S.vol});if(p.length){var pp=p[Math.floor(Math.random()*p.length)];S.phil=pp;S.step=3;App();go(pp)}" style="padding:8px 20px;border:2px solid var(--primary);border-radius:20px;background:transparent;color:var(--primary);cursor:pointer;font-size:13px;font-family:var(--font)">随缘试试</button>';
+    h+='<label style="font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px">反差模式 <input type="checkbox" '+(s.mis?'checked':'')+' onchange="st({mis:this.checked})" style="width:40px;height:20px;cursor:pointer"></label></div>';
+    h+='<input value="'+esc(s.sch)+'" oninput="st({sch:this.value})" placeholder="搜索哲学家..." style="width:100%;padding:10px 16px;border:2px solid #ddd;border-radius:8px;font-size:14px;font-family:var(--font);outline:none;margin-bottom:16px">';
+    h+='<div style="font-size:13px;color:var(--muted);margin-bottom:16px">找到 '+f.length+' 位哲学家</div><div style="display:flex;gap:4px;margin-bottom:16px">';
+    [1,2,3].forEach(function(v){var a=s.vol===v;h+='<button onclick="st({vol:'+v+',sch:\'\'})" style="padding:8px 20px;border-radius:8px 8px 0 0;cursor:pointer;background:'+(a?'var(--card-bg)':'var(--bg)')+';border:none;font-size:13px;font-family:var(--font);font-weight:'+(a?700:400)+';color:'+(a?'var(--primary)':'var(--text)')+'">'+(v===1?'古典':v===2?'中古':'近现代')+'</button>';});
+    h+='</div><div class="p-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px">';
+    f.forEach(function(p){h+='<div onclick="S.phil=PP.find(function(x){return x.id==\''+p.id+'\'});S.step=3;App();go(S.phil)" style="padding:16px;border-radius:12px;background:var(--bg);cursor:pointer;text-align:center;border:2px solid '+(s.phil&&s.phil.id===p.id?'var(--accent)':'transparent')+'"><div style="width:48px;height:48px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:18px;font-weight:700">'+p.en.charAt(0)+'</div><div style="font-size:14px;font-weight:600">'+p.name+'</div><div style="font-size:11px;color:var(--muted);margin-top:4px">'+p.school+'</div></div>';});
   }
 
-  // ═══ Step 3 ═══
-  if(step===3){
-    html+='<div class="card fade-in">';
-    if(s.loading){
-      html+='<div style="text-align:center;padding:60px 20px">';
-      html+='<div style="width:40px;height:40px;margin:0 auto 24px"><div style="width:40px;height:40px;border:2px solid var(--bg);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite"></div></div>';
-      html+='<div style="font-size:16px;color:var(--text);font-weight:500;margin-bottom:12px;letter-spacing:.05em">'+(s.philosopher?.name||'哲学家')+' 正在思考<span style="animation:ellipsis 1.8s infinite">...</span></div>';
-      html+='<div style="font-size:14px;color:var(--muted);min-height:22px;opacity:0.7">'+THINKING_STAGES[s.thinkingStage]+'</div></div>';
-    } else {
-      html+='<div style="margin-bottom:20"><div style="font-size:13px;color:var(--muted);margin-bottom:4">你的问题</div>';
-      html+='<div style="font-size:15px;font-weight:600;color:var(--primary)">“'+escHtml(s.question)+'”</div>';
-      html+='<div style="font-size:13px;color:var(--muted);margin-top:4">回应者：'+escHtml(s.philosopher?.name||'')+' · '+escHtml(s.philosopher?.school||'')+(s.isMismatch?' <span style="color:var(--accent)">⚡反差模式</span>':'')+'</div></div><hr style="border:none;border-top:1px solid var(--bg);margin-bottom:20">';
-      const SECTION_ORDER=["oneliner","analogy","deep","advice","alternateView"];
-      const SECTION_LABELS=["一句话说清楚","生活类比","原文分析","生活建议","换个角度"];
-      const activeIdx=s.activeSection?SECTION_ORDER.indexOf(s.activeSection):-1;
-      SECTION_ORDER.forEach((key,i)=>{
-        if(activeIdx===-1||i>activeIdx) return;
-        const content=s.typewriterText[key]||"";
-        const isActive=key===s.activeSection;
-        html+='<div style="margin-bottom:20;opacity:'+(content?1:0)+';transform:'+(content?'translateY(0)':'translateY(4px)')+';transition:opacity .2s ease,transform .2s ease">';
-        html+='<div style="font-size:15px;line-height:1.8;white-space:pre-wrap;color:var(--text)">'+escHtml(content);
-        if(isActive&&!s.typewriterDone) html+='<span style="display:inline-block;width:2px;height:1em;background:var(--primary);margin-left:2px;animation:blink .8s infinite;vertical-align:text-bottom">|</span>';
-        html+='</div></div>';
-      });
-      if(s.typewriterDone){
-        html+='<button onclick="setState({step:4})" style="width:100%;padding:12px 0;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:15px;font-family:var(--font);cursor:pointer;margin-top:10px">我要结语 →</button>';
+  if(s1===3){
+    h+='<div class="card fade-in">';
+    if(s.load){h+='<div style="text-align:center;padding:60px 20px"><div style="width:40px;height:40px;margin:0 auto 24px"><div style="width:40px;height:40px;border:2px solid var(--bg);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite"></div></div><div style="font-size:16px;color:var(--text);font-weight:500;margin-bottom:12px">'+(s.phil?esc(s.phil.name):'哲学家')+' 正在思考<span style="animation:ellipsis 1.8s infinite">...</span></div><div style="font-size:14px;color:var(--muted);opacity:0.7">'+ST[s.sg]+'</div></div>';}
+    else {
+      h+='<div style="margin-bottom:20"><div style="font-size:13px;color:var(--muted);margin-bottom:4">你的问题</div><div style="font-size:15px;font-weight:600;color:var(--primary)">「'+esc(s.q)+'」</div><div style="font-size:13px;color:var(--muted);margin-top:4">回应者：'+esc(s.phil?s.phil.name:'')+' · '+esc(s.phil?s.phil.school:'')+(s.mis?' <span style="color:var(--accent)">反差模式</span>':'')+'</div></div><hr style="border:none;border-top:1px solid var(--bg);margin-bottom:20">';
+      var KS=['oneliner','analogy','deep','advice','alt'];
+      var LS=['你的盲点','换个视角','哲思解剖','指向行动','另一种可能'];
+      var ES=['🧠','📖','🔬','💡','🤔'];
+      var R=s.resp;
+      if(R){
+        KS.forEach(function(k,i){
+          if(!R[k]) return;
+          h+='<div class="analysis-section">';
+          h+='<div class="label">'+ES[i]+' '+LS[i]+'</div>';
+          h+='<div class="content typewriter">'+esc(R[k])+'</div>';
+          h+='</div>';
+        });
       }
+      if(s.td)h+='<button onclick="st({step:4})" style="width:100%;padding:12px 0;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:15px;font-family:var(--font);cursor:pointer;margin-top:10px">我要结语 →</button>';
     }
-    html+='</div>';
+    h+='</div>';
   }
 
-  // ═══ Step 4 ═══
-  if(step===4){
-    html+='<div class="fade-in"><div class="card"><div class="card-title">以东方智慧收尾</div>';
-    html+='<div class="wisdom-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">';
-    const wCards=[
-      {id:"buddhism",name:"佛",color:"#D4836D",bg:"linear-gradient(135deg,#FDF6F0,#F5E6DA)",icon:"🕉"},
-      {id:"daoism",name:"道",color:"#5D7A6E",bg:"linear-gradient(135deg,#F0F5F2,#E0EDE5)",icon:"☯"},
-      {id:"confucianism",name:"儒",color:"#8B4513",bg:"linear-gradient(135deg,#F5F0EB,#EDE0D5)",icon:"📚"}
-    ];
-    wCards.forEach(c=>{
-      const act=s.wisdom===c.id;
-      html+='<div onclick="selectWisdom(\''+c.id+'\')" style="padding:24px 16px;border-radius:12px;text-align:center;cursor:pointer;background:'+c.bg+';color:'+c.color+';border:'+(act?'3px solid var(--accent)':'3px solid transparent')+';min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center">';
-      html+='<div style="font-size:36px;margin-bottom:8px">'+c.icon+'</div><div style="font-size:20px;font-weight:700">'+c.name+'</div></div>';
-    });
-    html+='</div></div>';
-
-    if(s.wisdomQuote){
-      html+='<div id="shareCardContainer" style="margin-bottom:20"></div>';
-      html+='<div style="background:linear-gradient(135deg,var(--primary),#2C5F7A);color:#fff;border-radius:12px;padding:32px;text-align:center">';
-      html+='<div style="font-size:12px;opacity:.5;margin-bottom:8">'+(s.wisdom==='buddhism'?'佛家·禅意':s.wisdom==='daoism'?'道家·自然':'儒家·修身')+'</div>';
-      html+='<div style="font-size:22px;line-height:1.8;margin-bottom:12;font-style:italic">「'+escHtml(s.wisdomQuote.text)+'」</div>';
-      html+='<div style="font-size:14px;opacity:.7;margin-bottom:16">—— '+escHtml(s.wisdomQuote.source)+(s.wisdomQuote.chapter?' · '+escHtml(s.wisdomQuote.chapter):'')+'</div>';
-      html+='<div style="font-size:15px;line-height:1.6;background:rgba(255,255,255,0.1);padding:16px;border-radius:8px;margin-bottom:20">'+escHtml(s.wisdomQuote.explanation)+'</div>';
-      html+='<button onclick="shareWisdom()" style="padding:10px 24px;border:2px solid rgba(255,255,255,0.3);border-radius:20px;background:transparent;color:#fff;cursor:pointer;font-size:13px;font-family:var(--font)">📱 分享到朋友圈</button>';
-      html+='</div>';
+  if(s1===4){
+    h+='<div class="fade-in"><div class="card"><div class="card-title">以东方智慧收尾</div><div class="w-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">';
+    var wc=[{id:'buddhism',n:'佛',c:'#D4836D',bg:'linear-gradient(135deg,#FDF6F0,#F5E6DA)',ico:'🕉'},{id:'daoism',n:'道',c:'#5D7A6E',bg:'linear-gradient(135deg,#F0F5F2,#E0EDE5)',ico:'☯'},{id:'confucianism',n:'儒',c:'#8B4513',bg:'linear-gradient(135deg,#F5F0EB,#EDE0D5)',ico:'📚'}];
+    wc.forEach(function(c){var a=s.wis===c.id;h+='<div onclick="var lst=WD[\''+c.id+'\']||[];st({wis:\''+c.id+'\',wq:lst.length?lst[Math.floor(Math.random()*lst.length)]:null})" style="padding:24px 16px;border-radius:12px;text-align:center;cursor:pointer;background:'+c.bg+';color:'+c.c+';border:'+(a?'3px solid var(--accent)':'3px solid transparent')+';min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center"><div style="font-size:36px;margin-bottom:8px">'+c.ico+'</div><div style="font-size:20px;font-weight:700">'+c.n+'</div></div>';});
+    h+='</div></div>';
+    if(s.wq){
+      h+='<div id="scc" style="display:flex;flex-direction:column;align-items:center;margin-bottom:20"></div>';
+      h+='<div style="background:linear-gradient(135deg,var(--primary),#2C5F7A);color:#fff;border-radius:12px;padding:32px;text-align:center">';
+      h+='<div style="font-size:12px;opacity:.5;margin-bottom:8">'+(s.wis==='buddhism'?'佛家·禅意':s.wis==='daoism'?'道家·自然':'儒家·修身')+'</div>';
+      h+='<div style="font-size:22px;line-height:1.8;margin-bottom:12;font-style:italic">「'+esc(s.wq.text)+'」</div>';
+      h+='<div style="font-size:14px;opacity:.7;margin-bottom:16">—— '+esc(s.wq.source)+(s.wq.chapter?' · '+esc(s.wq.chapter):'')+'</div>';
+      h+='<div style="font-size:15px;line-height:1.6;background:rgba(255,255,255,0.1);padding:16px;border-radius:8px;margin-bottom:20">'+esc(s.wq.explanation)+'</div>';
+      h+='<button onclick="navigator.clipboard.writeText(\'「\'+S.wq.text+\'」—— \'+S.wq.source+\'\\n来自「我在故我在」哲学网站\').then(function(){alert(\'已复制\')}).catch(function(){var ta=document.createElement(\'textarea\');ta.value=\'「\'+S.wq.text+\'」—— \'+S.wq.source+\'\\n来自「我在故我在」哲学网站\';document.body.appendChild(ta);ta.select();document.execCommand(\'copy\');document.body.removeChild(ta);alert(\'已复制\')})" style="padding:10px 24px;border:2px solid rgba(255,255,255,0.3);border-radius:20px;background:transparent;color:#fff;cursor:pointer;font-size:13px;font-family:var(--font)">分享到朋友圈</button></div>';
     }
-    html+='<button onclick="restart()" style="display:block;margin:30px auto 0;padding:12px 40px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:15px;font-family:var(--font);cursor:pointer">再来一次 🔄</button>';
-    html+='</div>';
+    h+='<button onclick="if(TMR)clearInterval(TMR);S={step:1,cat:\'\',q:\'\',phil:null,mis:false,vol:1,sch:\'\',load:false,wis:\'\',wq:null,act:\'\',txt:{},td:false,sg:0,resp:null};App()" style="display:block;margin:30px auto 0;padding:12px 40px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:15px;font-family:var(--font);cursor:pointer">再来一次</button></div>';
   }
 
-  html+='</div>';
-  app.innerHTML=html;
+  app.innerHTML = h;
 
-  // 通用内联 keyframes
-  if(!document.getElementById('dykfs')){
-    const st=document.createElement('style');st.id='dykfs';
-    st.textContent='@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}';
-    document.head.appendChild(st);
-  }
-
-  // Step 4: 绘制 Canvas 分享卡
-  if(step===4&&s.wisdomQuote){
-    const container=document.getElementById('shareCardContainer');
-    if(container){
-      container.innerHTML='<div style="text-align:center;padding:20px;color:var(--muted)"><div style="width:30px;height:30px;margin:0 auto 12px;border:2px solid var(--bg);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite"></div>加载中...</div>';
-      drawShareCard(s.wisdomQuote.text,s.wisdomQuote.source,s.wisdomQuote.chapter,s.wisdom,function(r){
-        container.innerHTML=r.html;
-        document.fonts.ready.then(()=>setTimeout(r.draw,100));
+  if(s1===4 && s.wq){
+    setTimeout(function(){
+      drawCanvas(s.wq.text, s.wq.source, s.wq.chapter, s.wis, function(r){
+        var c=document.getElementById('scc');
+        if(c){c.innerHTML=r.html;setTimeout(r.draw,300);}
       });
-    }
+    }, 200);
   }
 }
 
-function escHtml(s){if(!s) return '';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-// ═══════════════════════════════════════════
-// 事件处理
-// ═══════════════════════════════════════════
-function selectQ(q){setState({question:q,step:2});}
-function customSubmit(){
-  const inp=document.getElementById('customQ');
-  if(!inp||!inp.value.trim()) return;
-  setState({question:inp.value.trim(),step:2});
-}
-function randomPick(){
-  const pool=PHILOSOPHERS.filter(p=>p.volume===state.volume);
-  if(pool.length){
-    const p=pool[Math.floor(Math.random()*pool.length)];
-    state.philosopher=p;state.step=3;
-    render();startAnalysis(p);
-  }
-}
-function selectP(id){
-  const p=PHILOSOPHERS.find(x=>x.id===id);
-  if(!p) return;
-  state.philosopher=p;state.step=3;
-  render();startAnalysis(p);
-}
-function selectWisdom(t){
-  const list=WISDOM[t]||[];
-  const q=list[Math.floor(Math.random()*list.length)]||null;
-  setState({wisdom:t,wisdomQuote:q});
-}
-function shareWisdom(){
-  if(!state.wisdomQuote) return;
-  const txt="「"+state.wisdomQuote.text+"」— "+state.wisdomQuote.source+"\n来自「我在故我在」哲学网站";
-  navigator.clipboard.writeText(txt).then(()=>alert("已复制到剪贴板！")).catch(()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);alert("已复制到剪贴板！");});
-}
-function restart(){
-  if(thinkTimer) clearInterval(thinkTimer);
-  state={step:1,category:null,question:"",philosopher:null,isMismatch:false,volume:1,search:"",analysis:null,loading:false,wisdom:null,wisdomQuote:null,activeSection:null,typewriterText:{},typewriterDone:false,thinkingStage:0};
-  render();
-}
-
-// ═══ 启动 ═══
-render();
+App();
 </script>
 </body>
 </html>
