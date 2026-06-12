@@ -105,7 +105,7 @@ function ThinkPageInner() {
       ? PHILOSOPHERS.find(ph => ph.id === p.oppositeIds[0])?.name || "相反流派的哲学家"
       : "相反流派的哲学家";
 
-    const result = await analyzeQuestion(question, p.name, p.summary, opp, isMismatch, p.school, p.era, p.keyWorks, p.famousQuote);
+    const result = await analyzeQuestion(question, p.name, p.school, p.era, p.keyWorks, p.famousQuote, isMismatch, opp);
     setAnalysis(result);
     if (thinkingTimer.current) clearInterval(thinkingTimer.current);
     setLoading(false);
